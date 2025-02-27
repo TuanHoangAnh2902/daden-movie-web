@@ -7,12 +7,15 @@ import NotFount from '~/pages/NotFount'
 
 const router = createBrowserRouter([
 	{
+		path: '*',
+		element: <NotFount />,
+	},
+	{
 		path: '/',
 		element: <MainLayout />,
 		children: [
 			{ index: true, element: <Home /> },
 			{ path: 'about', element: <About /> },
-			{ path: '*', element: <NotFount /> },
 		],
 	},
 ])
