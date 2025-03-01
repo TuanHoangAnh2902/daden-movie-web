@@ -1,7 +1,7 @@
 import { useGetMovieInfoQuery } from '~/services/ophimApi'
 
 function MovieInfo() {
-	const { data, error, isLoading } = useGetMovieInfoQuery('ngoi-truong-xac-song')
+	const { data, error, isLoading } = useGetMovieInfoQuery('tren-dong-tro-tan')
 
 	if (isLoading) return <p>Đang tải phim...</p>
 	if (error) return <p>Lỗi khi tải dữ liệu!</p>
