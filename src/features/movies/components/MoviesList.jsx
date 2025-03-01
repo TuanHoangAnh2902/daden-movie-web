@@ -23,6 +23,7 @@ const MoviesList = () => {
 				Trang trước
 			</button>
 			<button onClick={() => setPage(page + 1)}>Trang sau</button>
+			<h1>Con cặc nè heof</h1>
 		</div>
 	)
 }
