@@ -23,6 +23,7 @@ const MoviesList = () => {
 				Trang trước
 			</button>
 			<button onClick={() => setPage(page + 1)}>Trang sau</button>
+			<div>căng cọt</div>
 		</div>
 	)
 }
