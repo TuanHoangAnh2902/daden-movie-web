@@ -1,16 +1,20 @@
-// import { StrictMode } from 'react'
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import 'normalize.css'
 import '@ant-design/v5-patch-for-react-19'
+import '~/styles/index.css'
 
 import App from './App.jsx'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
+import { ConfigProvider } from 'antd'
 
 createRoot(document.getElementById('root')).render(
-	// <StrictMode>
-	<Provider store={store}>
-		<App />
-	</Provider>,
-	/* </StrictMode>, */
+	<StrictMode>
+		<Provider store={store}>
+			<ConfigProvider theme={{ token: { colorBgLayout: '#0b0000' } }}>
+				<App />
+			</ConfigProvider>
+		</Provider>
+	</StrictMode>,
 )

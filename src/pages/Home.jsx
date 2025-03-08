@@ -1,12 +1,12 @@
-import MovieInfo from '~/features/movies/components/MovieInfo'
-import MoviesList from '~/features/movies/components/MoviesList'
+import MovieSearch from '~/components/movie/movieSearch'
+import MoviesList from '~/components/movie/MoviesList'
 
 function Home() {
 	return (
-		<>
+		<div style={{ minHeight: '100vh' }}>
 			<MoviesList />
-			<MovieInfo />
-		</>
+			<MovieSearch />
+		</div>
 	)
 }
 

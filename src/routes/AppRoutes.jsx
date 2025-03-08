@@ -4,6 +4,7 @@ import MainLayout from '~/layouts/MainLayout'
 import About from '~/pages/About'
 import Home from '~/pages/Home'
 import NotFount from '~/pages/NotFount'
+import AuthLayouts from '~/layouts/AuthLayouts'
 
 const router = createBrowserRouter([
 	{
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
 			{ index: true, element: <Home /> },
 			{ path: 'about', element: <About /> },
 		],
+	},
+	{
+		path: '/auth',
+		element: <AuthLayouts />,
 	},
 ])
 
