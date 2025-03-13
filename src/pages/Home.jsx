@@ -1,11 +1,9 @@
-import MovieSearch from '~/components/movie/movieSearch'
-import MoviesList from '~/components/movie/MoviesList'
+import CarouselMovies from '~/components/layouts/CarouselMovies'
 
 function Home() {
 	return (
-		<div style={{ minHeight: '100vh' }}>
-			<MoviesList />
-			<MovieSearch />
+		<div>
+			<CarouselMovies />
 		</div>
 	)
 }

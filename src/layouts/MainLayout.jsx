@@ -1,16 +1,16 @@
 import { Outlet } from 'react-router-dom'
-import MovieNav from '~/components/layouts/MovieNav'
+import MovieTopNav from '~/components/layouts/MovieTopNav'
 
 function MainLayout() {
 	return (
-		<div className='p-4'>
-			<nav className='flex gap-4 mb-4'>
-				<MovieNav />
+		<>
+			<nav>
+				<MovieTopNav />
 			</nav>
 			<main>
 				<Outlet /> {/* Hiển thị các trang con */}
 			</main>
-		</div>
+		</>
 	)
 }
 

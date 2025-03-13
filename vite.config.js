@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import compression from 'vite-plugin-compression'
-import imp from 'vite-plugin-imp'
 import svgr from 'vite-plugin-svgr'
 
 // https://vite.dev/config/
@@ -10,14 +9,15 @@ export default defineConfig({
 		react(),
 		compression(),
 		svgr(),
-		imp({
-			libList: [
-				{
-					libName: 'antd',
-					style: (name) => `antd/es/${name}/style`,
-				},
-			],
-		}),
+		[
+			'import',
+			{
+				libraryName: 'antd',
+				libraryDirectory: 'es',
+				style: 'css',
+			},
+			'antd',
+		],
 	],
 	resolve: {
 		alias: [{ find: '~', replacement: '/src' }],

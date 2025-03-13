@@ -12,7 +12,7 @@ import { ConfigProvider } from 'antd'
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
 		<Provider store={store}>
-			<ConfigProvider theme={{ token: { colorBgLayout: '#0b0000' } }}>
+			<ConfigProvider theme={{ token: { colorBgLayout: '#191b24' } }}>
 				<App />
 			</ConfigProvider>
 		</Provider>
