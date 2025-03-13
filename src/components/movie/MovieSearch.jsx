@@ -1,40 +1,69 @@
 import { useState } from 'react'
-import { Input, Button, Card } from 'antd'
-import { useLazyGetMovieInfoQuery } from '~/services/ophimApi'
+import { Input } from 'antd'
+import { useLazyGetSearchMovieQuery } from '~/services/ophimApi'
+import styled from 'styled-components'
+import { SearchOutlined } from '@ant-design/icons'
+import convertToSlug from '~/utils/convertToSlug'
+
+const StyledInput = styled(Input)`
+	background-color: hsla(0, 0%, 100%, 0.08);
+	border: none;
+	padding: 12px 18px;
+
+	& .ant-input-suffix {
+		& .ant-input-clear-icon {
+			color: #fff;
+			opacity: 0.7;
+			font-size: 16px;
+		}
+	}
+	& .ant-input-prefix {
+		color: #fff;
+		font-size: 18px;
+		opacity: 0.7;
+		margin-right: 10px;
+	}
+	&:hover,
+	&:focus {
+		background-color: hsla(0, 0%, 100%, 0.1);
+		outline: 1px solid #b8b8b8;
+	}
+	&:not(:focus) {
+		color: #fff;
+		opacity: 0.7;
+		background-color: hsla(0, 0%, 100%, 0.08);
+	}
+	input {
+		color: #fff;
+		&::placeholder {
+			color: #fff;
+			opacity: 0.7;
+		}
+	}
+`
 
 const MovieSearch = () => {
-	const [slug, setSlug] = useState('')
-	const [fetchMovie, { data, error, isLoading }] = useLazyGetMovieInfoQuery() // 🟢 useLazyQuery
+	const [string, setSring] = useState('')
+	const [fetchMovie, { data, error, isLoading }] = useLazyGetSearchMovieQuery() // 🟢 useLazyQuery
 	console.log('🚀 ~ MovieSearch ~ data:', data)
 
 	const handleSearch = () => {
-		if (slug) {
+		const slug = convertToSlug(string)
+		if (string) {
 			fetchMovie(slug) // 🟢 Gọi API khi người dùng nhấn nút
 		}
 	}
 
 	return (
-		<div style={{ maxWidth: 400, margin: '20px auto', textAlign: 'center' }}>
-			<Input
-				placeholder='Nhập slug phim (vd: nguoi-nhen)'
-				value={slug}
-				onChange={(e) => setSlug(e.target.value)}
-				style={{ marginBottom: 10 }}
-			/>
-			<Button type='primary' onClick={handleSearch}>
-				Tìm phim
-			</Button>
-
-			{isLoading && <p>Đang tải...</p>}
-			{error && <p style={{ color: 'red' }}>Không tìm thấy phim!</p>}
-
-			{data && (
-				<Card title={data.movie?.title} style={{ marginTop: 20 }}>
-					<p>{data.movie?.description}</p>
-					<img src={data.movie?.thumb_url} alt={data.movie?.title} style={{ width: '100%', borderRadius: 10 }} />
-				</Card>
-			)}
-		</div>
+		<StyledInput
+			disabled={isLoading}
+			allowClear
+			prefix={<SearchOutlined />}
+			placeholder='Tìm kiếm phim'
+			value={string}
+			onChange={(e) => setSring(e.target.value)}
+			onPressEnter={handleSearch}
+		/>
 	)
 }
 

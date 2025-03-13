@@ -7,11 +7,23 @@ export const movieApi = createApi({
 		getMoviesList: builder.query({
 			query: (page = 1) => `/danh-sach/phim-moi-cap-nhat?page=${page}`,
 		}),
-		getMovieInfo: builder.query({
-			query: (slug) => `/phim/${slug}`,
+		getSearchMovie: builder.query({
+			query: (slug) => `/v1/api/tim-kiem?keyword=${slug}`,
+		}),
+		getMoviesHome: builder.query({
+			query: () => '/v1/api/home',
+			transformResponse: (response) => response?.data,
+		}),
+		getMovieById: builder.query({
+			query: (Id) => `/phim/id/${Id}`,
 		}),
 	}),
 })
 
-export const { useGetMoviesListQuery, useGetMovieInfoQuery, useLazyGetMovieInfoQuery, useLazyGetMoviesListQuery } =
-	movieApi
+export const {
+	useGetMoviesListQuery,
+	useLazyGetSearchMovieQuery,
+	useGetMoviesHomeQuery,
+	useGetMovieByIdQuery,
+	useLazyGetMovieByIdQuery,
+} = movieApi
