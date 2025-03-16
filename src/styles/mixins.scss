@@ -1,0 +1,17 @@
+@use 'variables' as *;
+
+@mixin category-item($textHoverColor: none, $cursor: default, $borderColor: none) {
+	display: inline-block;
+	margin-right: 10px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	color: $textColor;
+	font-size: 12px;
+	background-color: #ffffff10;
+	font-weight: 400;
+	border: 1px solid $borderColor;
+	&:hover {
+		color: $textHoverColor;
+		cursor: $cursor;
+	}
+}

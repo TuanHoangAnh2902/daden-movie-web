@@ -1,4 +1,4 @@
-import CarouselMovies from '~/components/layouts/CarouselMovies'
+import CarouselMovies from '~/components/layouts/CarouselMovies/CarouselMovies'
 
 function Home() {
 	return (
