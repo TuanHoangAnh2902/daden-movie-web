@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import 'normalize.css'
 import '@ant-design/v5-patch-for-react-19'
-import '~/styles/index.css'
+import '~/styles/global.scss'
 
 import App from './App.jsx'
 import { Provider } from 'react-redux'

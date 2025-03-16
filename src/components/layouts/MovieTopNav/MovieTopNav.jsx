@@ -1,39 +1,18 @@
-import { Dropdown, Flex, Space } from 'antd'
-
-import MovieSearch from '../movie/MovieSearch'
-import Logo from '~/assets/Logo'
-import styled from 'styled-components'
-import { moviesCategories } from '~/constants/routes'
 import { Link } from 'react-router-dom'
+import classNames from 'classnames/bind'
+import { Dropdown, Flex, Space } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 
-const StyledFlex = styled(Flex)`
-	& .nav-child {
-		color: #fff;
-		font-size: 16px;
-		opacity: 0.7;
-		cursor: pointer;
-		&:hover {
-			opacity: 1;
-		}
-		&:visited {
-			color: #fff;
-		}
-	}
-`
+import Logo from '~/assets/Logo'
+import styles from './MovieTopNav.module.scss'
+import MovieSearch from '../../movie/MovieSearch/MovieSearch'
+import { moviesCategories } from '~/constants/routes'
 
-const StyledWrapper = styled(Flex)`
-	background: transparent;
-	padding: 14px 20px;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 1000;
-`
+const cx = classNames.bind(styles)
 
 function MovieTopNav() {
 	return (
-		<StyledWrapper align='center' justify='space-around'>
+		<Flex className={cx('top-nav')} align='center' justify='space-around'>
 			<Flex align='center' gap={14}>
 				<Link to='/'>
 					<Logo width={50} height={50} />
@@ -42,7 +21,7 @@ function MovieTopNav() {
 			</Flex>
 			<Flex align='center' gap={20}>
 				{moviesCategories.map((category, index) => (
-					<StyledFlex key={index} align='center'>
+					<Flex className={cx('nav-tab')} key={index} align='center'>
 						{category.children ? (
 							<Dropdown
 								arrow
@@ -64,10 +43,10 @@ function MovieTopNav() {
 								{category.name}
 							</Link>
 						)}
-					</StyledFlex>
+					</Flex>
 				))}
 			</Flex>
-		</StyledWrapper>
+		</Flex>
 	)
 }
 

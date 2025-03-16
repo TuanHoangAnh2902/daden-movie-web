@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import MovieTopNav from '~/components/layouts/MovieTopNav'
+import MovieTopNav from '~/components/layouts/MovieTopNav/MovieTopNav'
 
 function MainLayout() {
 	return (

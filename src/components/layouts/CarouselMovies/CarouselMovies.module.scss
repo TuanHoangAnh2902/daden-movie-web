@@ -1,0 +1,97 @@
+.carousel-movies {
+	position: relative;
+	background-color: $bgColorLayout;
+	.carousel-main {
+		position: relative;
+		:global(.slick-dots li) {
+			width: 70px;
+			height: 45px;
+			border-radius: 5px;
+		}
+		.carousel-img-wrapper {
+			position: relative;
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background-image: linear-gradient(to top, $bgColorLayout 0.1%, transparent 16%),
+					linear-gradient(to bottom, $bgColorLayout 0.1%, transparent 16%),
+					linear-gradient(to left, $bgColorLayout 0.1%, transparent 16%),
+					linear-gradient(to right, $bgColorLayout 0.1%, transparent 16%);
+				z-index: 100;
+			}
+			.carousel-img {
+				height: calc(100vh - 60px);
+				width: 100%;
+				object-fit: cover;
+			}
+		}
+		.carousel-content {
+			position: absolute;
+			top: 50%;
+			right: 52%;
+			transform: translateY(-50%);
+			z-index: 100;
+			width: 45%;
+
+			.play-btn {
+				width: 70px;
+				height: 70px;
+				font-size: 24px;
+				&:hover {
+					box-shadow: rgba(255, 218, 125, 0.15) 0px 0px 10px 12px;
+				}
+			}
+
+			.carousel-title {
+				font-size: 2.5rem;
+				font-weight: 700;
+				color: $textColor;
+			}
+			.carousel-description {
+				margin-top: 20px;
+				color: $textColor;
+			}
+			.category {
+				.category-item {
+					@include category-item();
+				}
+			}
+			.imdb-info {
+				margin-bottom: 10px;
+				.category-item {
+					@include category-item($borderColor: #fff);
+				}
+			}
+		}
+	}
+	.carousel-paging {
+		width: 460px;
+		height: 70px;
+		margin: auto;
+		transition: transform 0.5s;
+		position: absolute !important;
+		right: 0;
+		bottom: 5%;
+		:global(.slick-list) {
+			height: 100% !important;
+			line-height: 55px;
+			:global(.slick-track .slick-slide) div div img {
+				width: 70px;
+				height: 40px;
+				cursor: pointer;
+				border-radius: 5px;
+				object-fit: cover;
+				transition: all 0.5s;
+			}
+			:global(.slick-slide.slick-center) div div img {
+				transform: scale(1.2);
+				outline: 1px solid #f1c40f;
+				opacity: 1;
+			}
+			:global(.slick-slide:not(.slick-center)) div div img {
+				opacity: 0.7;
+			}
+		}
+	}
+}

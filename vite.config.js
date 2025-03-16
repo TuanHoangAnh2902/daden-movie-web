@@ -3,23 +3,37 @@ import react from '@vitejs/plugin-react-swc'
 import compression from 'vite-plugin-compression'
 import svgr from 'vite-plugin-svgr'
 
-// https://vite.dev/config/
 export default defineConfig({
 	plugins: [
-		react(),
+		react({
+			babel: {
+				plugins: [
+					[
+						'import',
+						{
+							libraryName: 'antd',
+							libraryDirectory: 'es',
+							style: 'css', // ✅ Tự động import CSS
+						},
+						'antd',
+					],
+				],
+			},
+		}),
 		compression(),
 		svgr(),
-		[
-			'import',
-			{
-				libraryName: 'antd',
-				libraryDirectory: 'es',
-				style: 'css',
-			},
-			'antd',
-		],
 	],
 	resolve: {
-		alias: [{ find: '~', replacement: '/src' }],
+		alias: [
+			{ find: '~', replacement: '/src' },
+			{ find: '@', replacement: '/src' },
+		],
+	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@use "@/styles/variables" as *; @use "@/styles/mixins" as *;`,
+			},
+		},
 	},
 })
