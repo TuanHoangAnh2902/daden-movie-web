@@ -1,2 +1,10 @@
 $bgColorLayout: #191b24;
+$bgColorLayoutLight: #282b3a;
 $textColor: #fff;
+$subColor: #ffd875;
+
+$paddingY: 45px;
+
+:root {
+	--bg-color-layout: #{$bgColorLayout};
+}

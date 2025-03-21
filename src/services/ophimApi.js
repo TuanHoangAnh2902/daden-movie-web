@@ -4,7 +4,7 @@ export const movieApi = createApi({
 	reducerPath: 'movieApi',
 	baseQuery: fetchBaseQuery({ baseUrl: 'https://ophim1.com' }),
 	endpoints: (builder) => ({
-		getMoviesList: builder.query({
+		getMoviesByUpdate: builder.query({
 			query: (page = 1) => `/danh-sach/phim-moi-cap-nhat?page=${page}`,
 		}),
 		getSearchMovie: builder.query({
@@ -17,13 +17,23 @@ export const movieApi = createApi({
 		getMovieById: builder.query({
 			query: (Id) => `/phim/id/${Id}`,
 		}),
+		getMoviesByCountry: builder.query({
+			query: (country) => `/v1/api/quoc-gia/${country}`,
+			transformResponse: (response) => response?.data,
+		}),
+		getMoviesByList: builder.query({
+			query: (list) => `/v1/api/danh-sach/${list}`,
+			transformResponse: (response) => response?.data,
+		}),
 	}),
 })
 
 export const {
-	useGetMoviesListQuery,
+	useGetMoviesByUpdateQuery,
 	useLazyGetSearchMovieQuery,
 	useGetMoviesHomeQuery,
 	useGetMovieByIdQuery,
 	useLazyGetMovieByIdQuery,
+	useGetMoviesByCountryQuery,
+	useGetMoviesByListQuery,
 } = movieApi

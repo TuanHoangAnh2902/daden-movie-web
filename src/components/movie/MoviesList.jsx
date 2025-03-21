@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useGetMoviesListQuery } from '~/services/ophimApi'
+import { useGetMoviesByUpdateQuery } from '~/services/ophimApi'
 
 const MoviesList = () => {
 	const [page, setPage] = useState(1)
-	const { data, error, isLoading } = useGetMoviesListQuery(page)
+	const { data, error, isLoading } = useGetMoviesByUpdateQuery(page)
 
 	if (isLoading) return <p>Đang tải phim...</p>
 	if (error) return <p>Lỗi khi tải dữ liệu!</p>

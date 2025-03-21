@@ -1,0 +1,23 @@
+.topics-list {
+	padding: 10px 20px;
+	width: 100%;
+	.topics-list-content {
+		max-width: 150px;
+		.topic-title {
+			background: -webkit-linear-gradient(45deg, #eee, #333);
+			-webkit-background-clip: text;
+			background-clip: text;
+			-webkit-text-fill-color: transparent;
+			font-weight: 700;
+		}
+		.view-more {
+			& > * {
+				color: $textColor;
+			}
+			&:hover > * {
+				color: $subColor;
+				cursor: pointer;
+			}
+		}
+	}
+}
