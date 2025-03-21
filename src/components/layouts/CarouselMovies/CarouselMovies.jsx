@@ -7,29 +7,15 @@ import { FaPlay } from 'react-icons/fa'
 import randomPage from '~/utils/randomPage'
 import styles from './CarouselMovies.module.scss'
 import getRandomMovies from '~/utils/getRandomMovies'
-import { useGetMoviesListQuery, useLazyGetMovieByIdQuery } from '~/services/ophimApi'
+import { useGetMoviesByUpdateQuery, useLazyGetMovieByIdQuery } from '~/services/ophimApi'
 import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
+import buttonTheme from '~/themes/buttonTheme'
 
 const cx = classNames.bind(styles)
 
-const buttonTheme = {
-	components: {
-		Button: {
-			defaultBg: 'linear-gradient(39deg, rgb(254, 207, 89), rgb(255, 241, 204));',
-			defaultHoverBg: 'linear-gradient(39deg, rgb(254, 207, 89), rgb(255, 241, 204));',
-			defaultActiveBg: 'linear-gradient(39deg, rgb(254, 207, 89), rgb(255, 241, 204));',
-			defaultHoverBorderColor: 'none',
-			defaultHoverColor: 'none',
-			defaultActiveBorderColor: 'none',
-			defaultActiveColor: 'none',
-			defaultShadow: 'rgba(255, 218, 125, 0.15) 0px 0px 10px 5px',
-		},
-	},
-}
-
 const CarouselMovies = () => {
 	const page = useMemo(() => randomPage(), []) // Chỉ random page 1 lần duy nhất
-	const { data } = useGetMoviesListQuery(page)
+	const { data } = useGetMoviesByUpdateQuery(page)
 
 	const [fetchMovieById] = useLazyGetMovieByIdQuery()
 
@@ -37,7 +23,6 @@ const CarouselMovies = () => {
 	const thumbCarouselRef = useRef(null)
 	const { token } = theme.useToken()
 	const [movies, setMovies] = useState([])
-	console.log('🚀 ~ CarouselMovies ~ movies:', movies)
 
 	// Memoize danh sách phim để tránh re-fetch không cần thiết
 	const ranDomMovies = useMemo(() => getRandomMovies(data?.items || [], 7), [data?.items])
@@ -89,12 +74,12 @@ const CarouselMovies = () => {
 							<Typography.Title level={4} className={cx('carousel-title')}>
 								{item?.movie?.name}
 							</Typography.Title>
-							<Flex gap={1} className={cx('imdb-info')}>
+							<Flex gap={8} className={cx('imdb-info')}>
 								<div className={cx('category-item')}>{item?.movie.episode_current}</div>
 								<div className={cx('category-item')}>{`${item?.movie.episode_total} tập`}</div>
 								<div className={cx('category-item')}>{item?.movie.year}</div>
 							</Flex>
-							<Flex gap={1} className={cx('category')}>
+							<Flex gap={8} className={cx('category')}>
 								{item?.movie?.category?.map((category) => (
 									<div className={cx('category-item')} key={category.id}>
 										{category.name}
@@ -114,6 +99,7 @@ const CarouselMovies = () => {
 			{/* Paging Carousel */}
 			<Carousel
 				className={cx('carousel-paging')}
+				variableWidth
 				adaptiveHeight
 				dots={false}
 				draggable
@@ -125,7 +111,7 @@ const CarouselMovies = () => {
 				swipeToSlide
 				focusOnSelect>
 				{movies.map((item, index) => (
-					<div key={index} onClick={() => handleThumbnailClick(index)}>
+					<div className={cx('carousel-item')} key={index} onClick={() => handleThumbnailClick(index)}>
 						<img src={item?.movie?.poster_url || 'fallback.jpg'} alt='thumbnail' />
 					</div>
 				))}

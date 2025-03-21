@@ -32,7 +32,8 @@
 			right: 52%;
 			transform: translateY(-50%);
 			z-index: 100;
-			width: 45%;
+			padding: 0 $paddingY;
+			// width: 45%;
 
 			.play-btn {
 				width: 70px;
@@ -66,13 +67,14 @@
 		}
 	}
 	.carousel-paging {
-		width: 460px;
+		width: 520px;
 		height: 70px;
 		margin: auto;
 		transition: transform 0.5s;
 		position: absolute !important;
 		right: 0;
 		bottom: 5%;
+		padding: 0 $paddingY;
 		:global(.slick-list) {
 			height: 100% !important;
 			line-height: 55px;
@@ -92,6 +94,9 @@
 			:global(.slick-slide:not(.slick-center)) div div img {
 				opacity: 0.7;
 			}
+		}
+		.carousel-item {
+			margin: 0 10px;
 		}
 	}
 }
