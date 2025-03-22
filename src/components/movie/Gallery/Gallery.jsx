@@ -6,8 +6,8 @@ import { useGetMoviesByCountryQuery, useGetMoviesByListQuery } from '~/services/
 
 const cx = classNames.bind(styles)
 export default function Gallery() {
-	const { data: dataVietNam, isLoading: isLoadingVietNam } = useGetMoviesByCountryQuery('viet-nam')
-	const { data: dataHanQuoc, isLoading: isLoadingHanQuoc } = useGetMoviesByCountryQuery('han-quoc')
+	const { data: dataVietNam, isLoading: isLoadingVietNam } = useGetMoviesByCountryQuery('trung-quoc')
+	const { data: dataHanQuoc, isLoading: isLoadingHanQuoc } = useGetMoviesByCountryQuery('nhat-ban')
 	const { data: dataHoatHinh, isLoading: isLoadingHoatHinh } = useGetMoviesByListQuery('hoat-hinh')
 
 	return (

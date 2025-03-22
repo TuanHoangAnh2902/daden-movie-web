@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 
 const cx = classNames.bind(styles)
-function MovieCard({ imageUrl, movieData, handleMouseEnter, hoveredCard, setCardPosition, cardRef }) {
+function MovieCard({ imageUrl, movieData, handleMouseEnter, hoveredCard, setCardPosition, cardRef, direction }) {
 	const imageBaseUrl = `${imageUrl}/uploads/movies/`
 
 	useEffect(() => {
@@ -33,24 +33,24 @@ function MovieCard({ imageUrl, movieData, handleMouseEnter, hoveredCard, setCard
 	}, [cardRef, hoveredCard, setCardPosition])
 
 	return (
-		<div className={cx('movie-card')}>
-			<div
-				className={cx('card-wrapper')}
-				ref={hoveredCard === movieData._id ? cardRef : null}
-				onMouseEnter={() => handleMouseEnter(movieData._id)}>
-				<motion.div className={cx('card')} layoutId={hoveredCard}>
-					<div className={cx('card-img')}>
-						<motion.img
-							key={hoveredCard}
-							src={imageBaseUrl + (movieData?.poster_url || '')}
-							alt={movieData?.name || 'Movie'}
-						/>
-					</div>
-					<div className={cx('card-content')}>
-						<p className={cx('card-content-title')}>{movieData?.name || 'Unknown Title'}</p>
-					</div>
-				</motion.div>
-			</div>
+		<div
+			onMouseEnter={() => handleMouseEnter(movieData._id)}
+			ref={hoveredCard === movieData._id ? cardRef : null}
+			className={cx('movie-card', direction === 'vertical' ? 'vertical' : 'horizontal')}>
+			<motion.div className={cx('card')} layoutId={hoveredCard}>
+				<div className={cx('card-img')}>
+					<motion.img
+						key={hoveredCard}
+						src={
+							direction === 'horizontal' ? imageBaseUrl + movieData?.poster_url : imageBaseUrl + movieData?.thumb_url
+						}
+						alt={movieData?.name || 'Movie'}
+					/>
+				</div>
+				<div className={cx('card-content')}>
+					<p className={cx('card-content-title')}>{movieData?.name || 'Unknown Title'}</p>
+				</div>
+			</motion.div>
 		</div>
 	)
 }
@@ -62,6 +62,7 @@ MovieCard.propTypes = {
 	hoveredCard: PropTypes.string,
 	setCardPosition: PropTypes.func,
 	cardRef: PropTypes.object,
+	direction: PropTypes.string,
 }
 
 export default MovieCard

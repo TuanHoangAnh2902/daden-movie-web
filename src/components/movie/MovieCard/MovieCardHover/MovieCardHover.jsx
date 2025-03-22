@@ -9,12 +9,15 @@ import { LuDot } from 'react-icons/lu'
 import { HeartFilled, InfoCircleFilled } from '@ant-design/icons'
 
 const cx = classNames.bind(styles)
+
 function MovieCardHover({ movieData, hoveredCard, cardPosition, handleMouseLeave, imageUrl }) {
 	const imageBaseUrl = `${imageUrl}/uploads/movies/`
+	const imageSrc = imageBaseUrl + movieData?.poster_url
+
 	return (
 		<div>
 			<AnimatePresence mode='sync'>
-				{hoveredCard && (
+				{hoveredCard && movieData && (
 					<motion.div
 						key={hoveredCard}
 						initial={{ opacity: 0, scale: 1 }}
@@ -32,7 +35,7 @@ function MovieCardHover({ movieData, hoveredCard, cardPosition, handleMouseLeave
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
 								transition={{ duration: 0.3 }}
-								src={imageBaseUrl + movieData?.poster_url}
+								src={imageSrc}
 								alt={movieData?.name}
 								className={cx('card-detail-img')}
 							/>
@@ -65,7 +68,6 @@ function MovieCardHover({ movieData, hoveredCard, cardPosition, handleMouseLeave
 								<div className={cx('imdb-info-item')}>{movieData?.episode_current}</div>
 								<div className={cx('imdb-info-item')}>{movieData?.time}</div>
 							</Flex>
-
 							<Flex className={cx('category-container')} gap={4}>
 								{movieData?.category?.map((category) => (
 									<Flex className={cx('category')} align='center' key={category?.id || Math.random()}>
@@ -81,6 +83,7 @@ function MovieCardHover({ movieData, hoveredCard, cardPosition, handleMouseLeave
 		</div>
 	)
 }
+
 MovieCardHover.propTypes = {
 	movieData: PropTypes.object,
 	hoveredCard: PropTypes.string,
@@ -91,4 +94,5 @@ MovieCardHover.propTypes = {
 	handleMouseLeave: PropTypes.func.isRequired,
 	imageUrl: PropTypes.string.isRequired,
 }
+
 export default MovieCardHover

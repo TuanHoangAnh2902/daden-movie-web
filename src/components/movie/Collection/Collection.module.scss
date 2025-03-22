@@ -1,0 +1,30 @@
+.collection {
+	.collection-title {
+		.title {
+			margin: 0;
+			font-weight: 700;
+			color: $textColor;
+		}
+	}
+	.view-more {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-width: 33px;
+		max-width: 120px;
+		min-height: 33px;
+		border: 1px solid $textColor;
+		padding: 5px 10px;
+		border-radius: 30px;
+		font-size: 12px;
+		overflow: hidden;
+		&:hover {
+			cursor: pointer;
+			color: $subColor;
+		}
+		p {
+			white-space: nowrap;
+			overflow: hidden;
+		}
+	}
+}

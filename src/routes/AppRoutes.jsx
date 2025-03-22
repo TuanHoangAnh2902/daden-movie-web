@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router'
 import { createBrowserRouter } from 'react-router-dom'
 
-import Home from '~/pages/Home'
+import Home from '~/pages/Home/Home'
 import About from '~/pages/About'
 import NotFount from '~/pages/NotFount'
 import MoviePage from '~/pages/MoviePage'
