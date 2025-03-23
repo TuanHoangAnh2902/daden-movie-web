@@ -76,7 +76,7 @@ const CarouselMovies = () => {
 							</Typography.Title>
 							<Flex gap={8} className={cx('imdb-info')}>
 								<div className={cx('category-item')}>{item?.movie.episode_current}</div>
-								<div className={cx('category-item')}>{`${item?.movie.episode_total} tập`}</div>
+								<div className={cx('category-item')}>{`Tập: ${item?.movie.episode_total}`}</div>
 								<div className={cx('category-item')}>{item?.movie.year}</div>
 							</Flex>
 							<Flex gap={8} className={cx('category')}>
