@@ -43,7 +43,7 @@ function SwiperCarousel({ data, isLoading }) {
 						}}
 						className={cx('carousel')}>
 						{Array.isArray(data?.items) &&
-							data.items.map((item, index) => (
+							data.items?.map((item, index) => (
 								<SwiperSlide key={item._id} virtualIndex={index}>
 									<MovieCardWithHover imageUrl={data?.APP_DOMAIN_CDN_IMAGE} movieData={item} direction={'horizontal'} />
 								</SwiperSlide>

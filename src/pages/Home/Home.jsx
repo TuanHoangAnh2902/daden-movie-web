@@ -8,15 +8,23 @@ import { useGetMoviesByListQuery } from '~/services/ophimApi'
 
 const cx = classNames.bind(styles)
 function Home() {
-	const { data: dataPhimLe } = useGetMoviesByListQuery('phim-le')
-	const { data: dataSapChieu } = useGetMoviesByListQuery('phim-sap-chieu')
+	const { data: dataPhimLe, isLoading: isLoadingPhimLe } = useGetMoviesByListQuery({ list: 'phim-le', page: 1 })
+	const { data: dataSapChieu, isLoading: isLoadingSapChieu } = useGetMoviesByListQuery({
+		list: 'phim-sap-chieu',
+		page: 1,
+	})
 
 	return (
 		<div className={cx('home')}>
 			<CarouselMovies />
 			<Gallery />
-			<Collection movieData={dataPhimLe} direction={'vertical'} reverseDirection={false} />
-			<Collection movieData={dataSapChieu} direction={'horizontal'} reverseDirection={true} />
+			<Collection movieData={dataPhimLe} isLoading={isLoadingPhimLe} direction={'vertical'} reverseDirection={false} />
+			<Collection
+				movieData={dataSapChieu}
+				isLoading={isLoadingSapChieu}
+				direction={'horizontal'}
+				reverseDirection={true}
+			/>
 		</div>
 	)
 }

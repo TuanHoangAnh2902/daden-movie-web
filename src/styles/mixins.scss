@@ -14,8 +14,8 @@
 	color: $textColor;
 	font-size: $fontSize;
 	background-color: $bgColor;
-	font-weight: 400;
 	border: 1px solid $borderColor;
+	white-space: nowrap;
 	&:hover {
 		color: $textHoverColor;
 		cursor: $cursor;

@@ -5,10 +5,10 @@
 	position: relative;
 
 	&.vertical {
-		width: 184px;
+		width: 170px;
 		.card {
 			.card-img {
-				height: 276px;
+				height: 255px;
 				width: 100%;
 			}
 		}
@@ -22,10 +22,41 @@
 			border-radius: 8px;
 			overflow: hidden;
 			height: 150px;
-			img {
+			position: relative;
+
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(26, 26, 26, 0.2) 0%, rgba(26, 26, 26, 0.6) 100%);
+				z-index: 1;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+			}
+
+			.card-img-element {
 				object-fit: cover;
 				width: 100%;
 				height: 100%;
+				transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+				will-change: transform, opacity, filter;
+				background-color: #1a1a1a;
+
+				&[data-loading='true'] {
+					filter: blur(10px);
+					transform: scale(1.1);
+					opacity: 0.6;
+				}
+
+				&[data-loading='false'] {
+					filter: blur(0);
+					transform: scale(1);
+					opacity: 1;
+				}
+			}
+
+			&:hover::before {
+				opacity: 1;
 			}
 		}
 
@@ -37,12 +68,19 @@
 				transition: all 0.3s;
 				font-size: 14px;
 				color: $textColor;
-				white-space: nowrap; /* Không cho xuống dòng */
-				overflow: hidden; /* Ẩn phần dư */
-				text-overflow: ellipsis; /* Hiển thị "..." khi quá dài */
-				width: 100%; /* Giới hạn độ rộng */
+				overflow: hidden;
+
 				&:hover {
 					color: $subColor;
+				}
+				&.card-horizontal {
+					white-space: nowrap; /* Không cho xuống dòng */
+					overflow: hidden; /* Ẩn phần bị tràn */
+					text-overflow: ellipsis; /* Hiển thị dấu "..." */
+					width: 100%;
+				}
+				&.card-vertical {
+					text-align: center;
 				}
 			}
 
@@ -63,9 +101,11 @@
 	border-radius: 10px;
 	overflow: hidden;
 	z-index: 1000;
+
 	.card-detail-img-wrapper {
 		position: relative;
 		height: 200px;
+
 		&::before {
 			content: '';
 			position: absolute;
@@ -75,12 +115,16 @@
 			width: 100%;
 			height: 100%;
 		}
+
 		.card-detail-img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+			transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+			will-change: transform, opacity, filter;
 		}
 	}
+
 	.card-detail-content {
 		padding: 10px 20px;
 
@@ -90,11 +134,13 @@
 			font-weight: 600;
 			margin-bottom: 5px;
 		}
+
 		.origin-name {
 			font-size: 13px;
 			font-weight: 400;
 			color: $subColor;
 		}
+
 		.card-detail-actions-btn {
 			margin-top: 14px;
 
@@ -108,6 +154,7 @@
 				padding-right: 30px;
 				border: none;
 			}
+
 			.action-btn {
 				background: transparent;
 				border: 0.1px solid $textColor;
@@ -117,12 +164,14 @@
 				}
 			}
 		}
+
 		.imdb-info {
 			margin-top: 14px;
 			.imdb-info-item {
 				@include category-item($fontSize: 11px);
 			}
 		}
+
 		.category-container {
 			.category {
 				margin-top: 10px;

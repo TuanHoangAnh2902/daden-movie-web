@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect, useCallback, memo } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames/bind'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -12,19 +12,24 @@ import styles from './MovieCardWithHover.module.scss'
 
 const cx = classNames.bind(styles)
 
-function MovieCardWithHover({ imageUrl, movieData, direction }) {
-	console.log('🚀 ~ MovieCardWithHover ~ movieData:', movieData)
+const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
+	const imageBaseUrl = `${imageUrl}/uploads/movies/`
+
 	const [hoveredCard, setHoveredCard] = useState(null)
 	const [cardPosition, setCardPosition] = useState(null)
 	const [isHovered, setIsHovered] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
+
 	const cardRef = useRef(null)
 	const cardDetailRef = useRef(null)
 	const timerRef = useRef(null)
-	const imageBaseUrl = `${imageUrl}/uploads/movies/`
 
-	// Hàm kiểm tra chuột có trong card hoặc card detail không
+	const handleImageLoad = useCallback(() => {
+		setIsLoading(false)
+	}, [])
+
+	// Mouse tracking logic
 	const checkMouseInside = useCallback((event) => {
-		// Check original card
 		const isInsideCard = cardRef.current
 			? (() => {
 					const rect = cardRef.current.getBoundingClientRect()
@@ -37,7 +42,6 @@ function MovieCardWithHover({ imageUrl, movieData, direction }) {
 			  })()
 			: false
 
-		// Check card detail if it exists
 		const isInsideDetail = cardDetailRef.current
 			? (() => {
 					const rect = cardDetailRef.current.getBoundingClientRect()
@@ -62,9 +66,9 @@ function MovieCardWithHover({ imageUrl, movieData, direction }) {
 
 	const handleMouseEnterWithDelay = useCallback(() => {
 		timerRef.current = setTimeout(() => {
-			setHoveredCard(movieData._id)
+			setHoveredCard(movieData?._id)
 		}, 500)
-	}, [movieData._id])
+	}, [movieData?._id])
 
 	const handleMouseLeave = useCallback(() => {
 		clearTimeout(timerRef.current)
@@ -76,19 +80,16 @@ function MovieCardWithHover({ imageUrl, movieData, direction }) {
 	useEffect(() => {
 		if (!hoveredCard || !cardRef.current) return
 		const rect = cardRef.current.getBoundingClientRect()
-		const cardWidth = 400 // Approximate width of hover card
+		const cardWidth = 400
 		const windowWidth = window.innerWidth
 
-		// Calculate base position
 		const top = rect.top + window.scrollY - 50
 		let left = rect.left + window.scrollX - 80
 
-		// Adjust for right edge
 		if (left + cardWidth > windowWidth - 16) {
 			left = windowWidth - cardWidth - 32
 		}
 
-		// Adjust for left edge
 		if (left < 16) {
 			left = 16
 		}
@@ -100,15 +101,24 @@ function MovieCardWithHover({ imageUrl, movieData, direction }) {
 		<>
 			<div ref={cardRef} className={cx('movie-card', direction)}>
 				<motion.div className={cx('card')}>
-					<div className={cx('card-img')}>
+					<div className={cx('card-img')} onMouseEnter={handleMouseEnterWithDelay}>
 						<motion.img
-							onMouseEnter={handleMouseEnterWithDelay}
 							src={imageBaseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)}
 							alt={movieData?.name || 'Movie'}
+							loading='lazy'
+							onError={(e) => {
+								e.target.onerror = null
+								e.target.src = '/placeholder-image.jpg'
+							}}
+							onLoad={handleImageLoad}
+							data-loading={isLoading}
+							className={cx('card-img-element')}
 						/>
 					</div>
 					<div className={cx('card-content')}>
-						<p className={cx('card-content-title')}>{movieData?.name || 'Unknown Title'}</p>
+						<p className={cx('card-content-title', direction === 'vertical' ? 'card-vertical' : 'card-horizontal')}>
+							{movieData?.name || 'Unknown Title'}
+						</p>
 					</div>
 				</motion.div>
 			</div>
@@ -131,8 +141,13 @@ function MovieCardWithHover({ imageUrl, movieData, direction }) {
 									animate={{ opacity: 1 }}
 									exit={{ opacity: 0 }}
 									transition={{ duration: 0.3 }}
-									src={imageBaseUrl + movieData.poster_url}
+									src={imageBaseUrl + movieData?.poster_url}
 									alt={movieData.name}
+									loading='lazy'
+									onError={(e) => {
+										e.target.onerror = null
+										e.target.src = imageBaseUrl + movieData?.thumb_url
+									}}
 									className={cx('card-detail-img')}
 								/>
 							</div>
@@ -180,10 +195,13 @@ function MovieCardWithHover({ imageUrl, movieData, direction }) {
 	)
 }
 
-MovieCardWithHover.propTypes = {
+MovieCardWithHoverComponent.propTypes = {
 	imageUrl: PropTypes.string.isRequired,
 	movieData: PropTypes.object.isRequired,
 	direction: PropTypes.oneOf(['vertical', 'horizontal']),
 }
+
+const MovieCardWithHover = memo(MovieCardWithHoverComponent)
+MovieCardWithHover.displayName = 'MovieCardWithHover'
 
 export default MovieCardWithHover

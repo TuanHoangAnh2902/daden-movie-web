@@ -7,44 +7,63 @@ import Logo from '~/assets/Logo'
 import styles from './MovieTopNav.module.scss'
 import MovieSearch from '../../movie/MovieSearch/MovieSearch'
 import { moviesCategories } from '~/constants/routes'
+import { useEffect, useState } from 'react'
 
 const cx = classNames.bind(styles)
 
 function MovieTopNav() {
+	const [lastScrollY, setLastScrollY] = useState(0)
+
+	useEffect(() => {
+		const handleScroll = () => {
+			const currentScrollY = window.scrollY
+			setLastScrollY(currentScrollY)
+		}
+
+		window.addEventListener('scroll', handleScroll)
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll)
+		}
+	}, [lastScrollY])
+
 	return (
-		<Flex className={cx('top-nav')} align='center' justify='space-around'>
+		<Flex className={cx('top-nav', { 'bg-color': lastScrollY !== 0 })} align='center' justify='space-around'>
 			<Flex align='center' gap={14}>
 				<Link to='/'>
 					<Logo width={50} height={50} />
 				</Link>
 				<MovieSearch />
 			</Flex>
+
 			<Flex align='center' gap={20}>
-				{moviesCategories.map((category, index) => (
-					<Flex className={cx('nav-tab')} key={index} align='center'>
-						{category.children ? (
-							<Dropdown
-								arrow
-								className='nav-child'
-								menu={{
-									items: category.children.map((child) => ({
-										key: child.to, // Đặt key là đường dẫn
-										label: <Link to={child.to}>{child.name}</Link>, // Hiển thị tên phim
-									})),
-								}}
-								trigger={['click']}>
-								<Space>
-									{category.name}
-									<CaretDownOutlined />
-								</Space>
-							</Dropdown>
-						) : (
-							<Link className='nav-child' to={category.to}>
-								{category.name}
+				{moviesCategories?.map((category) => {
+					const menuItems = category.children?.map((child) => ({
+						key: child.to,
+						label: (
+							<Link to={`movies/${child.to}`} state={{ param: child.to }}>
+								{child.name}
 							</Link>
-						)}
-					</Flex>
-				))}
+						),
+					}))
+
+					return (
+						<Flex className={cx('nav-tab')} key={category.to || category.name} align='center'>
+							{category.children ? (
+								<Dropdown arrow menu={{ items: menuItems }} trigger={['click']}>
+									<Space>
+										{category.name}
+										<CaretDownOutlined />
+									</Space>
+								</Dropdown>
+							) : (
+								<Link className='nav-child' to={`movies/${category.to}`} state={{ param: category.to }}>
+									{category.name}
+								</Link>
+							)}
+						</Flex>
+					)
+				})}
 			</Flex>
 		</Flex>
 	)

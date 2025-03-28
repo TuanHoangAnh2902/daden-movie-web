@@ -33,7 +33,7 @@ const CarouselMovies = () => {
 
 		let isMounted = true // Avoid state updates if component unmounts
 
-		Promise.all(ranDomMovies.map((movie) => fetchMovieById(movie._id).unwrap()))
+		Promise.all(ranDomMovies?.map((movie) => fetchMovieById(movie._id).unwrap()))
 			.then((fetchedMovies) => {
 				if (isMounted) setMovies(fetchedMovies)
 			})
@@ -65,7 +65,7 @@ const CarouselMovies = () => {
 				dots={false}
 				// autoplay={{ dotDuration: 3000 }}
 			>
-				{movies.map((item) => (
+				{movies?.map((item) => (
 					<div key={item?.movie?._id}>
 						<div className={cx('carousel-img-wrapper')}>
 							<img className={cx('carousel-img')} src={item?.movie?.poster_url} alt='thumbnail' />
@@ -110,7 +110,7 @@ const CarouselMovies = () => {
 				slidesToShow={5}
 				swipeToSlide
 				focusOnSelect>
-				{movies.map((item, index) => (
+				{movies?.map((item, index) => (
 					<div className={cx('carousel-item')} key={index} onClick={() => handleThumbnailClick(index)}>
 						<img src={item?.movie?.poster_url || 'fallback.jpg'} alt='thumbnail' />
 					</div>

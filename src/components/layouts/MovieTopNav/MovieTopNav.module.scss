@@ -1,4 +1,5 @@
 .top-nav {
+	transition: all 0.3s;
 	background: transparent;
 	padding: 14px 20px;
 	position: fixed;
@@ -20,4 +21,8 @@
 			}
 		}
 	}
+}
+
+.bg-color {
+	background: $bgColorLayout;
 }

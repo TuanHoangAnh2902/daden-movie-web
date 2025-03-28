@@ -1,5 +1,5 @@
 $bgColorLayout: #191b24;
-$bgColorLayoutLight: #282b3a;
+$bgColorLayoutLight: #2f3346;
 $textColor: #fff;
 $subColor: #ffd875;
 
@@ -7,4 +7,7 @@ $paddingY: 45px;
 
 :root {
 	--bg-color-layout: #{$bgColorLayout};
+	--bg-color-layout-light: #{$bgColorLayoutLight};
+	--text-color: #{$textColor};
+	--sub-color: #{$subColor};
 }

@@ -9,6 +9,7 @@ export const movieApi = createApi({
 		}),
 		getSearchMovie: builder.query({
 			query: (slug) => `/v1/api/tim-kiem?keyword=${slug}`,
+			transformResponse: (response) => response?.data,
 		}),
 		getMoviesHome: builder.query({
 			query: () => '/v1/api/home',
@@ -18,11 +19,11 @@ export const movieApi = createApi({
 			query: (Id) => `/phim/id/${Id}`,
 		}),
 		getMoviesByCountry: builder.query({
-			query: (country) => `/v1/api/quoc-gia/${country}`,
+			query: ({ country, page = 1 }) => `/v1/api/quoc-gia/${country}?page=${page}`,
 			transformResponse: (response) => response?.data,
 		}),
 		getMoviesByList: builder.query({
-			query: (list) => `/v1/api/danh-sach/${list}`,
+			query: ({ list, page = 1 }) => `/v1/api/danh-sach/${list}?page=${page}`,
 			transformResponse: (response) => response?.data,
 		}),
 	}),
@@ -35,5 +36,7 @@ export const {
 	useGetMovieByIdQuery,
 	useLazyGetMovieByIdQuery,
 	useGetMoviesByCountryQuery,
+	useLazyGetMoviesByListQuery,
+	useLazyGetMoviesByCountryQuery,
 	useGetMoviesByListQuery,
 } = movieApi

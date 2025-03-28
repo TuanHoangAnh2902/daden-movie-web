@@ -6,9 +6,15 @@ import { useGetMoviesByCountryQuery, useGetMoviesByListQuery } from '~/services/
 
 const cx = classNames.bind(styles)
 export default function Gallery() {
-	const { data: dataVietNam, isLoading: isLoadingVietNam } = useGetMoviesByCountryQuery('trung-quoc')
-	const { data: dataHanQuoc, isLoading: isLoadingHanQuoc } = useGetMoviesByCountryQuery('nhat-ban')
-	const { data: dataHoatHinh, isLoading: isLoadingHoatHinh } = useGetMoviesByListQuery('hoat-hinh')
+	const { data: dataVietNam, isLoading: isLoadingVietNam } = useGetMoviesByCountryQuery({
+		country: 'viet-nam',
+		page: 1,
+	})
+	const { data: dataHanQuoc, isLoading: isLoadingHanQuoc } = useGetMoviesByCountryQuery({
+		country: 'nhat-ban',
+		page: 1,
+	})
+	const { data: dataHoatHinh, isLoading: isLoadingHoatHinh } = useGetMoviesByListQuery({ list: 'hoat-hinh' })
 
 	return (
 		<Flex className={cx('gallery')} vertical>
