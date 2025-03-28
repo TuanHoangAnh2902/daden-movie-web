@@ -39,7 +39,7 @@ const MoviesDisplay = ({
 				<Typography.Title
 					className={cx('movies-list-title')}
 					style={{
-						background: randomColor !== '' ? `-webkit-linear-gradient(45deg, ${randomColor}, #fff)` : 'none',
+						background: randomColor ? `-webkit-linear-gradient(45deg, ${randomColor}, #fff)` : 'none',
 						fontWeight: 600,
 						WebkitBackgroundClip: 'text',
 						WebkitTextFillColor: randomColor ? 'transparent' : textColor,
@@ -66,7 +66,7 @@ const MoviesDisplay = ({
 				<ConfigProvider
 					theme={{
 						token: { colorBorder: 'none', lineWidth: '0', colorText: textColor, colorBgContainer: bgColorLight },
-						components: { Pagination: { itemBg: bgColorLight, itemActiveColorDisabled: 'red' } },
+						components: { Pagination: { itemBg: bgColorLight } },
 					}}>
 					<Pagination
 						align='center'

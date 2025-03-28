@@ -12,13 +12,18 @@ import { moviesCategories } from '~/constants/routes'
 import MoviesSearchList from '~/components/movie/MoviesSearchList/MoviesSearchList'
 import MoviesCountiesList from '~/components/movie/MoviesCountiesList/MoviesCountiesList'
 
-const navRoutes = moviesCategories.flatMap(({ to, name, children }) =>
+const navRoutes = moviesCategories.flatMap(({ name, children }) =>
 	children
-		? children?.map(({ to: childTo, name: childName }) => ({
-				path: `movies/${childTo}`,
+		? children.map(({ name: childName }) => ({
+				path: `movies/:param`, // sửa cố định
 				element: <MoviesList title={childName} />,
 		  }))
-		: [{ path: `movies/${to}`, element: <MoviesList title={name} /> }],
+		: [
+				{
+					path: `movies/:param`, // sửa cố định
+					element: <MoviesList title={name} />,
+				},
+		  ],
 )
 
 const router = createBrowserRouter([

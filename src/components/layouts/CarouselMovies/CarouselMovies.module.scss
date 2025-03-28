@@ -29,11 +29,10 @@
 		.carousel-content {
 			position: absolute;
 			top: 50%;
-			right: 52%;
+			left: 0;
 			transform: translateY(-50%);
 			z-index: 100;
-			// padding: 0 $paddingY;
-			// width: 45%;
+			width: 45%;
 
 			.play-btn {
 				width: 70px;

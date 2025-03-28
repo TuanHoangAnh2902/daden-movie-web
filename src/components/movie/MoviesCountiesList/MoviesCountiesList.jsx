@@ -1,38 +1,42 @@
-import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-
+import { useParams, useSearchParams, useLocation } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { useLazyGetMoviesByCountryQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
+
 const MoviesCountiesList = () => {
+	const { param } = useParams() // Lấy trực tiếp từ URL
+	console.log('🚀 ~ MoviesCountiesList ~ param:', param)
+	const [searchParams, setSearchParams] = useSearchParams()
 	const location = useLocation()
-	const param = location.state?.param || ''
+
+	// Giữ randomColor nếu có
 	const randomColor = location.state?.randomColor || ''
 
-	const [currentPage, setCurrentPage] = useState(1)
-	const [fetchData, { data, isLoading, isError, error }] = useLazyGetMoviesByCountryQuery({
-		country: param,
-		page: currentPage,
-	})
+	// Lấy page từ query string hoặc mặc định là 1
+	const initialPage = parseInt(searchParams.get('page')) || 1
+	const [currentPage, setCurrentPage] = useState(initialPage)
 
-	useEffect(() => {
-		if (param) {
-			fetchData({ country: param, page: 1 })
-			setCurrentPage(1)
-			window.scrollTo({ top: 0, behavior: 'smooth' })
-		}
-	}, [fetchData, param])
+	// API
+	const [fetchData, { data, isLoading, isError, error }] = useLazyGetMoviesByCountryQuery()
 
+	// Xử lý chuyển trang
+	const handlePageChange = (newPage) => {
+		setCurrentPage(newPage)
+		setSearchParams({ page: newPage.toString() })
+	}
+
+	// Fetch phim khi param hoặc page thay đổi
 	useEffect(() => {
-		if (param && currentPage > 1) {
-			fetchData({ country: param, page: currentPage })
-		}
-	}, [currentPage, param, fetchData])
+		if (!param) return
+		fetchData({ country: param, page: currentPage })
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}, [param, currentPage, fetchData])
 
 	return (
 		<MoviesDisplay
 			randomColor={randomColor}
-			titlePage={data?.titlePage}
+			titlePage={data?.titlePage || 'Movies List'}
 			imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
 			movies={data?.items || []}
 			totalMovies={data?.params?.pagination?.totalItems || 0}
@@ -41,7 +45,7 @@ const MoviesCountiesList = () => {
 			isError={isError}
 			error={error}
 			currentPage={currentPage}
-			setCurrentPage={setCurrentPage}
+			setCurrentPage={handlePageChange}
 		/>
 	)
 }
