@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
-import { Dropdown, Flex, Space } from 'antd'
+import { ConfigProvider, Dropdown, Flex, Space } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 
 import Logo from '~/assets/Logo'
@@ -40,24 +40,22 @@ function MovieTopNav() {
 				{moviesCategories?.map((category) => {
 					const menuItems = category.children?.map((child) => ({
 						key: child.to,
-						label: (
-							<Link to={`movies/${child.to}`} state={{ param: child.to }}>
-								{child.name}
-							</Link>
-						),
+						label: <Link to={`movies/${category.to}?name=${child.to}`}>{child.name}</Link>,
 					}))
 
 					return (
 						<Flex className={cx('nav-tab')} key={category.to || category.name} align='center'>
 							{category.children ? (
-								<Dropdown arrow menu={{ items: menuItems }} trigger={['click']}>
-									<Space>
-										{category.name}
-										<CaretDownOutlined />
-									</Space>
-								</Dropdown>
+								<ConfigProvider theme={{ components: { Dropdown: { paddingBlock: 0 } } }}>
+									<Dropdown className={cx('dropdown-link')} arrow menu={{ items: menuItems }} trigger={['click']}>
+										<Space>
+											<p className={cx('name')}>{category.name}</p>
+											<CaretDownOutlined />
+										</Space>
+									</Dropdown>
+								</ConfigProvider>
 							) : (
-								<Link className='nav-child' to={`movies/${category.to}`} state={{ param: category.to }}>
+								<Link className='nav-child' to={`movies?name=${category.to}&page=1`}>
 									{category.name}
 								</Link>
 							)}

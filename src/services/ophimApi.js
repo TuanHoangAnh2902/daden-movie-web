@@ -8,7 +8,7 @@ export const movieApi = createApi({
 			query: (page = 1) => `/danh-sach/phim-moi-cap-nhat?page=${page}`,
 		}),
 		getSearchMovie: builder.query({
-			query: (slug) => `/v1/api/tim-kiem?keyword=${slug}`,
+			query: ({ slug, page = 1 }) => `/v1/api/tim-kiem?keyword=${slug}&page=${page}`,
 			transformResponse: (response) => response?.data,
 		}),
 		getMoviesHome: builder.query({
@@ -26,6 +26,10 @@ export const movieApi = createApi({
 			query: ({ list, page = 1 }) => `/v1/api/danh-sach/${list}?page=${page}`,
 			transformResponse: (response) => response?.data,
 		}),
+		getMoviesByCategory: builder.query({
+			query: ({ category, page = 1 }) => `/v1/api/the-loai/${category}?page=${page}`,
+			transformResponse: (response) => response?.data,
+		}),
 	}),
 })
 
@@ -39,4 +43,5 @@ export const {
 	useLazyGetMoviesByListQuery,
 	useLazyGetMoviesByCountryQuery,
 	useGetMoviesByListQuery,
+	useLazyGetMoviesByCategoryQuery,
 } = movieApi

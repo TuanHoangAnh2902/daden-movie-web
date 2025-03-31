@@ -6,6 +6,7 @@ export const useThemeColors = () => {
 		return {
 			bgColorLight: rootStyles.getPropertyValue('--bg-color-layout-light').trim() || '#000',
 			textColor: rootStyles.getPropertyValue('--text-color').trim() || '#fff',
+			subColor: rootStyles.getPropertyValue('--sub-color').trim() || '#fff',
 		}
 	}
 

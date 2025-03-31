@@ -1,5 +1,5 @@
 export const moviesCategories = [
-	{ name: 'Phim Bộ', to: 'phim-bo' },
+	{ name: 'Phim Bộ', to: 'phim-bo', children: [{ name: 'Phim Bộ Trung Quốc', to: 'phim-bo-trung-quoc' }] },
 	{ name: 'Phim Lẻ', to: 'phim-le' },
 	{ name: 'Anime', to: 'hoat-hinh' },
 	{ name: 'TV shows', to: 'tv-shows' },
