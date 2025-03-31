@@ -18,7 +18,7 @@ function TopicsList({ data, isLoading }) {
 	const [randomColor] = useState(() => getRandomRGBColor())
 
 	// Xác định đường dẫn điều hướng
-	const navParam = `movies/${data?.params?.type_slug === 'danh-sach' ? '' : 'countries/'}`
+	const navParam = `movies/${data?.params?.type_slug === 'danh-sach' ? '' : 'country'}`
 	const breadcrumbTitle = data?.breadCrumb?.[0]?.name || 'Default Title'
 	const typeList = data?.type_list || ''
 
@@ -42,7 +42,7 @@ function TopicsList({ data, isLoading }) {
 				<Flex align='center' gap={4} className={cx('view-more')}>
 					<Link
 						className={cx('view-more-text')}
-						to={navParam + typeList}
+						to={`${navParam}?name=${typeList}&page=1`}
 						state={{ param: typeList, randomColor: randomColor }}>
 						Xem toàn bộ
 					</Link>

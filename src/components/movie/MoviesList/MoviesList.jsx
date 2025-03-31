@@ -1,36 +1,39 @@
 import { useEffect, useState } from 'react'
-import { useParams, useSearchParams, useLocation } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import { useSearchParams, useLocation } from 'react-router-dom'
 import { useLazyGetMoviesByListQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
 
 const MoviesList = () => {
-	const { param } = useParams() // Lấy trực tiếp từ URL
 	const [searchParams, setSearchParams] = useSearchParams()
 	const location = useLocation()
 
 	// Giữ randomColor nếu có
 	const randomColor = location.state?.randomColor || ''
 
-	// Lấy page từ query string hoặc mặc định là 1
+	const categoryNameSlug = searchParams.get('name') || ''
 	const initialPage = parseInt(searchParams.get('page')) || 1
 	const [currentPage, setCurrentPage] = useState(initialPage)
 
 	// API
 	const [fetchData, { data, isLoading, isError, error }] = useLazyGetMoviesByListQuery()
 
+	// Đồng bộ `currentPage` với URL
+	useEffect(() => {
+		setCurrentPage(parseInt(searchParams.get('page')) || 1)
+	}, [searchParams])
+
+	// Fetch dữ liệu khi categoryNameSlug hoặc currentPage thay đổi
+	useEffect(() => {
+		if (!categoryNameSlug) return
+		fetchData({ list: categoryNameSlug, page: currentPage })
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}, [categoryNameSlug, currentPage, fetchData])
+
 	// Xử lý chuyển trang
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage)
-		setSearchParams({ page: newPage.toString() })
+		setSearchParams({ name: categoryNameSlug, page: newPage.toString() })
 	}
-
-	// Fetch phim khi param hoặc page thay đổi
-	useEffect(() => {
-		if (!param) return
-		fetchData({ list: param, page: currentPage })
-		window.scrollTo({ top: 0, behavior: 'smooth' })
-	}, [param, currentPage, fetchData])
 
 	return (
 		<MoviesDisplay
@@ -47,10 +50,6 @@ const MoviesList = () => {
 			setCurrentPage={handlePageChange}
 		/>
 	)
-}
-
-MoviesList.propTypes = {
-	titlePage: PropTypes.string,
 }
 
 export default MoviesList

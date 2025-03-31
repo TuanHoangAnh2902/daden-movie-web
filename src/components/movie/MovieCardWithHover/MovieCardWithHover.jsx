@@ -9,6 +9,7 @@ import { LuDot } from 'react-icons/lu'
 import Portal from '~/components/common/Portal/Portal'
 import buttonTheme from '~/themes/buttonTheme'
 import styles from './MovieCardWithHover.module.scss'
+import { Link } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
@@ -19,6 +20,8 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	const [cardPosition, setCardPosition] = useState(null)
 	const [isHovered, setIsHovered] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
+	const [mainImageRetries, setMainImageRetries] = useState(0)
+	const [detailImageRetries, setDetailImageRetries] = useState(0)
 
 	const cardRef = useRef(null)
 	const cardDetailRef = useRef(null)
@@ -26,6 +29,19 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 
 	const handleImageLoad = useCallback(() => {
 		setIsLoading(false)
+	}, [])
+
+	const retryLoadImage = useCallback((imageElement, url, setRetries, maxRetries = 3) => {
+		setRetries((prev) => {
+			if (prev < maxRetries) {
+				const delay = Math.pow(2, prev) * 1000 // Exponential backoff: 1s, 2s, 4s
+				setTimeout(() => {
+					imageElement.src = url
+				}, delay)
+				return prev + 1
+			}
+			return prev
+		})
 	}, [])
 
 	// Mouse tracking logic
@@ -107,8 +123,13 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 							alt={movieData?.name || 'Movie'}
 							loading='lazy'
 							onError={(e) => {
-								e.target.onerror = null
-								e.target.src = '/placeholder-image.jpg'
+								const originalSrc =
+									imageBaseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)
+								retryLoadImage(e.target, originalSrc, setMainImageRetries, 3)
+								if (mainImageRetries >= 3) {
+									e.target.onerror = null
+									e.target.src = '/placeholder-image.jpg'
+								}
 							}}
 							onLoad={handleImageLoad}
 							data-loading={isLoading}
@@ -145,8 +166,12 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 									alt={movieData.name}
 									loading='lazy'
 									onError={(e) => {
-										e.target.onerror = null
-										e.target.src = imageBaseUrl + movieData?.thumb_url
+										const originalSrc = imageBaseUrl + movieData?.poster_url
+										retryLoadImage(e.target, originalSrc, setDetailImageRetries, 3)
+										if (detailImageRetries >= 3) {
+											e.target.onerror = null
+											e.target.src = imageBaseUrl + movieData?.thumb_url
+										}
 									}}
 									className={cx('card-detail-img')}
 								/>
@@ -160,7 +185,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 								<h5 className={cx('name')}>{movieData.name}</h5>
 								<p className={cx('origin-name')}>{movieData.origin_name}</p>
 								<Flex gap={8} className={cx('card-detail-actions-btn')}>
-									<ConfigProvider theme={buttonTheme}>
+									<ConfigProvider theme={{ components: { Button: buttonTheme } }}>
 										<Button className={cx('play-btn')} icon={<FaPlay />}>
 											{movieData.episode_current === 'Trailer' ? 'Xem Trailer' : 'Xem phim'}
 										</Button>
@@ -168,9 +193,11 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 									<Button className={cx('action-btn')} type='text' icon={<HeartFilled />}>
 										Thích
 									</Button>
-									<Button className={cx('action-btn')} type='text' icon={<InfoCircleFilled />}>
-										Chi tiết
-									</Button>
+									<Link to={`/movie/detail?id=${movieData?._id}`}>
+										<Button className={cx('action-btn')} type='text' icon={<InfoCircleFilled />}>
+											Chi tiết
+										</Button>
+									</Link>
 								</Flex>
 								<Flex className={cx('imdb-info')} gap={6}>
 									<div className={cx('imdb-info-item')}>{movieData.year}</div>

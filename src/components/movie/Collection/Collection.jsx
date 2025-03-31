@@ -49,7 +49,7 @@ const Collection = ({ movieData, isLoading, direction = 'horizontal', reverseDir
 	}
 
 	// Xác định đường dẫn điều hướng
-	const navParam = `movies/${movieData?.params?.type_slug === 'danh-sach' ? '' : 'countries/'}`
+	const navParam = `movies/${movieData?.params?.type_slug === 'danh-sach' ? '' : 'country'}`
 	const typeList = movieData?.type_list || ''
 
 	return (
@@ -61,7 +61,7 @@ const Collection = ({ movieData, isLoading, direction = 'horizontal', reverseDir
 							{movieData?.titlePage}
 						</Typography.Title>
 						<AnimatePresence mode='sync'>
-							<Link to={navParam + typeList} state={{ param: typeList }}>
+							<Link to={`${navParam}?name=${typeList}&page=1`} state={{ param: typeList }}>
 								<motion.div
 									animate={{ width: isHovered ? 100 : 33 }}
 									transition={{ duration: 0.2 }}

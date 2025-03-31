@@ -18,7 +18,7 @@ const MovieSearch = () => {
 		const slug = convertToSlug(string.trim()) // Xử lý trim trước khi convert
 		if (!slug) return // Nếu không có slug hợp lệ, thoát sớm
 		if (string) {
-			navigate(`search/${slug}`, { state: { param: string } }) // 🟢 Navigate to the search page
+			navigate(`search?query=${slug}&page=1`, { state: { param: string } }) // 🟢 Navigate to the search page
 		}
 	}
 

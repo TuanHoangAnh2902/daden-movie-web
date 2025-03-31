@@ -1,0 +1,33 @@
+.movie-detail {
+	position: relative;
+	.movie-detail-wrapper {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: -1;
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background-image: linear-gradient(to top, $bgColorLayout 0.1%, transparent 16%),
+				linear-gradient(to bottom, $bgColorLayout 0.1%, transparent 16%),
+				linear-gradient(to left, $bgColorLayout 0.1%, transparent 16%),
+				linear-gradient(to right, $bgColorLayout 0.1%, transparent 16%);
+			z-index: 100;
+		}
+		.movie-img {
+			height: calc(100vh - 160px);
+			width: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.movie-detail-content {
+		margin: 0 $paddingY;
+		position: absolute;
+		top: 750px;
+		z-index: 200;
+		width: 95%;
+	}
+}

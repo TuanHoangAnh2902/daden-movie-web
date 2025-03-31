@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useParams, useSearchParams, useLocation } from 'react-router-dom'
+import { useSearchParams, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useLazyGetMoviesByCountryQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
 
 const MoviesCountiesList = () => {
-	const { param } = useParams() // Lấy trực tiếp từ URL
-	console.log('🚀 ~ MoviesCountiesList ~ param:', param)
 	const [searchParams, setSearchParams] = useSearchParams()
 	const location = useLocation()
 
-	// Giữ randomColor nếu có
-	const randomColor = location.state?.randomColor || ''
-
+	const countryNameSlug = searchParams.get('name') // Lấy slug từ query string
 	// Lấy page từ query string hoặc mặc định là 1
 	const initialPage = parseInt(searchParams.get('page')) || 1
 	const [currentPage, setCurrentPage] = useState(initialPage)
+
+	// Giữ randomColor nếu có
+	const randomColor = location.state?.randomColor || ''
 
 	// API
 	const [fetchData, { data, isLoading, isError, error }] = useLazyGetMoviesByCountryQuery()
@@ -23,15 +22,15 @@ const MoviesCountiesList = () => {
 	// Xử lý chuyển trang
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage)
-		setSearchParams({ page: newPage.toString() })
+		setSearchParams({ name: countryNameSlug, page: newPage.toString() })
 	}
 
-	// Fetch phim khi param hoặc page thay đổi
+	// Fetch phim khi countryNameSlug hoặc page thay đổi
 	useEffect(() => {
-		if (!param) return
-		fetchData({ country: param, page: currentPage })
+		if (!countryNameSlug) return
+		fetchData({ country: countryNameSlug, page: currentPage })
 		window.scrollTo({ top: 0, behavior: 'smooth' })
-	}, [param, currentPage, fetchData])
+	}, [countryNameSlug, currentPage, fetchData])
 
 	return (
 		<MoviesDisplay

@@ -22,11 +22,6 @@ const MoviesDisplay = ({
 }) => {
 	const { bgColorLight, textColor } = useThemeColors()
 
-	const handlePageChange = (page) => {
-		setCurrentPage(page)
-		window.scrollTo({ top: 0, behavior: 'smooth' })
-	}
-
 	if (isError) {
 		return <div className={cx('movies-list-error')}>Error: {error?.message || 'Failed to load movies'}</div>
 	}
@@ -75,7 +70,7 @@ const MoviesDisplay = ({
 						current={currentPage}
 						total={totalMovies}
 						pageSize={itemsPerPage}
-						onChange={handlePageChange}
+						onChange={setCurrentPage}
 						showSizeChanger={false}
 						className={cx('pagination')}
 					/>

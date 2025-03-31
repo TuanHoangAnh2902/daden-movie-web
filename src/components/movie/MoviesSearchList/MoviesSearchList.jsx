@@ -1,43 +1,49 @@
-import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { useLazyGetSearchMovieQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
 
 const MoviesSearchList = () => {
+	const [searchParams, setSearchParams] = useSearchParams()
+	const query = searchParams.get('query') || '' // Search query from URL
 	const location = useLocation()
-	const param = location.state?.param || ''
 
-	const [fetchMovie, { data, isLoading }] = useLazyGetSearchMovieQuery()
-
+	const page = parseInt(searchParams.get('page')) || 1 // Page from URL
+	const [fetchData, { data = {}, isLoading }] = useLazyGetSearchMovieQuery()
 	const [searchResults, setSearchResults] = useState([])
 
+	const { param } = location.state || {} // Get the param from location state
+	// Fetch movies when query or page changes
 	useEffect(() => {
-		if (param) {
-			fetchMovie(param)
-		}
-	}, [param, fetchMovie])
+		if (!query) return // Skip fetch if no query
+		fetchData({ slug: query, page })
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}, [query, page, fetchData])
 
+	// Update search results when data changes
 	useEffect(() => {
-		if (data) {
+		if (data?.items) {
 			setSearchResults(data.items)
 		}
 	}, [data])
 
+	// Handle page change
+	const handlePageChange = (newPage) => {
+		setSearchParams({ query, page: newPage.toString() })
+	}
+
 	return (
 		<MoviesDisplay
-			titlePage={data?.titlePage}
-			imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
+			titlePage={`Tìm kiếm: ${param}`}
+			imageUrl={data?.APP_DOMAIN_CDN_IMAGE || ''}
 			movies={searchResults}
 			totalMovies={data?.params?.pagination?.totalItems || 0}
-			itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 20}
+			itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 24}
 			isLoading={isLoading}
+			currentPage={page}
+			setCurrentPage={handlePageChange}
 		/>
 	)
-}
-
-MoviesSearchList.propTypes = {
-	title: PropTypes.string,
 }
 
 export default MoviesSearchList

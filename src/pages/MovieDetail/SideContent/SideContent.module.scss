@@ -1,0 +1,61 @@
+.movie-detail-side {
+	padding: 40px;
+	background: linear-gradient(to bottom, $bgColorLayoutLight 10px, $bgColorLayout 30%);
+	border-top-right-radius: 48px;
+	border-top-left-radius: 20px;
+	.movie-img {
+		width: 170px;
+		height: 255px;
+		overflow: hidden;
+		border-radius: 8px;
+		margin-bottom: 14px;
+		img {
+			height: 100%;
+			width: 100%;
+			object-fit: con;
+		}
+	}
+	.movie-info {
+		* {
+			color: $textColor;
+		}
+
+		.movie-name {
+			font-size: 25px;
+			font-weight: 600;
+			line-height: 37.8px;
+			word-spacing: 0px;
+			margin-bottom: 6px;
+		}
+		.movie-origin-name {
+			color: $subColor;
+			font-size: 14px;
+		}
+	}
+	.imdb-info {
+		margin-top: 16px;
+		.imdb-info-item {
+			@include category-item($fontSize: 11px, $borderColor: $textColor, $bgColor: #272932);
+		}
+	}
+	.category-container {
+		margin-top: 12px;
+		.category-item {
+			@include category-item($bgColor: #272932, $fontSize: 11px);
+		}
+	}
+	.movie-introduce {
+		margin-top: 14px;
+		.introduce-title {
+			font-size: 14px;
+			font-weight: 500;
+			white-space: nowrap;
+		}
+		.introduce-content {
+			font-size: 14px;
+			font-weight: 300;
+			color: #aaa;
+			line-height: 22px;
+		}
+	}
+}

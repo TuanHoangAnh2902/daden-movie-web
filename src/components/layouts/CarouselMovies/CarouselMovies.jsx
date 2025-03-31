@@ -89,7 +89,7 @@ const CarouselMovies = () => {
 							<Typography.Paragraph ellipsis={{ rows: 3 }} className={cx('carousel-description')}>
 								{removeTagsUsingDOM(item?.movie?.content)}
 							</Typography.Paragraph>
-							<ConfigProvider theme={buttonTheme}>
+							<ConfigProvider theme={{ components: { Button: buttonTheme } }}>
 								<Button className={cx('play-btn')} shape='circle' icon={<FaPlay />} />
 							</ConfigProvider>
 						</div>
