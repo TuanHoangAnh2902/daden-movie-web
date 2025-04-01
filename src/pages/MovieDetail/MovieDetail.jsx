@@ -1,12 +1,12 @@
 import styles from './MovieDetail.module.scss'
 import classNames from 'classnames/bind'
 
-import { ConfigProvider, Layout } from 'antd'
-import { useSearchParams } from 'react-router-dom'
-
 import SideContent from './SideContent/SideContent'
 import MainContent from './MainContent/MainContent'
 import { useGetMovieByIdQuery } from '~/services/ophimApi'
+
+import { ConfigProvider, Layout } from 'antd'
+import { useSearchParams } from 'react-router-dom'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
 
