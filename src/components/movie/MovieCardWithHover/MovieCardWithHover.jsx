@@ -1,24 +1,27 @@
-import { useRef, useState, useEffect, useCallback, memo } from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames/bind'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button, ConfigProvider, Flex } from 'antd'
-import { FaPlay } from 'react-icons/fa6'
-import { HeartFilled, InfoCircleFilled } from '@ant-design/icons'
-import { LuDot } from 'react-icons/lu'
+import { debounce } from '~/utils/debounce'
+import { buttonTheme } from '~/themes/buttonTheme'
 import Portal from '~/components/common/Portal/Portal'
-import buttonTheme from '~/themes/buttonTheme'
+
 import styles from './MovieCardWithHover.module.scss'
+
+import PropTypes from 'prop-types'
+import { LuDot } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
+import classNames from 'classnames/bind'
+import { FaPlay } from 'react-icons/fa6'
+import { Button, ConfigProvider, Flex } from 'antd'
+import { motion, AnimatePresence } from 'framer-motion'
+import { HeartFilled, InfoCircleFilled } from '@ant-design/icons'
+import { useRef, useState, useEffect, useCallback, memo } from 'react'
+import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
 
 const cx = classNames.bind(styles)
-
 const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
+	console.log('🚀 ~ MovieCardWithHoverComponent ~ movieData:', movieData)
 	const imageBaseUrl = `${imageUrl}/uploads/movies/`
 
 	const [hoveredCard, setHoveredCard] = useState(null)
 	const [cardPosition, setCardPosition] = useState(null)
-	const [isHovered, setIsHovered] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 	const [mainImageRetries, setMainImageRetries] = useState(0)
 	const [detailImageRetries, setDetailImageRetries] = useState(0)
@@ -34,9 +37,9 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	const retryLoadImage = useCallback((imageElement, url, setRetries, maxRetries = 3) => {
 		setRetries((prev) => {
 			if (prev < maxRetries) {
-				const delay = Math.pow(2, prev) * 1000 // Exponential backoff: 1s, 2s, 4s
+				const delay = Math.pow(2, prev) * 1000
 				setTimeout(() => {
-					imageElement.src = url
+					if (imageElement) imageElement.src = url
 				}, delay)
 				return prev + 1
 			}
@@ -44,57 +47,18 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 		})
 	}, [])
 
-	// Mouse tracking logic
-	const checkMouseInside = useCallback((event) => {
-		const isInsideCard = cardRef.current
-			? (() => {
-					const rect = cardRef.current.getBoundingClientRect()
-					return (
-						event.clientX >= rect.left &&
-						event.clientX <= rect.right &&
-						event.clientY >= rect.top &&
-						event.clientY <= rect.bottom
-					)
-			  })()
-			: false
-
-		const isInsideDetail = cardDetailRef.current
-			? (() => {
-					const rect = cardDetailRef.current.getBoundingClientRect()
-					return (
-						event.clientX >= rect.left &&
-						event.clientX <= rect.right &&
-						event.clientY >= rect.top &&
-						event.clientY <= rect.bottom
-					)
-			  })()
-			: false
-
-		const isInside = isInsideCard || isInsideDetail
-		setIsHovered(isInside)
-		return isInside
+	// Sử dụng debounce để tránh gọi hàm quá nhiều lần
+	const debouncedSetHoveredCard = useCallback((id) => {
+		const debouncedFunction = debounce((id) => {
+			setHoveredCard(id)
+		}, 150)
+		debouncedFunction(id)
 	}, [])
 
-	useEffect(() => {
-		window.addEventListener('mousemove', checkMouseInside)
-		return () => window.removeEventListener('mousemove', checkMouseInside)
-	}, [checkMouseInside])
+	// Tính toán vị trí card chi tiết
+	const calculateCardPosition = useCallback(() => {
+		if (!cardRef.current) return null
 
-	const handleMouseEnterWithDelay = useCallback(() => {
-		timerRef.current = setTimeout(() => {
-			setHoveredCard(movieData?._id)
-		}, 500)
-	}, [movieData?._id])
-
-	const handleMouseLeave = useCallback(() => {
-		clearTimeout(timerRef.current)
-		setHoveredCard(null)
-		setIsHovered(false)
-		setCardPosition(null)
-	}, [])
-
-	useEffect(() => {
-		if (!hoveredCard || !cardRef.current) return
 		const rect = cardRef.current.getBoundingClientRect()
 		const cardWidth = 400
 		const windowWidth = window.innerWidth
@@ -110,22 +74,62 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 			left = 16
 		}
 
-		setCardPosition({ top, left })
-	}, [hoveredCard])
+		return { top, left }
+	}, [])
+
+	// Xử lý mouse enter với độ trễ
+	const handleMouseEnter = useCallback(() => {
+		timerRef.current = setTimeout(() => {
+			debouncedSetHoveredCard(movieData?._id)
+			setCardPosition(calculateCardPosition())
+		}, 300) // Giảm thời gian delay xuống để UX mượt hơn
+	}, [movieData?._id, debouncedSetHoveredCard, calculateCardPosition])
+
+	// Xử lý mouse leave
+	const handleMouseLeave = useCallback(() => {
+		clearTimeout(timerRef.current)
+		debouncedSetHoveredCard(null)
+	}, [debouncedSetHoveredCard])
+
+	// Cập nhật vị trí card khi có hover
+	useEffect(() => {
+		if (hoveredCard) {
+			setCardPosition(calculateCardPosition())
+		}
+	}, [hoveredCard, calculateCardPosition])
+
+	// Hủy timers khi unmount
+	useEffect(() => {
+		return () => {
+			clearTimeout(timerRef.current)
+		}
+	}, [])
+
+	// Lấy thumbnail hoặc poster dựa vào hướng hiển thị
+	const getImageUrl = useCallback(
+		(isDetail = false) => {
+			const baseUrl = imageBaseUrl
+			if (isDetail) return baseUrl + movieData?.poster_url
+			return baseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)
+		},
+		[imageBaseUrl, movieData?.poster_url, movieData?.thumb_url, direction],
+	)
 
 	return (
 		<>
-			<div ref={cardRef} className={cx('movie-card', direction)}>
+			<div
+				ref={cardRef}
+				className={cx('movie-card', direction)}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}>
 				<motion.div className={cx('card')}>
-					<div className={cx('card-img')} onMouseEnter={handleMouseEnterWithDelay}>
+					<div className={cx('card-img')}>
 						<motion.img
-							src={imageBaseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)}
+							src={getImageUrl()}
 							alt={movieData?.name || 'Movie'}
 							loading='lazy'
 							onError={(e) => {
-								const originalSrc =
-									imageBaseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)
-								retryLoadImage(e.target, originalSrc, setMainImageRetries, 3)
+								retryLoadImage(e.target, getImageUrl(), setMainImageRetries, 3)
 								if (mainImageRetries >= 3) {
 									e.target.onerror = null
 									e.target.src = '/placeholder-image.jpg'
@@ -145,7 +149,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 			</div>
 
 			<AnimatePresence>
-				{hoveredCard && isHovered && (
+				{hoveredCard === movieData?._id && cardPosition && (
 					<Portal>
 						<motion.div
 							ref={cardDetailRef}
@@ -153,6 +157,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 							initial={{ opacity: 0, scale: 0.1 }}
 							animate={{ opacity: 1, scale: 1 }}
 							exit={{ opacity: 0, scale: 0.1 }}
+							onMouseEnter={() => debouncedSetHoveredCard(movieData?._id)}
 							onMouseLeave={handleMouseLeave}
 							className={cx('card-detail')}
 							style={cardPosition}>
@@ -162,12 +167,11 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 									animate={{ opacity: 1 }}
 									exit={{ opacity: 0 }}
 									transition={{ duration: 0.3 }}
-									src={imageBaseUrl + movieData?.poster_url}
+									src={getImageUrl(true)}
 									alt={movieData.name}
 									loading='lazy'
 									onError={(e) => {
-										const originalSrc = imageBaseUrl + movieData?.poster_url
-										retryLoadImage(e.target, originalSrc, setDetailImageRetries, 3)
+										retryLoadImage(e.target, getImageUrl(true), setDetailImageRetries, 3)
 										if (detailImageRetries >= 3) {
 											e.target.onerror = null
 											e.target.src = imageBaseUrl + movieData?.thumb_url
@@ -186,9 +190,11 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 								<p className={cx('origin-name')}>{movieData.origin_name}</p>
 								<Flex gap={8} className={cx('card-detail-actions-btn')}>
 									<ConfigProvider theme={{ components: { Button: buttonTheme } }}>
-										<Button className={cx('play-btn')} icon={<FaPlay />}>
-											{movieData.episode_current === 'Trailer' ? 'Xem Trailer' : 'Xem phim'}
-										</Button>
+										<Link to={`/movie/watch?id=${movieData?._id}&ep=${movieData?.type === 'single' ? 'full' : '1'}`}>
+											<Button className={cx('play-btn')} icon={<FaPlay />}>
+												{movieData.episode_current === 'Trailer' ? 'Xem Trailer' : 'Xem phim'}
+											</Button>
+										</Link>
 									</ConfigProvider>
 									<Button className={cx('action-btn')} type='text' icon={<HeartFilled />}>
 										Thích
@@ -199,12 +205,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 										</Button>
 									</Link>
 								</Flex>
-								<Flex className={cx('imdb-info')} gap={6}>
-									<div className={cx('imdb-info-item')}>{movieData.year}</div>
-									<div className={cx('imdb-info-item')}>{movieData.lang}</div>
-									<div className={cx('imdb-info-item')}>{movieData.episode_current}</div>
-									<div className={cx('imdb-info-item')}>{movieData.time}</div>
-								</Flex>
+								<ImdbInfo ImdbData={movieData} />
 								<Flex className={cx('category-container')} gap={4}>
 									{movieData.category?.map((category) => (
 										<Flex className={cx('category')} align='center' key={category.id}>
@@ -224,11 +225,36 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 
 MovieCardWithHoverComponent.propTypes = {
 	imageUrl: PropTypes.string.isRequired,
-	movieData: PropTypes.object.isRequired,
+	movieData: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		name: PropTypes.string,
+		origin_name: PropTypes.string,
+		poster_url: PropTypes.string,
+		thumb_url: PropTypes.string,
+		year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+		type: PropTypes.string,
+		lang: PropTypes.string,
+		episode_current: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+		time: PropTypes.string,
+		category: PropTypes.arrayOf(
+			PropTypes.shape({
+				id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+				name: PropTypes.string,
+			}),
+		),
+	}).isRequired,
 	direction: PropTypes.oneOf(['vertical', 'horizontal']),
 }
 
-const MovieCardWithHover = memo(MovieCardWithHoverComponent)
+// Sử dụng memo với custom compare function để tránh re-render không cần thiết
+const MovieCardWithHover = memo(MovieCardWithHoverComponent, (prevProps, nextProps) => {
+	return (
+		prevProps.imageUrl === nextProps.imageUrl &&
+		prevProps.direction === nextProps.direction &&
+		prevProps.movieData?._id === nextProps.movieData?._id
+	)
+})
+
 MovieCardWithHover.displayName = 'MovieCardWithHover'
 
 export default MovieCardWithHover

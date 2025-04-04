@@ -1,4 +1,5 @@
 .episode-tab {
+	color: $textColor;
 	margin: 20px 0;
 
 	.title {
@@ -70,6 +71,7 @@
 	.episode-list {
 		margin-top: 20px;
 		.episode-item {
+			color: $textColor;
 			width: 120px;
 			padding: 14px 0;
 			background-color: $bgColorLayoutLight;
@@ -78,6 +80,11 @@
 			&:hover {
 				cursor: pointer;
 				color: $subColor;
+			}
+
+			&.active {
+				background-color: $subColor;
+				color: #000;
 			}
 		}
 	}

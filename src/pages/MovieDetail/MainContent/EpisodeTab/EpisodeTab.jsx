@@ -6,29 +6,33 @@ import { FaPlay, FaSortDown } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 import { useThemeColors } from '~/themes/useThemeColors'
 import { LiaComment } from 'react-icons/lia'
+import { Link, useSearchParams } from 'react-router-dom'
+
+const dropdownItems = [
+	{
+		label: <p>season 1</p>,
+		key: '0',
+	},
+	{
+		label: (
+			<a href='https://www.aliyun.com' target='_blank' rel='noopener noreferrer'>
+				2nd menu item
+			</a>
+		),
+		key: '1',
+	},
+]
 
 const cx = classNames.bind(styles)
 function EpisodeTab({ data }) {
-	const { subColor } = useThemeColors()
+	console.log('🚀 ~ EpisodeTab ~ data:', data)
+	const [searchParams] = useSearchParams()
+	const movieEp = searchParams.get('ep')
 
+	const { subColor } = useThemeColors()
 	const episodeList = data?.episodes?.[0].server_data || []
 	const isSingle = data?.movie?.type === 'single'
 	const { thumb_url } = data?.movie || {}
-
-	const dropdownItems = [
-		{
-			label: <p>season 1</p>,
-			key: '0',
-		},
-		{
-			label: (
-				<a href='https://www.aliyun.com' target='_blank' rel='noopener noreferrer'>
-					2nd menu item
-				</a>
-			),
-			key: '1',
-		},
-	]
 
 	return (
 		<div className={cx('episode-tab')}>
@@ -55,7 +59,9 @@ function EpisodeTab({ data }) {
 										},
 									},
 								}}>
-								<Button className={cx('play-btn')}>Xem bản này</Button>
+								<Link to={`/movie/watch?id=${data?.movie?._id}&ep=full`}>
+									<Button className={cx('play-btn')}>Xem bản này</Button>
+								</Link>
 							</ConfigProvider>
 						</Space>
 						{thumb_url ? <img className={cx('thumb')} src={thumb_url} alt='Movie Thumbnail' /> : null}
@@ -78,10 +84,18 @@ function EpisodeTab({ data }) {
 				{episodeList &&
 					!isSingle &&
 					episodeList?.map((ep, index) => (
-						<Flex key={index} className={cx('episode-item')} gap={8} align='center' justify='center'>
-							<FaPlay />
-							<p>Tập {ep.name}</p>
-						</Flex>
+						<Link key={index} to={`/movie/watch?id=${data?.movie?._id}&ep=${(ep.slug || ep.name)?.toLowerCase()}`}>
+							<Flex
+								className={cx('episode-item', {
+									active: (ep.slug || ep.name)?.toLowerCase() === movieEp?.toLowerCase(),
+								})}
+								gap={8}
+								align='center'
+								justify='center'>
+								<FaPlay />
+								<p>Tập {ep.name}</p>
+							</Flex>
+						</Link>
 					))}
 			</Flex>
 		</div>
@@ -103,6 +117,7 @@ EpisodeTab.propTypes = {
 			type: PropTypes.string,
 			thumb_url: PropTypes.string,
 			lang: PropTypes.string,
+			_id: PropTypes.string, // Added _id validation
 		}),
 	}),
 }

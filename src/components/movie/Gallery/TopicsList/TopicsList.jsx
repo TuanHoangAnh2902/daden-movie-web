@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Typography } from 'antd'
+import { Col, Flex, Row, Typography, Skeleton } from 'antd'
 import { FaAngleRight } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
@@ -22,8 +22,34 @@ function TopicsList({ data, isLoading }) {
 	const breadcrumbTitle = data?.breadCrumb?.[0]?.name || 'Default Title'
 	const typeList = data?.type_list || ''
 
-	// Hiển thị loading nếu đang tải dữ liệu
-	if (isLoading) return <div className={cx('loading-container')}>loading</div>
+	// Hiển thị loading skeleton nếu đang tải dữ liệu
+	if (isLoading) {
+		return (
+			<Row wrap={false} className={cx('topics-list', 'skeleton-container')} justify='space-around' align='middle'>
+				<Col span={3} className={cx('topics-list-content')}>
+					<Skeleton.Button active size='large' shape='square' block style={{ height: 28, marginBottom: 12 }} />
+					<Skeleton.Button active size='small' shape='round' style={{ width: 100 }} />
+				</Col>
+				<Col span={21} className={cx('skeleton-carousel')}>
+					<Flex gap={16}>
+						{[...Array(6)].map((_, index) => (
+							<div key={index} className={cx('skeleton-card')}>
+								<Skeleton.Image active style={{ width: 160, height: 240 }} />
+								<Skeleton.Button active size='small' shape='square' block style={{ marginTop: 8, height: 16 }} />
+								<Skeleton.Button
+									active
+									size='small'
+									shape='square'
+									block
+									style={{ marginTop: 4, height: 14, width: '70%' }}
+								/>
+							</div>
+						))}
+					</Flex>
+				</Col>
+			</Row>
+		)
+	}
 	return (
 		<Row wrap={false} className={cx('topics-list')} justify='space-around' align='middle'>
 			<Col span={3} className={cx('topics-list-content')}>

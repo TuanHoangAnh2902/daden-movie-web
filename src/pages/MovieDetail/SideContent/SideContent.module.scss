@@ -38,12 +38,7 @@
 			@include category-item($fontSize: 11px, $borderColor: $textColor, $bgColor: #272932);
 		}
 	}
-	.category-container {
-		margin-top: 12px;
-		.category-item {
-			@include category-item($bgColor: #272932, $fontSize: 11px);
-		}
-	}
+
 	.movie-introduce {
 		margin-top: 14px;
 		.introduce-title {
