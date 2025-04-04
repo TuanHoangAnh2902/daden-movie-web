@@ -7,6 +7,7 @@ export const buttonTheme = {
 	defaultActiveBorderColor: 'none',
 	defaultActiveColor: 'none',
 	defaultShadow: 'rgba(255, 218, 125, 0.15) 0px 0px 10px 5px',
+	defaultColor: '#000',
 }
 
 export const LayoutTheme = {
