@@ -28,3 +28,9 @@
 	line-height: 38px;
 	margin: 20px 0;
 }
+
+@mixin origin-name() {
+	font-size: 13px;
+	font-weight: 400;
+	color: $subColor;
+}

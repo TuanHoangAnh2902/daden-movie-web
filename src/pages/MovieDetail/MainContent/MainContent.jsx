@@ -1,7 +1,7 @@
 import { Button, ConfigProvider, Flex, Tabs } from 'antd'
 import styles from './MainContent.module.scss'
 import classNames from 'classnames/bind'
-import buttonTheme from '~/themes/buttonTheme'
+import { buttonTheme } from '~/themes/buttonTheme'
 import { TiHeartFullOutline } from 'react-icons/ti'
 import { FaComments, FaPlay, FaPlus } from 'react-icons/fa'
 import { IoIosSend } from 'react-icons/io'
@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import RecommentTab from './RecommentTab/RecommentTab'
 import GalleryTab from './GalleryTab/GalleryTab'
 import { BsCameraVideoFill } from 'react-icons/bs'
+import { Link } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {
@@ -71,9 +72,14 @@ function MainContent({ data }) {
 					) : (
 						<ConfigProvider
 							theme={{ components: { Button: { ...buttonTheme, contentFontSize: 17, fontWeight: 500 } } }}>
-							<Button className={cx('play-btn')} shape='round' icon={<FaPlay />}>
-								Xem ngay
-							</Button>
+							<Link
+								to={`/movie/watch?id=${data?.movie?._id}&ep=${
+									(data?.movie?.type || data?.movie?.name)?.toLowerCase() === 'single' ? 'full' : '1'
+								}`}>
+								<Button className={cx('play-btn')} shape='round' icon={<FaPlay />}>
+									Xem ngay
+								</Button>
+							</Link>
 						</ConfigProvider>
 					)}
 
@@ -119,6 +125,7 @@ function MainContent({ data }) {
 		</div>
 	)
 }
+
 MainContent.propTypes = {
 	data: PropTypes.object.isRequired,
 }

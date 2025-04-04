@@ -1,84 +1,133 @@
 .collection {
-	margin-top: 60px;
+  margin-top: 60px;
 
-	.collection-title {
-		overflow: hidden;
-		margin-bottom: 22px;
-		.title {
-			margin: 0;
-			font-weight: 700;
-			color: $textColor;
-		}
-		.view-more {
-			transform: scale(0.9);
-			display: flex;
-			align-items: center;
-			justify-content: space-around;
-			gap: 4px;
-			min-width: 33px;
-			min-height: 33px;
-			border: 1px solid $textColor;
-			padding: 5px 10px;
-			border-radius: 30px;
-			font-size: 12px;
-			overflow: hidden;
-			color: $textColor;
-			&:hover {
-				cursor: pointer;
-				color: $subColor;
-			}
-			p {
-				white-space: nowrap;
-				overflow: hidden;
-			}
-			.icon {
-				font-size: 14px;
-			}
-		}
-	}
+  .collection-title {
+    overflow: hidden;
+    margin-bottom: 22px;
+    .title {
+      margin: 0;
+      font-weight: 700;
+      color: $textColor;
+    }
+    .view-more {
+      transform: scale(0.9);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 4px;
+      min-width: 33px;
+      min-height: 33px;
+      border: 1px solid $textColor;
+      padding: 5px 10px;
+      border-radius: 30px;
+      font-size: 12px;
+      overflow: hidden;
+      color: $textColor;
+      &:hover {
+        cursor: pointer;
+        color: $subColor;
+      }
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .icon {
+        font-size: 14px;
+      }
+    }
+  }
 
-	:global(.swiper) {
-		:global {
-			.swiper-button-prev,
-			.swiper-button-next {
-				color: $textColor;
-				background-color: transparent;
-				&:after {
-					font-size: 32px;
-				}
-			}
-		}
+  :global(.swiper) {
+    :global {
+      .swiper-button-prev,
+      .swiper-button-next {
+        color: $textColor;
+        background-color: transparent;
+        &:after {
+          font-size: 32px;
+        }
+      }
+    }
 
-		:global(.swiper-button-prev) {
-			left: -10px;
-		}
+    :global(.swiper-button-prev) {
+      left: -10px;
+    }
 
-		:global(.swiper-button-next) {
-			right: -10px;
-		}
-	}
-	.swiper-container {
-		position: relative;
+    :global(.swiper-button-next) {
+      right: -10px;
+    }
+  }
+  .swiper-container {
+    position: relative;
 
-		.swiper-button {
-			position: absolute;
-			display: flex;
-			top: 50%;
-			right: -36px;
-			left: -36px;
+    .swiper-button {
+      position: absolute;
+      display: flex;
+      top: 50%;
+      right: -36px;
+      left: -36px;
 
-			justify-content: space-between;
-			transform: translateY(-50%);
-			z-index: 100;
-			& > * {
-				width: 30px;
-				height: 30px;
-				border-radius: 50%;
-				cursor: pointer;
-			}
-			:global(.swiper-button-disabled) {
-				visibility: hidden;
-			}
-		}
-	}
+      justify-content: space-between;
+      transform: translateY(-50%);
+      z-index: 100;
+      & > * {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      :global(.swiper-button-disabled) {
+        visibility: hidden;
+      }
+    }
+  }
+}
+
+// Skeleton styles
+.movie-card-skeleton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &.vertical {
+    max-width: 160px;
+  }
+
+  &.horizontal {
+    max-width: 100%;
+  }
+
+  .skeleton-img {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+
+    &.vertical {
+      aspect-ratio: 2/3;
+    }
+
+    &.horizontal {
+      aspect-ratio: 16/9;
+    }
+  }
+
+  .skeleton-title {
+    margin-top: 8px;
+  }
+}
+
+.skeleton-title-header {
+  border-radius: 4px;
+}
+
+// Override Ant Design skeleton styles
+:global {
+  .ant-skeleton-image {
+    border-radius: 8px;
+  }
+
+  .ant-skeleton-title {
+    height: 16px !important;
+  }
 }

@@ -1,13 +1,36 @@
-import { Flex } from 'antd'
+import { useEffect, useMemo, memo } from 'react'
+import { Flex, Skeleton } from 'antd'
 import styles from './RecommentTab.module.scss'
 import classNames from 'classnames/bind'
 import { useLazyGetMoviesByCategoryQuery } from '~/services/ophimApi'
 import PropTypes from 'prop-types'
-import { useEffect, useMemo } from 'react'
 import MovieCardWithHover from '~/components/movie/MovieCardWithHover/MovieCardWithHover'
 import randomPage from '~/utils/randomPage'
 
 const cx = classNames.bind(styles)
+
+// Memoized movie card skeleton component
+const MovieCardSkeleton = memo(() => (
+	<div className={cx('movie-card-skeleton')}>
+		<Skeleton.Image active className={cx('image-skeleton')} />
+		<div className={cx('content-skeleton')}>
+			<Skeleton.Input active size='small' style={{ width: '80%', marginBottom: '8px' }} />
+			<Skeleton.Input active size='small' style={{ width: '60%' }} />
+		</div>
+	</div>
+))
+
+MovieCardSkeleton.displayName = 'MovieCardSkeleton'
+
+// Generate array of multiple skeletons
+const MovieCardsSkeletonList = ({ count = 6 }) => (
+	<Flex className={cx('recomment-list')} gap={20} align='start' wrap>
+		{[...Array(count)].map((_, index) => (
+			<MovieCardSkeleton key={index} />
+		))}
+	</Flex>
+)
+
 function RecommentTab({ movieData }) {
 	// Dùng useMemo để tránh tính toán lại mỗi lần re-render
 	const randomCategory = useMemo(() => {
@@ -16,43 +39,42 @@ function RecommentTab({ movieData }) {
 			: null
 	}, [movieData?.category])
 
-	const page = randomPage()
+	// Memoize the page value to prevent unnecessary recalculations
+	const page = useMemo(() => randomPage(), [])
 
-	const [fetData, { data, isFetching }] = useLazyGetMoviesByCategoryQuery({ category: randomCategory?.slug, page })
-
-	// // Cuộn lên đầu khi đang fetch dữ liệu mới
-	// useEffect(() => {
-	// 	if (isFetching) {
-	// 		window.scrollTo({ top: 0, behavior: 'smooth' })
-	// 	}
-	// }, [isFetching])
+	const [fetchData, { data, isFetching }] = useLazyGetMoviesByCategoryQuery()
 
 	useEffect(() => {
 		if (randomCategory) {
-			fetData({ category: randomCategory.slug, page: 1 })
+			// Use the memoized page value
+			fetchData({ category: randomCategory.slug, page })
 		}
-	}, [fetData, randomCategory])
+	}, [fetchData, randomCategory, page])
+
+	// Memoize the movies data to prevent unnecessary re-renders
+	const movieItems = useMemo(() => data?.items || [], [data?.items])
+	const cdnImageUrl = useMemo(() => data?.APP_DOMAIN_CDN_IMAGE || '', [data?.APP_DOMAIN_CDN_IMAGE])
 
 	return (
 		<div className={cx('recomment-tab')}>
 			<h5 className={cx('title')}>Có thể bạn sẽ thích</h5>
 			{isFetching ? (
-				<div>loading</div>
+				<MovieCardsSkeletonList />
 			) : (
 				<Flex className={cx('recomment-list')} gap={20} align='start' wrap>
-					{data?.items?.map((item) => (
-						<MovieCardWithHover
-							key={item?._id}
-							imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
-							movieData={item}
-							direction='vertical'
-						/>
+					{movieItems.map((item) => (
+						<MovieCardWithHover key={item?._id} imageUrl={cdnImageUrl} movieData={item} direction='vertical' />
 					))}
 				</Flex>
 			)}
 		</div>
 	)
 }
+
+MovieCardsSkeletonList.propTypes = {
+	count: PropTypes.number,
+}
+
 RecommentTab.propTypes = {
 	movieData: PropTypes.shape({
 		category: PropTypes.arrayOf(
@@ -63,4 +85,4 @@ RecommentTab.propTypes = {
 	}),
 }
 
-export default RecommentTab
+export default memo(RecommentTab)

@@ -9,4 +9,11 @@ export const buttonTheme = {
 	defaultShadow: 'rgba(255, 218, 125, 0.15) 0px 0px 10px 5px',
 }
 
-export default buttonTheme
+export const LayoutTheme = {
+	defaultBg: 'transparent',
+	siderBg: 'transparent',
+	triggerBg: 'transparent',
+	lightTriggerColor: 'transparent',
+	headerBg: 'transparent',
+	bodyBg: 'transparent',
+}

@@ -1,0 +1,6 @@
+.category-container {
+	margin-top: 12px;
+	.category-item {
+		@include category-item($bgColor: #272932, $fontSize: 11px);
+	}
+}

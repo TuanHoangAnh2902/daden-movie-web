@@ -21,6 +21,14 @@
 			width: 100%;
 			object-fit: cover;
 		}
+		.skeleton-poster {
+			width: 100%;
+			height: calc(100vh - 160px);
+			.ant-skeleton-image {
+				width: 100% !important;
+				height: 100% !important;
+			}
+		}
 	}
 
 	.movie-detail-content {
@@ -30,4 +38,21 @@
 		z-index: 200;
 		width: 95%;
 	}
+
+	.tabs-skeleton {
+		margin-top: 24px;
+		padding: 16px;
+		background-color: rgba(255, 255, 255, 0.05);
+		border-radius: 8px;
+	}
+}
+
+// Error container styles
+.error-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 60vh;
+	padding: 2rem;
 }

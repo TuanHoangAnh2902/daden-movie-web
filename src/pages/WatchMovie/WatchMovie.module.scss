@@ -1,0 +1,150 @@
+.wrapper {
+	padding: 10rem 40px;
+	.watch-player {
+		max-width: 1640px;
+		margin: 0 auto;
+
+		.title {
+			padding: 0 0 20px 30px;
+			.title-icon {
+				font-size: 28px;
+				cursor: pointer;
+			}
+		}
+
+		.player-controls {
+			background-color: #000;
+			padding: 8px 24px;
+			border-bottom-right-radius: 12px;
+			border-bottom-left-radius: 12px;
+
+			.control-item {
+				padding: 10px 16px;
+				border-radius: 6px;
+				transition: all 0.3s;
+				cursor: pointer;
+				&:hover {
+					background-color: rgba($color: $bgColorLayoutLight, $alpha: 0.6);
+				}
+				&.active {
+					background-color: rgba($color: $bgColorLayoutLight, $alpha: 0.6);
+				}
+				p {
+					font-size: 14px;
+					line-height: 22px;
+				}
+				.transfer-episode {
+					@include category-item($padding: 0 10px, $borderColor: $subColor);
+					text-transform: uppercase;
+				}
+			}
+		}
+
+		.episode-selection-panel {
+			background-color: #000;
+			border-radius: 8px;
+			margin-top: 12px;
+			padding: 16px 24px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+			h4 {
+				font-size: 16px;
+				margin-bottom: 16px;
+				color: $subColor;
+			}
+
+			.episodes-quick-select {
+				display: flex;
+				flex-wrap: wrap;
+
+				.episode-quick-item {
+					padding: 8px 16px;
+					border-radius: 4px;
+					background-color: rgba($color: $bgColorLayoutLight, $alpha: 0.3);
+					margin: 0 8px 8px 0;
+					transition: all 0.2s;
+
+					p {
+						color: #ccc;
+						font-size: 14px;
+					}
+
+					&:hover {
+						background-color: rgba($color: $bgColorLayoutLight, $alpha: 0.6);
+					}
+
+					&.active {
+						background-color: $subColor;
+
+						p {
+							color: #000;
+							font-weight: 500;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.movie-info {
+		margin-top: 50px;
+
+		.info {
+			padding: 0 40px;
+			.movie-img {
+				width: 100px;
+				height: 150px;
+				overflow: hidden;
+				border-radius: 8px;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+			.movie-info-content {
+				.movie-name {
+					font-size: 20px;
+					color: $textColor;
+					font-weight: 600;
+					line-height: 30px;
+				}
+				.movie-origin-name {
+					@include origin-name();
+				}
+			}
+			.movie-info-description {
+				font-size: 14px;
+				font-weight: 300;
+				color: #aaa;
+				line-height: 22px;
+				max-width: 500px;
+			}
+
+			.view-more {
+				.view-more-text {
+					cursor: pointer;
+					color: $subColor;
+				}
+				& > * {
+					color: $subColor;
+					cursor: pointer;
+				}
+			}
+
+			.divider {
+				margin: 40px 0;
+				border: 1px solid #272932;
+			}
+		}
+		.vertical-divider {
+			margin: 0;
+			border: 1px solid #272932;
+			height: 1000px;
+		}
+	}
+
+	.recomment {
+		padding: 0 40px;
+	}
+}

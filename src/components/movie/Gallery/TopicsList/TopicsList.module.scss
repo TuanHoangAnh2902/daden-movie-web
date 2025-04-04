@@ -1,24 +1,38 @@
 .topics-list {
-	padding: 20px 0;
-	width: 100%;
-	contain: content;
-	.topics-list-content {
-		max-width: 180px;
-		.topic-title {
-			background: -webkit-linear-gradient(45deg, #674196, #fff);
-			-webkit-background-clip: text;
-			background-clip: text;
-			-webkit-text-fill-color: transparent;
-			font-weight: 700;
-		}
-		.view-more {
-			.view-more-text {
-				color: $textColor;
-			}
-			&:hover > * {
-				color: $subColor;
-				cursor: pointer;
-			}
-		}
-	}
+  padding: 20px 0;
+  width: 100%;
+  contain: content;
+  .topics-list-content {
+    max-width: 180px;
+    .topic-title {
+      background: -webkit-linear-gradient(45deg, #674196, #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+    .view-more {
+      .view-more-text {
+        color: $textColor;
+      }
+      &:hover > * {
+        color: $subColor;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Styles for skeleton loading
+  &.skeleton-container {
+    .skeleton-carousel {
+      overflow-x: hidden;
+      padding: 6px 0;
+
+      .skeleton-card {
+        width: 160px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
 }

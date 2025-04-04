@@ -136,9 +136,7 @@
 		}
 
 		.origin-name {
-			font-size: 13px;
-			font-weight: 400;
-			color: $subColor;
+			@include origin-name();
 		}
 
 		.card-detail-actions-btn {
@@ -162,13 +160,6 @@
 				& * {
 					color: $textColor;
 				}
-			}
-		}
-
-		.imdb-info {
-			margin-top: 14px;
-			.imdb-info-item {
-				@include category-item($fontSize: 11px);
 			}
 		}
 

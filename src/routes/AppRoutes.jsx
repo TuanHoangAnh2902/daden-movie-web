@@ -12,6 +12,7 @@ import { moviesCategories } from '~/constants/routes'
 import MoviesSearchList from '~/components/movie/MoviesSearchList/MoviesSearchList'
 import MoviesCountiesList from '~/components/movie/MoviesCountiesList/MoviesCountiesList'
 import MovieDetail from '~/pages/MovieDetail/MovieDetail'
+import WatchMovie from '~/pages/WatchMovie/WatchMovie'
 const navRoutes = moviesCategories.flatMap(({ name, children, to }) =>
 	children
 		? children.map(({ to: childName }) => ({
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
 			{
 				path: 'movie/detail',
 				element: <MovieDetail />,
+			},
+			{
+				path: 'movie/watch',
+				element: <WatchMovie />,
 			},
 			...navRoutes,
 		],
