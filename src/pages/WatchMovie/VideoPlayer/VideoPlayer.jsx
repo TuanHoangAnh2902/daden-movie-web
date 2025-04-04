@@ -8,7 +8,7 @@ import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
 
-const VideoPlayer = ({ src }) => {
+const VideoPlayer = ({ src, onVideoEnded }) => {
 	const videoRef = useRef(null)
 	const playerRef = useRef(null)
 	const hlsRef = useRef(null)
@@ -114,6 +114,11 @@ const VideoPlayer = ({ src }) => {
 					seekTime: 10, // Thiết lập thời gian tua là 10 giây
 				})
 
+				// Add ended event handler
+				if (onVideoEnded) {
+					videoElement.addEventListener('ended', onVideoEnded)
+				}
+
 				// If browser supports HLS
 				if (Hls.isSupported()) {
 					const hls = new Hls({
@@ -146,6 +151,11 @@ const VideoPlayer = ({ src }) => {
 								})
 							}
 						}
+					})
+
+					// Listen for video end event if using HLS
+					hls.on(Hls.Events.ENDED, () => {
+						if (onVideoEnded) onVideoEnded()
 					})
 
 					hls.on(Hls.Events.ERROR, (event, data) => {
@@ -193,7 +203,7 @@ const VideoPlayer = ({ src }) => {
 			clearTimeout(timer)
 			cleanupEventListeners()
 		}
-	}, [src, isInitialized])
+	}, [src, isInitialized, onVideoEnded])
 
 	return (
 		<div className={cx('video-container')}>
@@ -220,6 +230,7 @@ const VideoPlayer = ({ src }) => {
 
 VideoPlayer.propTypes = {
 	src: PropTypes.string.isRequired,
+	onVideoEnded: PropTypes.func,
 }
 
 export default VideoPlayer

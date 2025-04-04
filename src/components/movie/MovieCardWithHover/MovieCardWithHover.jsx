@@ -1,8 +1,9 @@
+import styles from './MovieCardWithHover.module.scss'
+
 import { debounce } from '~/utils/debounce'
 import { buttonTheme } from '~/themes/buttonTheme'
 import Portal from '~/components/common/Portal/Portal'
-
-import styles from './MovieCardWithHover.module.scss'
+import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
 
 import PropTypes from 'prop-types'
 import { LuDot } from 'react-icons/lu'
@@ -13,11 +14,9 @@ import { Button, ConfigProvider, Flex } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HeartFilled, InfoCircleFilled } from '@ant-design/icons'
 import { useRef, useState, useEffect, useCallback, memo } from 'react'
-import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
 
 const cx = classNames.bind(styles)
 const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
-	console.log('🚀 ~ MovieCardWithHoverComponent ~ movieData:', movieData)
 	const imageBaseUrl = `${imageUrl}/uploads/movies/`
 
 	const [hoveredCard, setHoveredCard] = useState(null)
