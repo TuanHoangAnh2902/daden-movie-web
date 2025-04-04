@@ -5,11 +5,37 @@
 	position: relative;
 
 	&.vertical {
-		width: 170px;
+		width: $cardWidthVertical;
 		.card {
 			.card-img {
-				height: 255px;
+				height: $cardHeightVertical;
 				width: 100%;
+			}
+		}
+	}
+
+	&.skeleton {
+		cursor: default;
+
+		.card-img {
+			.skeleton-img {
+				width: 100% !important;
+
+				.ant-skeleton-image {
+					width: 100% !important;
+					height: 100% !important;
+					border-radius: 8px;
+				}
+			}
+		}
+
+		.skeleton-title,
+		.skeleton-subtitle {
+			display: block;
+			margin: 0 auto;
+
+			.ant-skeleton-input {
+				border-radius: 4px;
 			}
 		}
 	}
@@ -21,7 +47,7 @@
 		.card-img {
 			border-radius: 8px;
 			overflow: hidden;
-			height: 150px;
+			height: $cardHeightHorizontal;
 			position: relative;
 
 			&::before {

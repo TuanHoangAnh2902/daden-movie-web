@@ -136,6 +136,10 @@ function WatchMovie() {
 		)
 	}, [currentEpUrl, handleVideoEnded, data?.movie?.trailer_url])
 
+	useEffect(() => {
+		window.scrollTo({ top: 200, behavior: 'smooth' })
+	}, [])
+
 	return (
 		<div className={cx('wrapper')}>
 			<div className={cx('watch-player')}>

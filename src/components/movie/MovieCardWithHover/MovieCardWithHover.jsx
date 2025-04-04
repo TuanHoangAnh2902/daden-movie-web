@@ -16,12 +16,13 @@ import { HeartFilled, InfoCircleFilled } from '@ant-design/icons'
 import { useRef, useState, useEffect, useCallback, memo } from 'react'
 
 const cx = classNames.bind(styles)
+
 const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	const imageBaseUrl = `${imageUrl}/uploads/movies/`
 
 	const [hoveredCard, setHoveredCard] = useState(null)
 	const [cardPosition, setCardPosition] = useState(null)
-	const [isLoading, setIsLoading] = useState(true)
+	const [imageLoading, setImageLoading] = useState(true)
 	const [mainImageRetries, setMainImageRetries] = useState(0)
 	const [detailImageRetries, setDetailImageRetries] = useState(0)
 
@@ -30,7 +31,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	const timerRef = useRef(null)
 
 	const handleImageLoad = useCallback(() => {
-		setIsLoading(false)
+		setImageLoading(false)
 	}, [])
 
 	const retryLoadImage = useCallback((imageElement, url, setRetries, maxRetries = 3) => {
@@ -135,7 +136,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 								}
 							}}
 							onLoad={handleImageLoad}
-							data-loading={isLoading}
+							data-loading={imageLoading}
 							className={cx('card-img-element')}
 						/>
 					</div>
@@ -243,6 +244,7 @@ MovieCardWithHoverComponent.propTypes = {
 		),
 	}).isRequired,
 	direction: PropTypes.oneOf(['vertical', 'horizontal']),
+	isLoading: PropTypes.bool,
 }
 
 // Sử dụng memo với custom compare function để tránh re-render không cần thiết

@@ -2,7 +2,10 @@ $bgColorLayout: #191b24;
 $bgColorLayoutLight: #2f3346;
 $textColor: #fff;
 $subColor: #ffd875;
-
+$cardWidthVertical: 170px;
+$cardHeightVertical: 255px;
+$cardWidthHorizontal: 250px;
+$cardHeightHorizontal: 150px;
 $paddingY: 45px;
 
 :root {
@@ -10,4 +13,8 @@ $paddingY: 45px;
 	--bg-color-layout-light: #{$bgColorLayoutLight};
 	--text-color: #{$textColor};
 	--sub-color: #{$subColor};
+	--card-width-vertical: #{$cardWidthVertical};
+	--card-height-vertical: #{$cardHeightVertical};
+	--card-width-horizontal: #{$cardWidthHorizontal};
+	--card-height-horizontal: #{$cardHeightHorizontal};
 }
