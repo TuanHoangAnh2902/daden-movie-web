@@ -10,10 +10,10 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			background-image: linear-gradient(to top, $bgColorLayout 0.1%, transparent 16%),
-				linear-gradient(to bottom, $bgColorLayout 0.1%, transparent 16%),
-				linear-gradient(to left, $bgColorLayout 0.1%, transparent 16%),
-				linear-gradient(to right, $bgColorLayout 0.1%, transparent 16%);
+			background-image: linear-gradient(to top, $bgColorLayout 3%, transparent 16%),
+				linear-gradient(to bottom, $bgColorLayout 3%, transparent 16%),
+				linear-gradient(to left, $bgColorLayout 1%, transparent 16%),
+				linear-gradient(to right, $bgColorLayout 1%, transparent 16%);
 			z-index: 100;
 		}
 		.movie-img {
@@ -32,8 +32,9 @@
 	}
 
 	.movie-detail-content {
-		margin: 0 $paddingY;
-		position: absolute;
+		margin: 0 $paddingY 0;
+		// position: absolute;
+		padding-top: calc(100vh - 320px);
 		top: 550px;
 		z-index: 200;
 		width: 95%;

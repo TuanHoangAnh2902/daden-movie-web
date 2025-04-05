@@ -1,24 +1,25 @@
-import { CiCircleChevLeft } from 'react-icons/ci'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import styles from './WatchMovie.module.scss'
-import classNames from 'classnames/bind'
-import { useLazyGetMovieByIdQuery } from '~/services/ophimApi'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ConfigProvider, Divider, Flex, Layout, Switch } from 'antd'
-import VideoPlayer from './VideoPlayer/VideoPlayer'
-import { TiHeartFullOutline } from 'react-icons/ti'
-import { FaAngleRight, FaPlus } from 'react-icons/fa6'
-import { MdAutorenew } from 'react-icons/md'
-import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
-import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
-import { LayoutTheme } from '~/themes/buttonTheme'
-import EpisodeTab from '../MovieDetail/MainContent/EpisodeTab/EpisodeTab'
-import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
-import RecommentMovie from './RecommentMovie/RecommentMovie'
+import classNames from 'classnames/bind'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { CiCircleChevLeft } from 'react-icons/ci'
+import { FaAngleRight, FaPlus } from 'react-icons/fa6'
+import { MdAutorenew } from 'react-icons/md'
+import { TiHeartFullOutline } from 'react-icons/ti'
 import ReactPlayer from 'react-player'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+
+import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
+import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
+import { useLazyGetMovieByIdQuery } from '~/services/ophimApi'
+import { LayoutTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
+import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
+import EpisodeTab from '../MovieDetail/MainContent/EpisodeTab/EpisodeTab'
+import RecommentMovie from './RecommentMovie/RecommentMovie'
+import VideoPlayer from './VideoPlayer/VideoPlayer'
+import styles from './WatchMovie.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -157,6 +158,7 @@ function WatchMovie() {
 						<FaPlus />
 						<p>Thêm vào</p>
 					</Flex>
+
 					<Flex align='center' gap={10} className={cx('control-item')}>
 						<MdAutorenew />
 						<p>Tự động chuyển tập</p>
