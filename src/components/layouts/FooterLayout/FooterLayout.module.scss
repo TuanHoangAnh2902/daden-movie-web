@@ -1,0 +1,41 @@
+.footer-container {
+	padding: 30px 40px;
+	margin-top: 160px;
+	background-color: #0f111a;
+	color: #fff;
+	.footer-layout {
+		position: relative;
+		z-index: 100;
+		.logo {
+			.logo-text {
+				h5 {
+					font-size: 30px;
+					font-weight: 700;
+				}
+				p {
+					color: #aaa;
+				}
+			}
+		}
+
+		.social-icons {
+			div {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				background-color: $bgColorLayoutLight;
+
+				.icon {
+					color: $textColor;
+				}
+			}
+		}
+
+		.footer-text {
+			margin-top: 10px;
+			font-size: 14px;
+			color: #aaa;
+			line-height: 24px;
+		}
+	}
+}

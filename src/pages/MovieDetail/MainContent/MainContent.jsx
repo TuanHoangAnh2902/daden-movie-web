@@ -1,17 +1,18 @@
 import { Button, ConfigProvider, Flex, Tabs } from 'antd'
-import styles from './MainContent.module.scss'
 import classNames from 'classnames/bind'
-import { buttonTheme } from '~/themes/buttonTheme'
-import { TiHeartFullOutline } from 'react-icons/ti'
+import PropTypes from 'prop-types'
+import { BsCameraVideoFill } from 'react-icons/bs'
 import { FaComments, FaPlay, FaPlus } from 'react-icons/fa'
 import { IoIosSend } from 'react-icons/io'
+import { TiHeartFullOutline } from 'react-icons/ti'
+import { Link } from 'react-router-dom'
+
+import { buttonTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
 import EpisodeTab from './EpisodeTab/EpisodeTab'
-import PropTypes from 'prop-types'
-import RecommentTab from './RecommentTab/RecommentTab'
 import GalleryTab from './GalleryTab/GalleryTab'
-import { BsCameraVideoFill } from 'react-icons/bs'
-import { Link } from 'react-router-dom'
+import styles from './MainContent.module.scss'
+import RecommentTab from './RecommentTab/RecommentTab'
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {
@@ -60,15 +61,17 @@ function MainContent({ data }) {
 			<div className={cx('movie-detail-main-wrapper')}>
 				<Flex align='center' gap={30} className={cx('movie-detail-main-content')}>
 					{isTrailerOnly ? (
-						<div className={cx('trailer-btn')}>
-							<Flex align='center' gap={10} className={cx('button')}>
-								<BsCameraVideoFill className={cx('trailer-icon')} />
-								<p>Xem trailer</p>
-							</Flex>
-							<Flex className={cx('trailer-text')} align='center' justify='center'>
-								<p>Phim sắp ra mắt</p>
-							</Flex>
-						</div>
+						<Link to={`/movie/watch?id=${data?.movie?._id}&ep=full`}>
+							<div className={cx('trailer-btn')}>
+								<Flex align='center' gap={10} className={cx('button')}>
+									<BsCameraVideoFill className={cx('trailer-icon')} />
+									<p>Xem trailer</p>
+								</Flex>
+								<Flex className={cx('trailer-text')} align='center' justify='center'>
+									<p>Phim sắp ra mắt</p>
+								</Flex>
+							</div>
+						</Link>
 					) : (
 						<ConfigProvider
 							theme={{ components: { Button: { ...buttonTheme, contentFontSize: 17, fontWeight: 500 } } }}>

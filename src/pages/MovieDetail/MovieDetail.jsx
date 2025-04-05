@@ -1,15 +1,15 @@
-import styles from './MovieDetail.module.scss'
 import classNames from 'classnames/bind'
+import styles from './MovieDetail.module.scss'
 
-import SideContent from './SideContent/SideContent'
-import MainContent from './MainContent/MainContent'
 import { useGetMovieByIdQuery } from '~/services/ophimApi'
+import MainContent from './MainContent/MainContent'
+import SideContent from './SideContent/SideContent'
 
 import { ConfigProvider, Layout, Skeleton } from 'antd'
-import { useSearchParams } from 'react-router-dom'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
 import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { LayoutTheme } from '~/themes/buttonTheme'
 
 const cx = classNames.bind(styles)

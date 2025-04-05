@@ -11,6 +11,7 @@ export const useThemeColors = () => {
 			cardWidthHorizontal: rootStyles.getPropertyValue('--card-width-horizontal').trim() || '100%',
 			cardHeightVertical: rootStyles.getPropertyValue('--card-height-vertical').trim() || '100%',
 			cardHeightHorizontal: rootStyles.getPropertyValue('--card-height-horizontal').trim() || '100%',
+			bgColorLayoutLight: rootStyles.getPropertyValue('--bg-color-layout-light').trim() || '#ccc',
 		}
 	}
 
