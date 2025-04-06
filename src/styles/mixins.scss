@@ -34,3 +34,8 @@
 	font-weight: 400;
 	color: $subColor;
 }
+
+@mixin user-avatar {
+	background-color: $subColor;
+	border: 2px solid rgba(255, 255, 255, 0.2);
+}

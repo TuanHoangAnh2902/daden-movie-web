@@ -1,37 +1,28 @@
-import { LockOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Card, Divider, Flex, Spin, Typography } from 'antd'
+import { Avatar, Col, Flex, Row, Spin } from 'antd'
 import classNames from 'classnames/bind'
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
-import { logout } from '~/features/auth/authSlice'
-import { logOut } from '~/services/authService'
 import styles from './Profile.module.scss'
-
-const { Title, Text } = Typography
+import { TiHeartFullOutline } from 'react-icons/ti'
+import { FaPlus, FaUser } from 'react-icons/fa6'
+import { UserOutlined } from '@ant-design/icons'
 
 const cx = classNames.bind(styles)
 const Profile = () => {
 	const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth)
-	console.log('🚀 ~ Profile ~ user:', user)
-	const dispatch = useDispatch()
+
 	const navigate = useNavigate()
+	const location = useLocation()
+	const currentPath = location.pathname.split('/')[2] || 'profile' // Get the current path after '/user/' or default to 'profile'
 
 	// If not authenticated, redirect to home
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!isLoading && !isAuthenticated) {
 			navigate('/')
 		}
 	}, [isAuthenticated, isLoading, navigate])
-
-	const handleLogout = async () => {
-		const result = await logOut()
-		if (!result.error) {
-			dispatch(logout())
-			navigate('/')
-		}
-	}
 
 	if (isLoading) {
 		return (
@@ -41,59 +32,46 @@ const Profile = () => {
 		)
 	}
 
+	// Define menu items with their paths and icons for cleaner code
+	const menuItems = [
+		{ path: 'favourite', label: 'Yêu thích', icon: <TiHeartFullOutline /> },
+		{ path: 'lists', label: 'Danh sách', icon: <FaPlus /> },
+		{ path: 'profile', label: 'Tài khoản', icon: <FaUser /> },
+	]
+
 	return (
-		<div className={cx('profile-container')}>
-			<Title level={2} className={cx('page-title')}>
-				Hồ sơ của tôi
-			</Title>
+		<div className={cx('wrapper')}>
+			<Row className={cx('profile-container')} align={'top'} justify={'space-between'}>
+				<Col span={5} className={cx('tabs-side')}>
+					<h1>Quản lý tài khoản</h1>
+					<Flex vertical className={cx('profile-menu')}>
+						{menuItems.map((item) => (
+							<Link key={item.path} to={item.path}>
+								<Flex gap={10} className={cx('menu-item', { active: currentPath === item.path })} align='center'>
+									{item.icon}
+									<p>{item.label}</p>
+								</Flex>
+							</Link>
+						))}
+					</Flex>
 
-			<Card className={cx('profile-card')}>
-				<Flex align='center' gap={16} className={cx('user-header')}>
-					<Avatar
-						size={80}
-						src={user?.photoURL}
-						icon={!user?.photoURL && <UserOutlined />}
-						className={cx('user-avatar')}
-					/>
-					<div className={cx('user-info')}>
-						<Title level={3}>{user?.displayName || 'Người dùng'}</Title>
-						<Text type='secondary'>{user?.email}</Text>
-					</div>
-				</Flex>
-
-				<Divider />
-
-				<div className={cx('account-details')}>
-					<Title level={4}>Chi tiết tài khoản</Title>
-
-					<div className={cx('detail-item')}>
-						<Text strong>Email:</Text>
-						<Text>{user?.email}</Text>
-					</div>
-
-					<div className={cx('detail-item')}>
-						<Text strong>Xác thực email:</Text>
-						<Text>{user?.emailVerified ? 'Đã xác thực' : 'Chưa xác thực'}</Text>
-					</div>
-
-					<div className={cx('detail-item')}>
-						<Text strong>ID người dùng:</Text>
-						<Text className={cx('user-id')}>{user?.uid}</Text>
-					</div>
-				</div>
-
-				<Divider />
-
-				<Flex gap={12} className={cx('action-buttons')}>
-					<Button type='primary' icon={<LockOutlined />} className={cx('change-password-btn')}>
-						Đổi mật khẩu
-					</Button>
-
-					<Button danger icon={<LogoutOutlined />} onClick={handleLogout}>
-						Đăng xuất
-					</Button>
-				</Flex>
-			</Card>
+					<Flex vertical gap={16} className={cx('user-info')}>
+						<Avatar
+							size={65}
+							src={user?.photoURL}
+							icon={!user?.photoURL && <UserOutlined />}
+							className={cx('user-avatar')}
+						/>
+						<Flex vertical gap={5} className={cx('user-detail')}>
+							<h5>{user?.displayName || 'Người dùng'}</h5>
+							<p type='secondary'>{user?.email}</p>
+						</Flex>
+					</Flex>
+				</Col>
+				<Col span={18} className={cx('content-side')}>
+					<Outlet />
+				</Col>
+			</Row>
 		</div>
 	)
 }

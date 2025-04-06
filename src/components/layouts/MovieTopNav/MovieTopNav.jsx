@@ -57,8 +57,8 @@ function MovieTopNav() {
 
 	const userMenuItems = [
 		{
-			key: 'profile',
-			label: <Link to='/profile'>Hồ sơ</Link>,
+			key: 'user',
+			label: <Link to='/user/profile'>Hồ sơ</Link>,
 			icon: <UserOutlined />,
 		},
 		{

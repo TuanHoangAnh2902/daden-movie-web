@@ -14,6 +14,9 @@ import MoviesSearchList from '~/components/movie/MoviesSearchList/MoviesSearchLi
 import MoviesCountiesList from '~/components/movie/MoviesCountiesList/MoviesCountiesList'
 import MovieDetail from '~/pages/MovieDetail/MovieDetail'
 import WatchMovie from '~/pages/WatchMovie/WatchMovie'
+import Favourite from '~/pages/Profile/Favourite/Favourite'
+import AccountInfo from '~/pages/Profile/AccountInfo/AccountInfo'
+
 const navRoutes = moviesCategories.flatMap(({ name, children, to }) =>
 	children
 		? children.map(({ to: childName }) => ({
@@ -47,8 +50,12 @@ const router = createBrowserRouter([
 				element: <WatchMovie />,
 			},
 			{
-				path: 'profile',
+				path: 'user',
 				element: <Profile />,
+				children: [
+					{ path: 'favourite', element: <Favourite /> },
+					{ path: 'profile', element: <AccountInfo /> },
+				],
 			},
 			...navRoutes,
 		],
