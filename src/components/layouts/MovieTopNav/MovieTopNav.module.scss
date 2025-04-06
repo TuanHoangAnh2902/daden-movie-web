@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 .top-nav {
 	transition: all 0.3s;
 	background: transparent;
@@ -22,8 +24,110 @@
 			}
 		}
 	}
+
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 9999;
+	padding: 20px;
+	transition: background-color 0.2s ease-in-out;
+
+	&.bg-color {
+		background-color: rgba(15, 17, 26, 0.9);
+		backdrop-filter: blur(10px);
+	}
+
+	.dropdown-link {
+		cursor: pointer;
+	}
+
+	.name {
+		transition: color 0.2s ease-in-out;
+		cursor: pointer;
+
+		&:hover {
+			color: $subColor;
+		}
+	}
+
+	.auth-section {
+		margin-left: 10px;
+
+		.login-button {
+			background-color: $subColor;
+			border: none;
+			border-radius: 4px;
+			&:hover {
+				background-color: color.adjust($subColor, $lightness: -10%);
+			}
+		}
+
+		.register-button {
+			background-color: transparent;
+			border: 1px solid $subColor;
+			color: $subColor;
+			border-radius: 4px;
+
+			&:hover {
+				background-color: rgba(52, 152, 219, 0.1);
+				border-color: color.adjust($subColor, $lightness: 10%);
+				color: color.adjust($subColor, $lightness: 10%);
+			}
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			cursor: pointer;
+			padding: 4px 8px;
+			border-radius: 20px;
+			transition: background-color 0.2s ease-in-out;
+
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.1);
+			}
+
+			.user-avatar {
+				background-color: $subColor;
+			}
+
+			.user-name {
+				color: #fff;
+				font-size: 14px;
+				max-width: 120px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
 }
 
 .bg-color {
 	background: $bgColorLayout;
+}
+
+.login-modal {
+	overflow: hidden;
+	border-radius: 12px;
+	:global {
+		.ant-modal-content {
+			.ant-modal-body {
+				height: 550px;
+			}
+		}
+	}
+	.modal-img {
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: right center;
+		}
+	}
+	:global(.ant-modal-content) {
+		padding: 0;
+	}
 }

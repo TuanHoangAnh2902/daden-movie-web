@@ -15,6 +15,15 @@ createRoot(document.getElementById('root')).render(
 			<ConfigProvider
 				theme={{
 					token: { colorBgLayout: '#191b24', fontFamily: '"Be Vietnam Pro","sans-serif"' },
+					components: {
+						Message: {
+							contentBg: '#ffffff',
+							colorText: '#141414',
+							padding: 16,
+							borderRadius: 8,
+							boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+						},
+					},
 				}}>
 				<App />
 			</ConfigProvider>

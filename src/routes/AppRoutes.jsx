@@ -7,6 +7,7 @@ import NotFound from '~/pages/NotFount'
 import MainLayout from '~/layouts/MainLayout'
 import AuthLayouts from '~/layouts/AuthLayouts'
 import MoviesList from '~/components/movie/MoviesList/MoviesList'
+import Profile from '~/pages/Profile/Profile'
 
 import { moviesCategories } from '~/constants/routes'
 import MoviesSearchList from '~/components/movie/MoviesSearchList/MoviesSearchList'
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
 			{
 				path: 'movie/watch',
 				element: <WatchMovie />,
+			},
+			{
+				path: 'profile',
+				element: <Profile />,
 			},
 			...navRoutes,
 		],
