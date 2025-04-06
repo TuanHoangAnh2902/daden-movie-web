@@ -1,0 +1,83 @@
+@use 'sass:color';
+
+.profile-container {
+	max-width: 800px;
+	margin: 120px auto 40px;
+	padding: 0 20px;
+
+	.page-title {
+		margin-bottom: 24px;
+		color: #fff;
+		text-align: center;
+	}
+
+	.profile-card {
+		background-color: $bgColorLayout;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+
+		:global(.ant-card-body) {
+			padding: 24px;
+		}
+
+		:global(.ant-typography) {
+			color: #fff;
+
+			&.ant-typography-secondary {
+				color: rgba(255, 255, 255, 0.65);
+			}
+		}
+
+		:global(.ant-divider) {
+			border-color: rgba(255, 255, 255, 0.1);
+		}
+
+		.user-header {
+			margin-bottom: 16px;
+
+			.user-avatar {
+				background-color: $subColor;
+				border: 2px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.user-info {
+				h3.ant-typography {
+					margin-bottom: 4px;
+				}
+			}
+		}
+
+		.account-details {
+			margin-bottom: 16px;
+
+			.detail-item {
+				display: flex;
+				margin-bottom: 12px;
+
+				> span:first-child {
+					width: 140px;
+					color: rgba(255, 255, 255, 0.85);
+				}
+
+				.user-id {
+					color: rgba(255, 255, 255, 0.5);
+					font-family: monospace;
+					font-size: 0.9em;
+				}
+			}
+		}
+
+		.action-buttons {
+			justify-content: flex-end;
+
+			.change-password-btn {
+				background-color: $subColor;
+				border: none;
+
+				&:hover {
+					background-color: color.adjust($subColor, $lightness: -10%);
+				}
+			}
+		}
+	}
+}

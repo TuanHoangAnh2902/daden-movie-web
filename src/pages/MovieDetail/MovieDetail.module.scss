@@ -23,7 +23,7 @@
 		}
 		.skeleton-poster {
 			width: 100%;
-			height: calc(100vh - 160px);
+			height: calc(100vh - 100px);
 			.ant-skeleton-image {
 				width: 100% !important;
 				height: 100% !important;
@@ -34,7 +34,7 @@
 	.movie-detail-content {
 		margin: 0 $paddingY 0;
 		// position: absolute;
-		padding-top: calc(100vh - 320px);
+		padding-top: calc(100vh - 230px);
 		top: 550px;
 		z-index: 200;
 		width: 95%;
