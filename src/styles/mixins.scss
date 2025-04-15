@@ -39,3 +39,41 @@
 	background-color: $subColor;
 	border: 2px solid rgba(255, 255, 255, 0.2);
 }
+
+/// Max-width media query (tối đa)
+@mixin respond-down($breakpoint) {
+	$value: map-get($breakpoints, $breakpoint);
+	@if $value {
+		@media (max-width: $value) {
+			@content;
+		}
+	} @else {
+		@warn "⚠️ Breakpoint `#{$breakpoint}` không tồn tại!";
+	}
+}
+
+/// Min-width media query (từ kích thước đó trở lên)
+@mixin respond-up($breakpoint) {
+	$value: map-get($breakpoints, $breakpoint);
+	@if $value {
+		@media (min-width: $value) {
+			@content;
+		}
+	} @else {
+		@warn "⚠️ Breakpoint `#{$breakpoint}` không tồn tại!";
+	}
+}
+
+/// Between two breakpoints
+@mixin respond-between($min, $max) {
+	$min-val: map-get($breakpoints, $min);
+	$max-val: map-get($breakpoints, $max);
+
+	@if $min-val and $max-val {
+		@media (min-width: $min-val) and (max-width: $max-val) {
+			@content;
+		}
+	} @else {
+		@warn "⚠️ Một trong hai breakpoint `#{$min}` hoặc `#{$max}` không tồn tại!";
+	}
+}

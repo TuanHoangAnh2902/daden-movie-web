@@ -8,6 +8,15 @@ $cardWidthHorizontal: 250px;
 $cardHeightHorizontal: 150px;
 $paddingY: 45px;
 
+$breakpoints: (
+	'xs': 480px,
+	'sm': 576px,
+	'md': 768px,
+	'lg': 1024px,
+	'xl': 1280px,
+	'xxl': 1400px,
+);
+
 :root {
 	--bg-color-layout: #{$bgColorLayout};
 	--bg-color-layout-light: #{$bgColorLayoutLight};

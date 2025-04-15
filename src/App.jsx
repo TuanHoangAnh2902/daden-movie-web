@@ -1,11 +1,15 @@
 import AppRoutes from './routes/AppRoutes'
 import AuthInitializer from './components/auth/AuthInitializer'
+import FavoritesInitializer from './components/auth/FavoritesInitializer'
 
 function App() {
 	return (
 		<>
-			<AuthInitializer />
-			<AppRoutes />
+			<AuthInitializer>
+				<FavoritesInitializer>
+					<AppRoutes />
+				</FavoritesInitializer>
+			</AuthInitializer>
 		</>
 	)
 }

@@ -177,11 +177,6 @@ export const subscribeToAuthChanges = (callback) => {
 	return onAuthStateChanged(auth, callback)
 }
 
-/**
- * Serializes a Firebase user object to keep only serializable properties
- * @param {Object} user - Firebase user object
- * @returns {Object} Serialized user object with only serializable properties
- */
 export const serializeUser = (user) => {
 	if (!user) return null
 
