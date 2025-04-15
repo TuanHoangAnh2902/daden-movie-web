@@ -1,10 +1,110 @@
 .wrapper {
+	width: 100%;
+
 	.favourite-container {
-		.title {
-			color: $textColor;
-			font-size: 20px;
+		padding: 15px;
+
+		border-radius: 10px;
+
+		.header {
 			margin-bottom: 20px;
-			line-height: 30px;
+
+			.sort-select {
+				:global {
+					.ant-select-arrow {
+						color: $textColor;
+					}
+				}
+			}
+
+			.sort-btn {
+				background-color: transparent;
+				border: 1px solid $subColor;
+				color: $subColor;
+			}
 		}
+
+		.title {
+			margin: 0;
+			color: $subColor;
+		}
+		.empty {
+			margin-top: 50px;
+			& * {
+				color: $textColor;
+			}
+		}
+	}
+}
+
+.movies-grid {
+	margin-top: 20px;
+	width: 100%;
+}
+
+.movie-item {
+	position: relative;
+	cursor: pointer;
+	transition: all 0.3s ease;
+
+	&:hover {
+		transform: translateY(-5px);
+	}
+
+	&.selected {
+		border: 2px solid $subColor;
+		border-radius: 8px;
+		box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+	}
+}
+
+.movie-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: 8px;
+	background-color: rgba(0, 0, 0, 0);
+	transition: background-color 0.3s ease;
+	pointer-events: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&.active {
+		background-color: rgba(0, 0, 0, 0.5);
+
+		&:after {
+			content: '✓';
+			color: white;
+			font-size: 2rem;
+			font-weight: bold;
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.header {
+		flex-direction: column;
+		align-items: flex-start !important;
+		gap: 10px;
+
+		.title {
+			margin-bottom: 10px;
+		}
+
+		:global(.ant-space) {
+			width: 100%;
+			justify-content: space-between;
+		}
+	}
+}
+
+:global {
+	.ant-select-item-option-selected,
+	.ant-select-item-option-active {
+		background-color: $subColor !important;
+		color: #000 !important;
 	}
 }

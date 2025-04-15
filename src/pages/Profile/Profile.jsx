@@ -24,6 +24,18 @@ const Profile = () => {
 		}
 	}, [isAuthenticated, isLoading, navigate])
 
+	// Define menu items with their paths and icons for cleaner code
+	const menuItems = [
+		{ path: 'profile', label: 'Tài khoản', icon: <FaUser /> },
+		{ path: 'favourite', label: 'Yêu thích', icon: <TiHeartFullOutline /> },
+		{ path: 'lists', label: 'Danh sách', icon: <FaPlus /> },
+	]
+
+	useEffect(() => {
+		// Scroll to top when the component mounts or the path changes
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}, [])
+
 	if (isLoading) {
 		return (
 			<Flex align='center' justify='center' style={{ height: '80vh' }}>
@@ -31,13 +43,6 @@ const Profile = () => {
 			</Flex>
 		)
 	}
-
-	// Define menu items with their paths and icons for cleaner code
-	const menuItems = [
-		{ path: 'favourite', label: 'Yêu thích', icon: <TiHeartFullOutline /> },
-		{ path: 'lists', label: 'Danh sách', icon: <FaPlus /> },
-		{ path: 'profile', label: 'Tài khoản', icon: <FaUser /> },
-	]
 
 	return (
 		<div className={cx('wrapper')}>

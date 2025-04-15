@@ -1,6 +1,6 @@
 // Base card styles
 .movie-card {
-	width: clamp(200px, 100%, 270px);
+	width: $cardHeightVertical;
 	cursor: pointer;
 	position: relative;
 
@@ -10,6 +10,15 @@
 			.card-img {
 				height: $cardHeightVertical;
 				width: 100%;
+			}
+		}
+		@include respond-down(xl) {
+			width: 20px;
+			.card {
+				.card-img {
+					height: 20px;
+					width: 100%;
+				}
 			}
 		}
 	}
@@ -184,6 +193,11 @@
 				background: transparent;
 				border: 0.1px solid $textColor;
 
+				&.like-modifier {
+					& * {
+						color: $subColor;
+					}
+				}
 				& * {
 					color: $textColor;
 				}

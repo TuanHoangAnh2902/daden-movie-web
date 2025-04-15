@@ -1,21 +1,20 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
+import { getDatabase } from 'firebase/database' // ADD THIS
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
 	apiKey: 'AIzaSyB8JEjD3d4QRpfyoONiQKMazmnPhcAZRzY',
 	authDomain: 'login-bc4c7.firebaseapp.com',
-	projectId: 'https://login-bc4c7-default-rtdb.firebaseio.com',
-	storageBucket: 'login-bc4c7.firebasestorage.app',
+	projectId: 'login-bc4c7', // CHỈ LÀ projectId (bỏ https://)
+	databaseURL: 'https://login-bc4c7-default-rtdb.firebaseio.com', // ADD THIS
+	storageBucket: 'login-bc4c7.appspot.com', // FIXED domain
 	messagingSenderId: '678793601980',
 	appId: '1:678793601980:web:e485048e12ae2af90d81b9',
 	measurementId: 'G-WWECDJ66W3',
 }
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
+const db = getDatabase(app)
 
-export { app, auth }
+export { app, auth, db }
