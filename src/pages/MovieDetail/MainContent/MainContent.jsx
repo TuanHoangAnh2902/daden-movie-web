@@ -137,7 +137,7 @@ function MainContent({ data }) {
 						/>
 					</ConfigProvider>
 				</div>
-				<Comment />
+				<Comment movieId={data?.movie?._id} />
 			</div>
 		</>
 	)
