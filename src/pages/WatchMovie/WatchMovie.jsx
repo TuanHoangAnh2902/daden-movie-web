@@ -219,7 +219,7 @@ function WatchMovie() {
 							</Flex>
 							<Divider className={cx('divider')} />
 							{currentEpUrl && <EpisodeTab data={data} />}
-							<Comment />
+							<Comment movieId={data?.movie?._id} />
 						</Content>
 						<Divider className={cx('vertical-divider')} type='vertical' />
 						<Sider className={cx('recomment')} width='28%'>
