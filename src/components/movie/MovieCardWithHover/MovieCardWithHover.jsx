@@ -4,32 +4,26 @@ import { debounce } from '~/utils/debounce'
 import { buttonTheme } from '~/themes/buttonTheme'
 import Portal from '~/components/common/Portal/Portal'
 import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
+import useToggleFavorite from '~/hooks/useToggleFavorite'
 
 import PropTypes from 'prop-types'
 import { LuDot } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { FaPlay } from 'react-icons/fa6'
-import { Button, ConfigProvider, Flex, message } from 'antd'
+import { Button, ConfigProvider, Flex } from 'antd'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HeartFilled, InfoCircleFilled, LoadingOutlined } from '@ant-design/icons'
 import { useRef, useState, useEffect, useCallback, memo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { toggleFavorite } from '~/features/favorites/favoritesService'
-import { addFavorite, removeFavorite } from '~/features/favorites/favoritesSlice'
 
 const cx = classNames.bind(styles)
 
 const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	const imageBaseUrl = `${imageUrl}/uploads/movies/`
-	const dispatch = useDispatch()
-	const { favoriteIds } = useSelector((state) => state.favorites)
-	const { isAuthenticated } = useSelector((state) => state.auth)
+	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 
-	// Kiểm tra trạng thái yêu thích từ Redux store
-	const isFav = favoriteIds.includes(movieData?._id)
-	const [isToggling, setIsToggling] = useState(false)
-	const [messageApi, contextHolder] = message.useMessage()
+	// Kiểm tra trạng thái yêu thích từ hook
+	const isFav = checkIsFavorite(movieData?._id)
 
 	const [hoveredCard, setHoveredCard] = useState(null)
 	const [cardPosition, setCardPosition] = useState(null)
@@ -115,34 +109,6 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 			clearTimeout(timerRef.current)
 		}
 	}, [])
-
-	// Xử lý toggle yêu thích
-	const handleToggleFavorite = async () => {
-		if (!isAuthenticated) {
-			messageApi.error('Bạn cần đăng nhập để sử dụng chức năng này')
-			return
-		}
-
-		try {
-			setIsToggling(true)
-			const result = await toggleFavorite(movieData)
-
-			if (result.status === 'added') {
-				dispatch(addFavorite(movieData._id))
-				messageApi.success('Đã thêm vào danh sách yêu thích')
-			} else if (result.status === 'removed') {
-				dispatch(removeFavorite(movieData._id))
-				messageApi.info('Đã xóa khỏi danh sách yêu thích')
-			} else if (result.error) {
-				messageApi.error(result.error)
-			}
-		} catch (error) {
-			messageApi.error('Có lỗi xảy ra, vui lòng thử lại sau')
-			console.error('Error toggling favorite:', error)
-		} finally {
-			setIsToggling(false)
-		}
-	}
 
 	// Lấy thumbnail hoặc poster dựa vào hướng hiển thị
 	const getImageUrl = useCallback(
@@ -240,7 +206,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 										className={cx('action-btn', { 'like-modifier': isFav })}
 										type='text'
 										icon={isToggling ? <LoadingOutlined /> : <HeartFilled />}
-										onClick={handleToggleFavorite}
+										onClick={() => handleToggleFavorite(movieData)}
 										disabled={isToggling}>
 										{isFav ? 'Đã thích' : 'Thích'}
 									</Button>
