@@ -35,7 +35,7 @@
 	.imdb-info {
 		margin-top: 16px;
 		.imdb-info-item {
-			@include category-item($fontSize: 11px, $borderColor: $textColor, $bgColor: #272932);
+			@include category-item($fontSize: 11px, $borderColor: $textColor, $bgColor: $bgColorLayoutLight2);
 		}
 	}
 

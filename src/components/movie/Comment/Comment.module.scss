@@ -1,0 +1,86 @@
+.wrapper {
+	margin-top: 60px;
+	color: $textColor;
+
+	.title {
+		font-size: 24px;
+		font-weight: 500;
+		line-height: 30px;
+		margin-bottom: 20px;
+	}
+
+	.comment-form {
+		margin-bottom: 40px;
+		.account-user {
+			margin-bottom: 20px;
+			.user-info {
+				.user-title {
+					font-size: 13px;
+					line-height: 20px;
+					color: $textColor;
+					opacity: 0.6;
+				}
+				.user-name {
+					font-size: 15px;
+					line-height: 20px;
+					color: $textColor;
+				}
+			}
+		}
+		.comment-input {
+			background-color: $bgColorLayoutLight2;
+			padding: 8px 8px 0 8px;
+			border-radius: 12px;
+			.input {
+				background-color: $bgColorLayout;
+				color: $textColor;
+				padding: 12px 0 0 12px;
+				&::placeholder {
+					color: $textColor;
+					opacity: 0.5;
+					font-size: 12px;
+				}
+			}
+			.send-btn {
+				color: $subColor;
+				padding: 24px 0;
+
+				margin-left: 94%;
+				&:hover {
+					color: $subColor;
+					opacity: 0.8;
+				}
+			}
+			:global {
+				.ant-form-item {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+
+	.content {
+		.account-comment {
+			.account-info {
+				.account-name {
+					font-size: 14px;
+					line-height: 20px;
+					color: $textColor;
+				}
+				.account-time {
+					font-size: 12px;
+					line-height: 16px;
+					color: $textColor;
+					opacity: 0.5;
+				}
+				.account-comment-text {
+					font-size: 14px;
+					line-height: 20px;
+					color: $textColor;
+					margin-top: 10px;
+					opacity: 0.8;
+				}
+			}
+		}
+	}
+}

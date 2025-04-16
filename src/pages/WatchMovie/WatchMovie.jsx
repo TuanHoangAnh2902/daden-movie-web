@@ -12,6 +12,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
+import Comment from '~/components/movie/Comment/Comment'
 import { useLazyGetMovieByIdQuery } from '~/services/ophimApi'
 import { LayoutTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
@@ -218,6 +219,7 @@ function WatchMovie() {
 							</Flex>
 							<Divider className={cx('divider')} />
 							{currentEpUrl && <EpisodeTab data={data} />}
+							<Comment />
 						</Content>
 						<Divider className={cx('vertical-divider')} type='vertical' />
 						<Sider className={cx('recomment')} width='28%'>
