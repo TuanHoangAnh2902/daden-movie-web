@@ -14,6 +14,7 @@ import GalleryTab from './GalleryTab/GalleryTab'
 import styles from './MainContent.module.scss'
 import RecommentTab from './RecommentTab/RecommentTab'
 import useToggleFavorite from '~/hooks/useToggleFavorite'
+import Comment from '~/components/movie/Comment/Comment'
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {
@@ -136,6 +137,7 @@ function MainContent({ data }) {
 						/>
 					</ConfigProvider>
 				</div>
+				<Comment />
 			</div>
 		</>
 	)
