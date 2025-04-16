@@ -47,7 +47,7 @@ const Profile = () => {
 	return (
 		<div className={cx('wrapper')}>
 			<Row className={cx('profile-container')} align={'top'} justify={'space-between'}>
-				<Col span={5} className={cx('tabs-side')}>
+				<Col flex=' 0 0 18%' className={cx('tabs-side')}>
 					<h1>Quản lý tài khoản</h1>
 					<Flex vertical className={cx('profile-menu')}>
 						{menuItems.map((item) => (
@@ -73,7 +73,7 @@ const Profile = () => {
 						</Flex>
 					</Flex>
 				</Col>
-				<Col span={18} className={cx('content-side')}>
+				<Col flex='0 0 80%' className={cx('content-side')}>
 					<Outlet />
 				</Col>
 			</Row>

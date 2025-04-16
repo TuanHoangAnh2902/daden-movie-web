@@ -12,6 +12,7 @@ import { Button, Flex } from 'antd'
 import { SwiperSlide, Swiper } from 'swiper/react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { Autoplay, Scrollbar, Navigation } from 'swiper/modules'
+console.log('width: ', window.innerWidth)
 
 const cx = classNames.bind(styles)
 function SwiperCarousel({ data }) {
@@ -27,7 +28,7 @@ function SwiperCarousel({ data }) {
 			/>
 			<Swiper
 				modules={[Navigation, Scrollbar, Autoplay]}
-				slidesPerView={4}
+				slidesPerView={3}
 				spaceBetween={18}
 				navigation={{
 					prevEl: `.custom-prev-${cardNav}`,
@@ -38,8 +39,8 @@ function SwiperCarousel({ data }) {
 					480: { slidesPerView: 5, spaceBetween: 18 }, // Mobile lớn
 					768: { slidesPerView: 6, spaceBetween: 18 }, // Tablet
 					1024: { slidesPerView: 7, spaceBetween: 18 }, // Desktop
-					1440: { slidesPerView: 5, spaceBetween: 18 }, // Màn lớn
-					1710: { slidesPerView: 6, spaceBetween: 18 }, // Màn lớn
+					1530: { slidesPerView: 3, spaceBetween: 80 }, // Màn lớn
+					1700: { slidesPerView: 5, spaceBetween: 18 }, // Màn lớn
 				}}
 				className={cx('carousel')}>
 				{Array.isArray(data?.items) &&

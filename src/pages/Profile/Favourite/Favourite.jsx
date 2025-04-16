@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Empty, Flex, Grid, Select, Space, Spin, Typography, message } from 'antd'
+import { Button, ConfigProvider, Empty, Flex, Select, Space, Spin, Typography, message } from 'antd'
 import styles from './Favourite.module.scss'
 import classNames from 'classnames/bind'
 import { useCallback, useEffect, useState } from 'react'
@@ -8,7 +8,6 @@ import MovieCardWithHover from '~/components/movie/MovieCardWithHover/MovieCardW
 import { FaChevronDown } from 'react-icons/fa'
 
 const cx = classNames.bind(styles)
-const { useBreakpoint } = Grid
 
 function Favourite() {
 	const [favorites, setFavorites] = useState([])
@@ -17,7 +16,6 @@ function Favourite() {
 	const [sortOption, setSortOption] = useState('dateAdded')
 	const [sortDirection, setSortDirection] = useState(false) // false = descending (newest first)
 	const [messageApi, contextHolder] = message.useMessage()
-	const screens = useBreakpoint()
 
 	// Fetch favorites
 	const fetchFavorites = useCallback(async () => {
@@ -85,15 +83,6 @@ function Favourite() {
 		}
 	}
 
-	// Calculate grid columns based on screen size
-	const getGridColumns = () => {
-		if (screens.xxl) return 6
-		if (screens.xl) return 5
-		if (screens.lg) return 4
-		if (screens.md) return 3
-		return 1
-	}
-
 	return (
 		<div className={cx('wrapper')}>
 			{contextHolder}
@@ -150,13 +139,7 @@ function Favourite() {
 						<Spin size='large' />
 					</Flex>
 				) : favorites.length > 0 ? (
-					<div
-						className={cx('movies-grid')}
-						style={{
-							display: 'grid',
-							gridTemplateColumns: `repeat(${getGridColumns()}, 1fr)`,
-							gap: '20px',
-						}}>
+					<Flex wrap gap={20}>
 						{favorites.map((movie) => (
 							<div
 								key={movie._id}
@@ -166,7 +149,7 @@ function Favourite() {
 								<div className={cx('movie-overlay', { active: selectedMovies.includes(movie._id) })} />
 							</div>
 						))}
-					</div>
+					</Flex>
 				) : (
 					<Empty className={cx('empty')} description='Chưa có phim yêu thích nào' />
 				)}

@@ -1,17 +1,15 @@
 import { Col, Flex, Row, Typography } from 'antd'
-import { FaAngleRight } from 'react-icons/fa6'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
-
-import SwiperCarousel from '~/components/common/SwiperCarousel/SwiperCarousel'
-import styles from './TopicsList.module.scss'
-
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { FaAngleRight } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import SwiperCarousel from '~/components/common/SwiperCarousel/SwiperCarousel'
 import { getRandomRGBColor } from '~/utils/getRandomColor'
-import { useState } from 'react'
 import MovieCardWithHoverSkeleton from '../../MovieCardWithHover/MovieCardWithHoverSkeleton/MovieCardWithHoverSkeleton'
+import styles from './TopicsList.module.scss'
 
 const cx = classNames.bind(styles)
 

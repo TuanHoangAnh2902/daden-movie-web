@@ -75,7 +75,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 		const windowWidth = window.innerWidth
 
 		const top = rect.top + window.scrollY - 50
-		let left = rect.left + window.scrollX - 80
+		let left = rect.left + window.scrollX
 
 		if (left + cardWidth > windowWidth - 16) {
 			left = windowWidth - cardWidth - 40

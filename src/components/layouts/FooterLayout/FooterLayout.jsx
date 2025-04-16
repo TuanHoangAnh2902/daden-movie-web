@@ -35,7 +35,7 @@ function FooterLayout() {
 					</Flex>
 					<Divider type='vertical' style={{ borderColor: '#aaa', height: '40px' }} />
 					<Flex className={cx('social-icons')} gap={10}>
-						<a href='https://www.facebook.com/MrTuan.2902' target='_blank' rel='noopener noreferrer'>
+						<a href='https://www.facebook.com/lehieunhon5124' target='_blank' rel='noopener noreferrer'>
 							<Flex align='center' justify='center'>
 								<BiLogoFacebook className={cx('icon')} />
 							</Flex>

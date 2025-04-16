@@ -1,6 +1,6 @@
 // Base card styles
 .movie-card {
-	width: $cardHeightVertical;
+	width: $cardWidthHorizontal;
 	cursor: pointer;
 	position: relative;
 
@@ -12,11 +12,11 @@
 				width: 100%;
 			}
 		}
-		@include respond-down(xl) {
-			width: 20px;
+		@include respond-down(xxxl) {
+			width: 215px;
 			.card {
 				.card-img {
-					height: 20px;
+					height: 323px;
 					width: 100%;
 				}
 			}
@@ -122,6 +122,16 @@
 			.play-btn {
 				color: #000;
 				background: $subColor;
+			}
+		}
+	}
+
+	@include respond-down(xxxl) {
+		width: 395px;
+		.card {
+			.card-img {
+				height: 221px;
+				width: 100%;
 			}
 		}
 	}
