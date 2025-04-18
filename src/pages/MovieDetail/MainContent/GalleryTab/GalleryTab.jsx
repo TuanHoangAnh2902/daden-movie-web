@@ -1,4 +1,4 @@
-import { ConfigProvider, Flex, Image, Modal } from 'antd'
+import { ConfigProvider, Flex, Modal } from 'antd'
 import styles from './GalleryTab.module.scss'
 import classNames from 'classnames/bind'
 import { useState } from 'react'
@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import ReactPlayer from 'react-player'
 import { useThemeColors } from '~/themes/useThemeColors'
 import { DropboxOutlined, PlayCircleFilled } from '@ant-design/icons'
+import LazyImage from '~/utils/Lazyimage'
 
 const cx = classNames.bind(styles)
 function GalleryTab({ trailerData }) {
@@ -28,7 +29,7 @@ function GalleryTab({ trailerData }) {
 			{trailer ? (
 				<>
 					<div className={cx('traler-img')} onClick={showModal}>
-						<img src={images[0]} alt='' />
+						<LazyImage src={images[0]} alt='Movie trailer thumbnail' />
 						<PlayCircleFilled className={cx('play-icon')} />
 					</div>
 
@@ -57,7 +58,7 @@ function GalleryTab({ trailerData }) {
 			<h5 className={cx('title')}>Ảnh</h5>
 			<Flex className={cx('gallery')} wrap='wrap' gap={10}>
 				{images?.map((src, index) => (
-					<Image className={cx('img')} key={index} src={src} alt={`Image ${index + 1}`} />
+					<LazyImage className={cx('img')} key={index} src={src} alt={`Image ${index + 1}`} />
 				))}
 			</Flex>
 		</div>

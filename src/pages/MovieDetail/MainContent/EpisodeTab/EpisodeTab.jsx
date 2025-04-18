@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { useThemeColors } from '~/themes/useThemeColors'
 import { LiaComment } from 'react-icons/lia'
 import { Link, useSearchParams } from 'react-router-dom'
+import LazyImage from '~/utils/Lazyimage'
 
 const dropdownItems = [
 	{
@@ -64,7 +65,7 @@ function EpisodeTab({ data }) {
 								</Link>
 							</ConfigProvider>
 						</Space>
-						{thumb_url ? <img className={cx('thumb')} src={thumb_url} alt='Movie Thumbnail' /> : null}
+						{thumb_url ? <LazyImage className={cx('thumb')} src={thumb_url} alt='Movie Thumbnail' /> : null}
 					</Flex>
 				</>
 			) : (

@@ -7,6 +7,7 @@ import { useLazyGetMoviesByCategoryQuery } from '~/services/ophimApi'
 import { Flex } from 'antd'
 import { LuDot } from 'react-icons/lu'
 import { useNavigate } from 'react-router-dom'
+import LazyImage from '~/utils/Lazyimage'
 
 const cx = classNames.bind(styles)
 function RecommentMovie({ movieData }) {
@@ -48,7 +49,7 @@ function RecommentMovie({ movieData }) {
 					{movieItems.map((item) => (
 						<Flex key={item?._id} className={cx('movie-card')}>
 							<div className={cx('card-img')} onClick={() => handleMovieClick(item?._id)}>
-								<img src={cdnImageUrl + item?.thumb_url} alt='' />
+								<LazyImage src={cdnImageUrl + item?.thumb_url} alt={item?.name || 'Movie thumbnail'} />
 							</div>
 							<Flex vertical className={cx('card-content')} justify='center' gap={10}>
 								<p className={cx('card-name')} onClick={() => handleMovieClick(item?._id)}>

@@ -9,6 +9,7 @@ import { MdAutorenew } from 'react-icons/md'
 import { TiHeartFullOutline } from 'react-icons/ti'
 import ReactPlayer from 'react-player'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import LazyImage from '~/utils/Lazyimage'
 
 import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
@@ -21,15 +22,18 @@ import EpisodeTab from '../MovieDetail/MainContent/EpisodeTab/EpisodeTab'
 import RecommentMovie from './RecommentMovie/RecommentMovie'
 import VideoPlayer from './VideoPlayer/VideoPlayer'
 import styles from './WatchMovie.module.scss'
+import useToggleFavorite from '~/hooks/useToggleFavorite'
 
 const cx = classNames.bind(styles)
-
 function WatchMovie() {
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
 	const [fetchData, { data }] = useLazyGetMovieByIdQuery()
+	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 
 	const { subColor } = useThemeColors()
+
+	const isFav = checkIsFavorite(data?.movie?._id)
 
 	// Sử dụng useRef thay vì useState để không gây re-render khi thay đổi
 	const autoPlayNextRef = useRef(true) // Mặc định bật tự động chuyển tập
@@ -143,92 +147,100 @@ function WatchMovie() {
 	}, [])
 
 	return (
-		<div className={cx('wrapper')}>
-			<div className={cx('watch-player')}>
-				<Flex className={cx('title')} align='center' gap={8}>
-					<CiCircleChevLeft className={cx('title-icon')} onClick={() => navigate(-1)} />
-					<h5 className={cx('title-name')}>Xem phim {data?.movie?.name}</h5>
-				</Flex>
-				{videoPlayerMemo}
-				<Flex className={cx('player-controls')} align='center' gap={20}>
-					<Flex align='center' gap={10} className={cx('control-item')}>
-						<TiHeartFullOutline />
-						<p>Yêu thích</p>
+		<>
+			{contextHolder}
+			<div className={cx('wrapper')}>
+				<div className={cx('watch-player')}>
+					<Flex className={cx('title')} align='center' gap={8}>
+						<CiCircleChevLeft className={cx('title-icon')} onClick={() => navigate(-1)} />
+						<h5 className={cx('title-name')}>Xem phim {data?.movie?.name}</h5>
 					</Flex>
-					<Flex align='center' gap={10} className={cx('control-item')}>
-						<FaPlus />
-						<p>Thêm vào</p>
+					{videoPlayerMemo}
+					<Flex className={cx('player-controls')} align='center' gap={20}>
+						<Flex
+							align='center'
+							gap={10}
+							className={cx('control-item')}
+							onClick={!isToggling ? () => handleToggleFavorite(data?.movie) : null}>
+							<TiHeartFullOutline className={cx({ like: isFav })} />
+							<p>Yêu thích</p>
+						</Flex>
+						<Flex align='center' gap={10} className={cx('control-item')}>
+							<FaPlus />
+							<p>Thêm vào</p>
+						</Flex>
+
+						<Flex align='center' gap={10} className={cx('control-item')}>
+							<MdAutorenew />
+							<p>Tự động chuyển tập</p>
+							<ConfigProvider
+								theme={{ components: { Switch: { colorPrimary: subColor, colorPrimaryHover: subColor } } }}>
+								<Switch
+									checkedChildren='on'
+									unCheckedChildren='off'
+									checked={autoPlayNextUI}
+									onChange={handleAutoPlayToggle}
+									size='default'
+								/>
+							</ConfigProvider>
+						</Flex>
 					</Flex>
 
-					<Flex align='center' gap={10} className={cx('control-item')}>
-						<MdAutorenew />
-						<p>Tự động chuyển tập</p>
-						<ConfigProvider theme={{ components: { Switch: { colorPrimary: subColor, colorPrimaryHover: subColor } } }}>
-							<Switch
-								checkedChildren='on'
-								unCheckedChildren='off'
-								checked={autoPlayNextUI}
-								onChange={handleAutoPlayToggle}
-								size='default'
-							/>
-						</ConfigProvider>
-					</Flex>
-				</Flex>
+					{/* Điều khiển chuyển tập */}
+					{currentEpIndex > 0 && (
+						<button className={cx('nav-episode', 'prev-episode')} onClick={goToPreviousEpisode}>
+							Tập trước
+						</button>
+					)}
 
-				{/* Điều khiển chuyển tập */}
-				{currentEpIndex > 0 && (
-					<button className={cx('nav-episode', 'prev-episode')} onClick={goToPreviousEpisode}>
-						Tập trước
-					</button>
-				)}
+					{currentEpIndex < episoleList.length - 1 && (
+						<button className={cx('nav-episode', 'next-episode')} onClick={goToNextEpisode}>
+							Tập sau
+						</button>
+					)}
+				</div>
 
-				{currentEpIndex < episoleList.length - 1 && (
-					<button className={cx('nav-episode', 'next-episode')} onClick={goToNextEpisode}>
-						Tập sau
-					</button>
-				)}
-			</div>
-
-			{/* Phần thông tin phim */}
-			<div className={cx('movie-info')}>
-				<ConfigProvider theme={{ components: { Layout: LayoutTheme } }}>
-					<Layout>
-						<Content className={cx('info')}>
-							{/* ... Nội dung phần thông tin phim giữ nguyên ... */}
-							<Flex justify='space-between'>
-								<Flex align='center' gap={24} justify='flex-start'>
-									<div className={cx('movie-img')}>
-										<img src={data?.movie?.thumb_url} alt='' />
-									</div>
-									<Flex className={cx('movie-info-content')} vertical>
-										<h5 className={cx('movie-name')}>{data?.movie?.name}</h5>
-										<p className={cx('movie-origin-name')}>{data?.movie?.origin_name}</p>
-										<ImdbInfo ImdbData={data?.movie} />
-										<CategoryInfo categoryData={data?.movie?.category} />
+				{/* Phần thông tin phim */}
+				<div className={cx('movie-info')}>
+					<ConfigProvider theme={{ components: { Layout: LayoutTheme } }}>
+						<Layout>
+							<Content className={cx('info')}>
+								{/* ... Nội dung phần thông tin phim giữ nguyên ... */}
+								<Flex justify='space-between'>
+									<Flex align='center' gap={24} justify='flex-start'>
+										<div className={cx('movie-img')}>
+											<LazyImage src={data?.movie?.thumb_url} alt={data?.movie?.name || 'Movie thumbnail'} />
+										</div>
+										<Flex className={cx('movie-info-content')} vertical>
+											<h5 className={cx('movie-name')}>{data?.movie?.name}</h5>
+											<p className={cx('movie-origin-name')}>{data?.movie?.origin_name}</p>
+											<ImdbInfo ImdbData={data?.movie} />
+											<CategoryInfo categoryData={data?.movie?.category} />
+										</Flex>
+									</Flex>
+									<Flex vertical gap={20}>
+										<p className={cx('movie-info-description')}>{removeTagsUsingDOM(data?.movie?.content)}</p>
+										<Flex align='center' gap={4} className={cx('view-more')}>
+											<Link className={cx('view-more-text')} to={`/movie/detail?id=${data?.movie?._id}`}>
+												Thông tin phim
+											</Link>
+											<FaAngleRight />
+										</Flex>
 									</Flex>
 								</Flex>
-								<Flex vertical gap={20}>
-									<p className={cx('movie-info-description')}>{removeTagsUsingDOM(data?.movie?.content)}</p>
-									<Flex align='center' gap={4} className={cx('view-more')}>
-										<Link className={cx('view-more-text')} to={`/movie/detail?id=${data?.movie?._id}`}>
-											Thông tin phim
-										</Link>
-										<FaAngleRight />
-									</Flex>
-								</Flex>
-							</Flex>
-							<Divider className={cx('divider')} />
-							{currentEpUrl && <EpisodeTab data={data} />}
-							<Comment movieId={data?.movie?._id} />
-						</Content>
-						<Divider className={cx('vertical-divider')} type='vertical' />
-						<Sider className={cx('recomment')} width='28%'>
-							<RecommentMovie movieData={data?.movie} />
-						</Sider>
-					</Layout>
-				</ConfigProvider>
+								<Divider className={cx('divider')} />
+								{currentEpUrl && <EpisodeTab data={data} />}
+								<Comment movieId={data?.movie?._id} />
+							</Content>
+							<Divider className={cx('vertical-divider')} type='vertical' />
+							<Sider className={cx('recomment')} width='28%'>
+								<RecommentMovie movieData={data?.movie} />
+							</Sider>
+						</Layout>
+					</ConfigProvider>
+				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 

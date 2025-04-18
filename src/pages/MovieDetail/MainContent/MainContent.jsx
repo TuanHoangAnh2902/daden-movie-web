@@ -7,14 +7,14 @@ import { IoIosSend } from 'react-icons/io'
 import { TiHeartFullOutline } from 'react-icons/ti'
 import { Link } from 'react-router-dom'
 
+import Comment from '~/components/movie/Comment/Comment'
+import useToggleFavorite from '~/hooks/useToggleFavorite'
 import { buttonTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
 import EpisodeTab from './EpisodeTab/EpisodeTab'
 import GalleryTab from './GalleryTab/GalleryTab'
 import styles from './MainContent.module.scss'
 import RecommentTab from './RecommentTab/RecommentTab'
-import useToggleFavorite from '~/hooks/useToggleFavorite'
-import Comment from '~/components/movie/Comment/Comment'
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {

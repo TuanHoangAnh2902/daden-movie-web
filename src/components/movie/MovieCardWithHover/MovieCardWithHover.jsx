@@ -34,10 +34,66 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	const cardRef = useRef(null)
 	const cardDetailRef = useRef(null)
 	const timerRef = useRef(null)
+	const mainImageRef = useRef(null)
+	const detailImageRef = useRef(null)
 
-	const handleImageLoad = useCallback(() => {
-		setImageLoading(false)
-	}, [])
+	// Lấy thumbnail hoặc poster dựa vào hướng hiển thị
+	const getImageUrl = useCallback(
+		(isDetail = false) => {
+			const baseUrl = imageBaseUrl
+			if (isDetail) return baseUrl + movieData?.poster_url
+			return baseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)
+		},
+		[imageBaseUrl, movieData?.poster_url, movieData?.thumb_url, direction],
+	)
+	// Preload images with IntersectionObserver instead of relying on loading='lazy'
+	useEffect(() => {
+		// Function to handle image loading
+		const handleImageLoaded = () => {
+			setImageLoading(false)
+		}
+
+		// Create observer for main image
+		const observerOptions = {
+			root: null,
+			rootMargin: '0px',
+			threshold: 0.1,
+		}
+
+		const imageObserver = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting && mainImageRef.current) {
+					// Set src only when image is in viewport
+					const imgSrc = getImageUrl()
+					if (mainImageRef.current.src !== imgSrc) {
+						mainImageRef.current.src = imgSrc
+					}
+
+					// Listen for load event
+					mainImageRef.current.addEventListener('load', handleImageLoaded, { once: true })
+
+					// Stop observing after setting src
+					imageObserver.unobserve(entry.target)
+				}
+			})
+		}, observerOptions)
+
+		// Start observing if ref is available
+		if (mainImageRef.current) {
+			imageObserver.observe(mainImageRef.current)
+		}
+
+		// Store the current ref value for cleanup
+		const currentMainImageRef = mainImageRef.current
+
+		return () => {
+			// Cleanup
+			if (currentMainImageRef) {
+				currentMainImageRef.removeEventListener('load', handleImageLoaded)
+			}
+			imageObserver.disconnect()
+		}
+	}, [getImageUrl])
 
 	const retryLoadImage = useCallback((imageElement, url, setRetries, maxRetries = 3) => {
 		setRetries((prev) => {
@@ -100,8 +156,13 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	useEffect(() => {
 		if (hoveredCard) {
 			setCardPosition(calculateCardPosition())
+
+			// Preload detail image when card is hovered
+			if (detailImageRef.current && hoveredCard === movieData?._id) {
+				detailImageRef.current.src = getImageUrl(true)
+			}
 		}
-	}, [hoveredCard, calculateCardPosition])
+	}, [hoveredCard, calculateCardPosition, getImageUrl, movieData?._id])
 
 	// Hủy timers khi unmount
 	useEffect(() => {
@@ -109,16 +170,6 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 			clearTimeout(timerRef.current)
 		}
 	}, [])
-
-	// Lấy thumbnail hoặc poster dựa vào hướng hiển thị
-	const getImageUrl = useCallback(
-		(isDetail = false) => {
-			const baseUrl = imageBaseUrl
-			if (isDetail) return baseUrl + movieData?.poster_url
-			return baseUrl + (direction === 'horizontal' ? movieData?.poster_url : movieData?.thumb_url)
-		},
-		[imageBaseUrl, movieData?.poster_url, movieData?.thumb_url, direction],
-	)
 
 	return (
 		<>
@@ -131,9 +182,10 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 				<motion.div className={cx('card')}>
 					<div className={cx('card-img')}>
 						<motion.img
-							src={getImageUrl()}
+							ref={mainImageRef}
+							// Set data-src instead of src initially
+							data-src={getImageUrl()}
 							alt={movieData?.name || 'Movie'}
-							loading='lazy'
 							onError={(e) => {
 								retryLoadImage(e.target, getImageUrl(), setMainImageRetries, 3)
 								if (mainImageRetries >= 3) {
@@ -141,7 +193,6 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 									e.target.src = '/placeholder-image.jpg'
 								}
 							}}
-							onLoad={handleImageLoad}
 							data-loading={imageLoading}
 							className={cx('card-img-element')}
 						/>
@@ -169,13 +220,14 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 							style={cardPosition}>
 							<div className={cx('card-detail-img-wrapper')}>
 								<motion.img
+									ref={detailImageRef}
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}
 									exit={{ opacity: 0 }}
 									transition={{ duration: 0.3 }}
-									src={getImageUrl(true)}
+									// Set data-src instead of src initially
+									data-src={getImageUrl(true)}
 									alt={movieData.name}
-									loading='lazy'
 									onError={(e) => {
 										retryLoadImage(e.target, getImageUrl(true), setDetailImageRetries, 3)
 										if (detailImageRetries >= 3) {
