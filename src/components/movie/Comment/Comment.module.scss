@@ -44,7 +44,6 @@
 			.send-btn {
 				color: $subColor;
 				padding: 24px 0;
-
 				margin-left: 94%;
 				&:hover {
 					color: $subColor;
@@ -61,25 +60,166 @@
 
 	.content {
 		.account-comment {
+			margin-bottom: 26px;
+
+			&.comment-reply {
+				margin-left: 24px;
+				margin-bottom: 16px;
+				margin-top: 16px;
+				padding-left: 16px;
+				border-left: 2px solid rgba($color: $textColor, $alpha: 0.1);
+			}
+
 			.account-info {
+				width: 100%;
+
 				.account-name {
 					font-size: 14px;
 					line-height: 20px;
 					color: $textColor;
+					font-weight: 500;
 				}
+
 				.account-time {
 					font-size: 12px;
 					line-height: 16px;
 					color: $textColor;
 					opacity: 0.5;
+
+					.edited-mark {
+						font-style: italic;
+					}
 				}
+
 				.account-comment-text {
 					font-size: 14px;
 					line-height: 20px;
 					color: $textColor;
 					margin-top: 10px;
+					margin-bottom: 10px;
 					opacity: 0.8;
 				}
+
+				.reply-to {
+					font-size: 13px;
+					margin-top: 4px;
+					color: $textColor;
+					opacity: 0.7;
+
+					span {
+						color: $subColor;
+						opacity: 1;
+					}
+				}
+
+				.comment-actions {
+					margin-top: 8px;
+
+					button {
+						padding: 4px 8px;
+						height: auto;
+						color: $textColor;
+						opacity: 0.7;
+
+						&:hover {
+							opacity: 1;
+							background-color: rgba($color: $textColor, $alpha: 0.05);
+						}
+
+						&.active-like {
+							color: $subColor;
+							opacity: 1;
+						}
+
+						&.active-dislike {
+							color: #ff6b6b;
+							opacity: 1;
+						}
+
+						span {
+							margin-left: 4px;
+							font-size: 12px;
+						}
+					}
+				}
+
+				.reply-form {
+					margin-top: 16px;
+					margin-bottom: 16px;
+
+					.reply-input {
+						background-color: $bgColorLayoutLight2;
+						color: $textColor;
+						border-radius: 8px;
+						padding: 8px;
+
+						&::placeholder {
+							color: $textColor;
+							opacity: 0.5;
+						}
+					}
+				}
+
+				.edit-input {
+					background-color: $bgColorLayoutLight2;
+					color: $textColor;
+					border-radius: 8px;
+					padding: 8px;
+					margin-bottom: 8px;
+
+					&::placeholder {
+						color: $textColor;
+						opacity: 0.5;
+					}
+				}
+
+				.replies-container {
+					margin-top: 16px;
+				}
+			}
+		}
+	}
+}
+
+:global {
+	.ant-pagination {
+		.ant-pagination-item,
+		.ant-pagination-prev .ant-pagination-item-link,
+		.ant-pagination-next .ant-pagination-item-link {
+			background-color: $bgColorLayoutLight;
+			border: none;
+
+			a {
+				color: $textColor;
+			}
+
+			&:hover {
+				background-color: $bgColorLayoutLight2;
+			}
+		}
+
+		.ant-pagination-item-active {
+			background-color: $subColor;
+
+			a {
+				color: black;
+			}
+
+			&:hover {
+				background-color: $subColor;
+			}
+		}
+	}
+
+	.ant-select-dropdown {
+		background-color: $bgColorLayoutLight;
+
+		.ant-select-item {
+			color: $textColor;
+
+			&.ant-select-item-option-selected,
+			&.ant-select-item-option-active {
+				background-color: rgba($color: $subColor, $alpha: 0.2);
 			}
 		}
 	}
