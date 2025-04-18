@@ -1,0 +1,79 @@
+.wrapper {
+	.title {
+		margin-bottom: 20px;
+		h5 {
+			font-size: 20px;
+			font-weight: 600;
+			color: $textColor;
+		}
+
+		.add-btn {
+			border: 1px solid $textColor;
+			border-radius: 16px;
+			color: $textColor;
+			padding: 0 8px;
+			transition: all 0.3s;
+			&:hover {
+				opacity: 0.8;
+			}
+		}
+	}
+	:global {
+		.ant-tabs-nav {
+			&::before {
+				border: none !important;
+			}
+		}
+
+		.ant-tabs-nav-list {
+			gap: 10px;
+		}
+
+		.ant-tabs-tab {
+			border-radius: 16px !important;
+			border: 1px solid $bgColorLayoutLight !important;
+		}
+
+		.ant-tabs-tab-active {
+			background-color: transparent !important;
+			border-radius: 16px !important;
+			border: 1px solid $subColor !important;
+			.ant-tabs-tab-btn {
+				transition: none;
+			}
+		}
+
+		.list-movies {
+			margin-top: 20px;
+		}
+	}
+}
+
+.list-header {
+	width: 160px;
+	font-size: 12px;
+	border-radius: 16px;
+	color: $textColor;
+	.movie-info {
+		opacity: 0.6;
+		.update {
+			text-decoration: underline;
+		}
+	}
+}
+
+.modal {
+	:global {
+		.ant-modal-content {
+			background-color: #2a314e;
+
+			.ant-modal-header {
+				background-color: #2a314e;
+
+				.ant-modal-title {
+					color: #fff;
+				}
+			}
+		}
+	}
+}

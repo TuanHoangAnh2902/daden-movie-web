@@ -19,7 +19,7 @@ import { useRef, useState, useEffect, useCallback, memo } from 'react'
 const cx = classNames.bind(styles)
 
 const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
-	const imageBaseUrl = `${imageUrl}/uploads/movies/`
+	let imageBaseUrl = imageUrl ? `${imageUrl}/uploads/movies/` : ''
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 
 	// Kiểm tra trạng thái yêu thích từ hook

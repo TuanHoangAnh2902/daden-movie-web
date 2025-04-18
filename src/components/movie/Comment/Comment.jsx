@@ -20,7 +20,7 @@ import styles from './Comment.module.scss'
 import { useSelector } from 'react-redux'
 
 const cx = classNames.bind(styles)
-function Comment({ movieId }) {
+function Comment({ movieId, sectionRef }) {
 	const user = useSelector((state) => state.auth.user)
 	const [form] = Form.useForm()
 	const [replyForm] = Form.useForm()
@@ -551,7 +551,7 @@ function Comment({ movieId }) {
 	const paginatedComments = comments.slice(startIndex, endIndex)
 
 	return (
-		<div className={cx('wrapper')}>
+		<div className={cx('wrapper')} ref={sectionRef}>
 			<Flex className={cx('title')} gap={14} align='center' justify='space-between'>
 				<Flex gap={14} align='center'>
 					<FaCommentDots />
@@ -638,6 +638,7 @@ function Comment({ movieId }) {
 
 Comment.propTypes = {
 	movieId: PropTypes.string,
+	sectionRef: PropTypes.object,
 }
 
 export default Comment

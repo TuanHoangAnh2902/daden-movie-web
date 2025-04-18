@@ -1,0 +1,47 @@
+.list-form {
+	margin-bottom: 1rem;
+
+	& input,
+	textarea {
+		background-color: transparent !important;
+		color: #fff;
+		&::placeholder {
+			color: #fff;
+			opacity: 0.5;
+		}
+	}
+
+	.form-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+		margin-top: 16px;
+
+		&.with-delete {
+			justify-content: space-between;
+		}
+
+		.active-btn {
+			color: #000;
+			&:hover {
+				color: #000;
+			}
+		}
+
+		.cancel-btn {
+			&:hover {
+				color: #000;
+			}
+		}
+	}
+}
+
+label {
+	color: #fff !important;
+}
+
+:global {
+	.ant-modal-close {
+		color: #fff !important;
+	}
+}

@@ -1,6 +1,7 @@
 import { Button, ConfigProvider, Flex, Tabs } from 'antd'
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
+import { useRef, useState } from 'react'
 import { BsCameraVideoFill } from 'react-icons/bs'
 import { FaComments, FaPlay, FaPlus } from 'react-icons/fa'
 import { IoIosSend } from 'react-icons/io'
@@ -8,6 +9,7 @@ import { TiHeartFullOutline } from 'react-icons/ti'
 import { Link } from 'react-router-dom'
 
 import Comment from '~/components/movie/Comment/Comment'
+import MovieListSelector from '~/components/movie/MovieListSelector/MovieListSelector'
 import useToggleFavorite from '~/hooks/useToggleFavorite'
 import { buttonTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
@@ -20,9 +22,21 @@ const cx = classNames.bind(styles)
 function MainContent({ data }) {
 	const { subColor, textColor } = useThemeColors()
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
+	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
+	const sectionRef = useRef(null)
 
 	// Check if the movie is a favorite
 	const isFav = checkIsFavorite(data?.movie?._id)
+
+	// Open the movie list selector modal
+	const openListSelector = () => {
+		setIsListSelectorOpen(true)
+	}
+
+	// Close the movie list selector modal
+	const closeListSelector = () => {
+		setIsListSelectorOpen(false)
+	}
 
 	// eslint-disable-next-line no-unused-vars
 	const onChange = (key) => {
@@ -32,6 +46,10 @@ function MainContent({ data }) {
 	const trailerData = {
 		trailer: data?.movie?.trailer_url,
 		images: [data?.movie?.poster_url, data?.movie?.thumb_url],
+	}
+
+	const scrollToSection = () => {
+		sectionRef.current?.scrollIntoView({ behavior: 'smooth' })
 	}
 
 	const completedMovieTabsItems = [
@@ -102,7 +120,7 @@ function MainContent({ data }) {
 							<TiHeartFullOutline className={cx({ like: isFav })} />
 							<p>Yêu thích</p>
 						</Flex>
-						<Flex vertical gap={10} className={cx('favorite-btn')} align='center'>
+						<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={openListSelector}>
 							<FaPlus />
 							<p>Thêm vào</p>
 						</Flex>
@@ -110,7 +128,7 @@ function MainContent({ data }) {
 							<IoIosSend />
 							<p>Chia sẻ</p>
 						</Flex>
-						<Flex vertical gap={10} className={cx('favorite-btn')} align='center'>
+						<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={scrollToSection}>
 							<FaComments />
 							<p>Bình luận</p>
 						</Flex>
@@ -137,8 +155,11 @@ function MainContent({ data }) {
 						/>
 					</ConfigProvider>
 				</div>
-				<Comment movieId={data?.movie?._id} />
+				<Comment movieId={data?.movie?._id} sectionRef={sectionRef} />
 			</div>
+
+			{/* Movie List Selector Modal */}
+			{data?.movie && <MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />}
 		</>
 	)
 }

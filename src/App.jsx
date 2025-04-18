@@ -1,15 +1,35 @@
 import AppRoutes from './routes/AppRoutes'
 import AuthInitializer from './components/auth/AuthInitializer'
 import FavoritesInitializer from './components/auth/FavoritesInitializer'
+import MovieListsInitializer from './components/auth/MovieListsInitializer'
+import { ConfigProvider } from 'antd'
+import { useThemeColors } from './themes/useThemeColors'
 
 function App() {
+	const { subColor } = useThemeColors()
 	return (
 		<>
-			<AuthInitializer>
-				<FavoritesInitializer>
-					<AppRoutes />
-				</FavoritesInitializer>
-			</AuthInitializer>
+			<ConfigProvider
+				theme={{
+					token: { colorBgLayout: '#191b24', fontFamily: '"Be Vietnam Pro","sans-serif"', colorPrimary: subColor },
+					components: {
+						Message: {
+							contentBg: '#ffffff',
+							colorText: '#141414',
+							padding: 16,
+							borderRadius: 8,
+							boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+						},
+					},
+				}}>
+				<AuthInitializer>
+					<FavoritesInitializer>
+						<MovieListsInitializer>
+							<AppRoutes />
+						</MovieListsInitializer>
+					</FavoritesInitializer>
+				</AuthInitializer>
+			</ConfigProvider>
 		</>
 	)
 }

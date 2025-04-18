@@ -14,6 +14,7 @@ import LazyImage from '~/utils/Lazyimage'
 import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
 import Comment from '~/components/movie/Comment/Comment'
+import MovieListSelector from '~/components/movie/MovieListSelector/MovieListSelector'
 import { useLazyGetMovieByIdQuery } from '~/services/ophimApi'
 import { LayoutTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
@@ -30,10 +31,21 @@ function WatchMovie() {
 	const [searchParams] = useSearchParams()
 	const [fetchData, { data }] = useLazyGetMovieByIdQuery()
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
+	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
 
 	const { subColor } = useThemeColors()
 
 	const isFav = checkIsFavorite(data?.movie?._id)
+
+	// Open the movie list selector modal
+	const openListSelector = () => {
+		setIsListSelectorOpen(true)
+	}
+
+	// Close the movie list selector modal
+	const closeListSelector = () => {
+		setIsListSelectorOpen(false)
+	}
 
 	// Sử dụng useRef thay vì useState để không gây re-render khi thay đổi
 	const autoPlayNextRef = useRef(true) // Mặc định bật tự động chuyển tập
@@ -165,7 +177,7 @@ function WatchMovie() {
 							<TiHeartFullOutline className={cx({ like: isFav })} />
 							<p>Yêu thích</p>
 						</Flex>
-						<Flex align='center' gap={10} className={cx('control-item')}>
+						<Flex align='center' gap={10} className={cx('control-item')} onClick={openListSelector}>
 							<FaPlus />
 							<p>Thêm vào</p>
 						</Flex>
@@ -240,6 +252,9 @@ function WatchMovie() {
 					</ConfigProvider>
 				</div>
 			</div>
+
+			{/* Movie List Selector Modal */}
+			{data?.movie && <MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />}
 		</>
 	)
 }

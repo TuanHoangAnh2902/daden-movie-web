@@ -1,0 +1,76 @@
+.movie-list-modal {
+	:global {
+		.ant-modal-content {
+			background-color: $bgColorLayoutLight;
+			border-radius: 12px;
+		}
+		.ant-modal-header {
+			background-color: $bgColorLayoutLight;
+			border-bottom: 1px solid $bgColorLayoutLight2;
+			border-radius: 12px 12px 0 0;
+		}
+		.ant-modal-title {
+			color: $textColor;
+			font-weight: 600;
+		}
+		.ant-modal-close-x {
+			color: $textColor;
+		}
+		.ant-checkbox-checked .ant-checkbox-inner {
+			background-color: $subColor;
+			border-color: $subColor;
+		}
+		.ant-typography {
+			color: #fff;
+		}
+	}
+
+	// Removing redundant form styles since we've moved this to MoviesListHandle component
+
+	.create-list-btn {
+		width: 100%;
+		color: $textColor;
+		border-color: $subColor;
+		margin-bottom: 8px;
+		background-color: transparent !important;
+
+		&:hover {
+			color: $subColor;
+			border-color: $subColor;
+		}
+	}
+
+	.loading-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		height: 200px;
+	}
+
+	.list-item {
+		border-bottom: 1px solid $bgColorLayoutLight2;
+		padding: 8px 0;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.list-item-content {
+			display: flex;
+			flex-direction: column;
+
+			.list-description {
+				margin-left: 24px;
+				margin-top: 4px;
+				font-size: 12px;
+			}
+		}
+
+		:global {
+			.ant-list-item-action {
+				margin-left: 24px;
+			}
+		}
+	}
+}
