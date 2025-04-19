@@ -17,7 +17,6 @@ import { HeartFilled, InfoCircleFilled, LoadingOutlined } from '@ant-design/icon
 import { useRef, useState, useEffect, useCallback, memo } from 'react'
 
 const cx = classNames.bind(styles)
-
 const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	let imageBaseUrl = movieData?.thumb_url?.includes('http') ? '' : `${imageUrl}/uploads/movies/`
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
@@ -175,6 +174,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 		<>
 			{contextHolder}
 			<div
+				data-aos='fade-up'
 				ref={cardRef}
 				className={cx('movie-card', direction)}
 				onMouseEnter={handleMouseEnter}

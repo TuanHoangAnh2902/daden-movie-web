@@ -17,7 +17,7 @@ export default function Gallery() {
 	const { data: dataHoatHinh, isLoading: isLoadingHoatHinh } = useGetMoviesByListQuery({ list: 'hoat-hinh' })
 
 	return (
-		<Flex className={cx('gallery')} vertical>
+		<Flex className={cx('gallery')} vertical data-aos='fade-up'>
 			<TopicsList data={dataVietNam} isLoading={isLoadingVietNam} />
 			<TopicsList data={dataHanQuoc} isLoading={isLoadingHanQuoc} />
 			<TopicsList data={dataHoatHinh} isLoading={isLoadingHoatHinh} />

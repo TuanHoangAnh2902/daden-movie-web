@@ -92,7 +92,7 @@ const Collection = ({ movieData, isLoading, direction = 'horizontal', reverseDir
 	const typeList = movieData?.type_list || ''
 
 	return (
-		<div className={cx('collection')}>
+		<div className={cx('collection')} data-aos='fade-up'>
 			<Flex className={cx('collection-title')} align='center' gap={20}>
 				{isLoading ? (
 					<Skeleton.Input active style={{ width: '200px', height: '40px' }} className={cx('skeleton-title-header')} />
