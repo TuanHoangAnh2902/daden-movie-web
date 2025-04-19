@@ -1,16 +1,27 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import { getDatabase } from 'firebase/database' // ADD THIS
+import { getDatabase } from 'firebase/database'
+
+const {
+	VITE_API_KEY,
+	VITE_PROJECT_ID,
+	VITE_DATABASE_URL,
+	VITE_STORAGE_BUCKET,
+	VITE_MESSAGING_SENDER_ID,
+	VITE_APP_ID,
+	VITE_MEASUREMENT_ID,
+	VITE_AUTH_DOMAIN,
+} = import.meta.env
 
 const firebaseConfig = {
-	apiKey: 'AIzaSyB8JEjD3d4QRpfyoONiQKMazmnPhcAZRzY',
-	authDomain: 'login-bc4c7.firebaseapp.com',
-	projectId: 'login-bc4c7', // CHỈ LÀ projectId (bỏ https://)
-	databaseURL: 'https://login-bc4c7-default-rtdb.firebaseio.com', // ADD THIS
-	storageBucket: 'login-bc4c7.appspot.com', // FIXED domain
-	messagingSenderId: '678793601980',
-	appId: '1:678793601980:web:e485048e12ae2af90d81b9',
-	measurementId: 'G-WWECDJ66W3',
+	apiKey: VITE_API_KEY,
+	authDomain: VITE_AUTH_DOMAIN,
+	projectId: VITE_PROJECT_ID,
+	databaseURL: VITE_DATABASE_URL,
+	storageBucket: VITE_STORAGE_BUCKET,
+	messagingSenderId: VITE_MESSAGING_SENDER_ID,
+	appId: VITE_APP_ID,
+	measurementId: VITE_MEASUREMENT_ID,
 }
 
 const app = initializeApp(firebaseConfig)

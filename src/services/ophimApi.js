@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+const { VITE_API_ENDPOINT } = import.meta.env
 
 export const movieApi = createApi({
 	reducerPath: 'movieApi',
-	baseQuery: fetchBaseQuery({ baseUrl: 'https://ophim1.com' }),
+	baseQuery: fetchBaseQuery({ baseUrl: VITE_API_ENDPOINT }),
 	endpoints: (builder) => ({
 		getMoviesByUpdate: builder.query({
 			query: (page = 1) => `/danh-sach/phim-moi-cap-nhat?page=${page}`,

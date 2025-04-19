@@ -47,7 +47,7 @@ const Profile = () => {
 	return (
 		<div className={cx('wrapper')}>
 			<Row className={cx('profile-container')} align={'top'} justify={'space-between'}>
-				<Col flex='0 0 18%' className={cx('tabs-side')}>
+				<Col flex='0 0 20%' className={cx('tabs-side')}>
 					<h1>Quản lý tài khoản</h1>
 					<Flex vertical className={cx('profile-menu')}>
 						{menuItems.map((item) => (
@@ -59,7 +59,6 @@ const Profile = () => {
 							</Link>
 						))}
 					</Flex>
-
 					<Flex vertical gap={16} className={cx('user-info')}>
 						<Avatar
 							size={65}
@@ -73,7 +72,7 @@ const Profile = () => {
 						</Flex>
 					</Flex>
 				</Col>
-				<Col flex='auto' className={cx('content-side')}>
+				<Col flex='78%' className={cx('content-side')}>
 					<Outlet />
 				</Col>
 			</Row>
