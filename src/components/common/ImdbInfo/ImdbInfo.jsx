@@ -7,10 +7,10 @@ const cx = classNames.bind(styles)
 function ImdbInfo({ ImdbData }) {
 	return (
 		<Flex className={cx('imdb-info')} gap={6}>
-			<div className={cx('imdb-info-item')}>{ImdbData?.year}</div>
-			<div className={cx('imdb-info-item')}>{ImdbData?.lang}</div>
-			<div className={cx('imdb-info-item')}>{ImdbData?.episode_current}</div>
-			<div className={cx('imdb-info-item')}>{ImdbData?.time}</div>
+			{ImdbData?.year && <div className={cx('imdb-info-item')}>{ImdbData?.year}</div>}
+			{ImdbData?.lang && <div className={cx('imdb-info-item')}>{ImdbData?.lang}</div>}
+			{ImdbData?.episode_current && <div className={cx('imdb-info-item')}>{ImdbData?.episode_current}</div>}
+			{ImdbData?.time && <div className={cx('imdb-info-item')}>{ImdbData?.time}</div>}
 		</Flex>
 	)
 }

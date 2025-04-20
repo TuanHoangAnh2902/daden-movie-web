@@ -23,6 +23,14 @@
 	}
 }
 
+@mixin selected-item() {
+	:global {
+		.ant-select-arrow {
+			color: $textColor;
+		}
+	}
+}
+
 @mixin title-tab() {
 	font-size: 25px;
 	font-weight: 600;

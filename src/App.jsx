@@ -20,6 +20,14 @@ function App() {
 							borderRadius: 8,
 							boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
 						},
+						Select: {
+							selectorBg: '#25272f',
+							colorBorder: 'none',
+							hoverBorderColor: 'none',
+							activeBorderColor: 'none',
+							colorText: '#fff',
+							colorTextPlaceholder: '#ccc',
+						},
 					},
 				}}>
 				<AuthInitializer>

@@ -14,7 +14,7 @@ import classNames from 'classnames/bind'
 import { onValue, push, ref, serverTimestamp, set, update, remove, get } from 'firebase/database'
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { FaCommentDots } from 'react-icons/fa'
+import { FaChevronDown, FaCommentDots } from 'react-icons/fa'
 import { db } from '~/config/firebase'
 import styles from './Comment.module.scss'
 import { useSelector } from 'react-redux'
@@ -558,6 +558,9 @@ function Comment({ movieId, sectionRef }) {
 					<h5>Bình luận ({commentCount})</h5>
 				</Flex>
 				<Select
+					className={cx('sort-select')}
+					suffixIcon={<FaChevronDown />}
+					dropdownStyle={{ backgroundColor: '#25272f' }}
 					defaultValue='newest'
 					style={{ width: 150 }}
 					onChange={handleSortChange}

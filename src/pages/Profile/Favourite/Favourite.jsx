@@ -93,34 +93,19 @@ function Favourite() {
 					</Typography.Title>
 
 					<Space>
-						<ConfigProvider
-							theme={{
-								components: {
-									Select: {
-										selectorBg: '#25272f',
-										colorBorder: 'none',
-										hoverBorderColor: 'none',
-										activeBorderColor: 'none',
-										colorText: '#fff',
-										colorTextPlaceholder: '#ccc',
-									},
-								},
-								token: { lineWidth: '0' },
-							}}>
-							<Select
-								className={cx('sort-select')}
-								dropdownStyle={{ backgroundColor: '#25272f' }}
-								suffixIcon={<FaChevronDown />}
-								value={sortOption}
-								onChange={handleSortChange}
-								style={{ width: 120 }}
-								options={[
-									{ value: 'dateAdded', label: 'Ngày thêm' },
-									{ value: 'name', label: 'Tên phim' },
-									{ value: 'year', label: 'Năm sản xuất' },
-								]}
-							/>
-						</ConfigProvider>
+						<Select
+							className={cx('sort-select')}
+							dropdownStyle={{ backgroundColor: '#25272f' }}
+							suffixIcon={<FaChevronDown />}
+							value={sortOption}
+							onChange={handleSortChange}
+							style={{ width: 120 }}
+							options={[
+								{ value: 'dateAdded', label: 'Ngày thêm' },
+								{ value: 'name', label: 'Tên phim' },
+								{ value: 'year', label: 'Năm sản xuất' },
+							]}
+						/>
 						<Button
 							className={cx('sort-btn')}
 							icon={<SortAscendingOutlined rotate={sortDirection ? 0 : 180} />}

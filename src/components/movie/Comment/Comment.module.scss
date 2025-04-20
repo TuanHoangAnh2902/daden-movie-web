@@ -222,5 +222,12 @@
 				background-color: rgba($color: $subColor, $alpha: 0.2);
 			}
 		}
+		.ant-select-arrow {
+			color: $textColor;
+		}
 	}
+}
+
+.sort-select {
+	@include selected-item();
 }
