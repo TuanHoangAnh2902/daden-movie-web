@@ -1,0 +1,72 @@
+.movie-card-skeleton {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	border-radius: 8px;
+	background-color: var(--bg-secondary);
+	transition: all 0.3s ease;
+
+	&.horizontal {
+		width: $cardWidthHorizontal;
+		height: $cardHeightHorizontal;
+		.card-img-skeleton {
+			width: 100%;
+			height: 100%;
+		}
+		.card-content-skeleton {
+			padding: 10px;
+			width: calc(100% - 110px);
+		}
+	}
+
+	&.vertical {
+		width: $cardWidthVertical;
+		height: $cardHeightVertical;
+		.card-img-skeleton {
+			width: 100%;
+			height: 100%;
+			aspect-ratio: 2/3;
+		}
+		.card-content-skeleton {
+			padding: 8px 4px;
+		}
+	}
+
+	.card-img-skeleton {
+		position: relative;
+		overflow: hidden;
+
+		:global(.ant-skeleton-image) {
+			width: 100% !important;
+			height: 100% !important;
+		}
+	}
+}
+
+// Tạo thêm skeleton cho card detail khi hover
+.card-detail-skeleton {
+	width: 380px;
+	min-height: 450px;
+	background-color: var(--bg-secondary);
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	z-index: 1000;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+
+	.detail-img-skeleton {
+		width: 100%;
+		height: 220px;
+
+		:global(.ant-skeleton-image) {
+			width: 100% !important;
+			height: 100% !important;
+		}
+	}
+
+	.detail-content-skeleton {
+		padding: 16px;
+		flex-grow: 1;
+	}
+}

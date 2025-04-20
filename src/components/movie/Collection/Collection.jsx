@@ -1,70 +1,29 @@
+import { Flex, Skeleton, Typography } from 'antd'
+import classNames from 'classnames/bind'
+import { AnimatePresence, motion } from 'framer-motion'
+import PropTypes from 'prop-types'
+import { useMemo, useState } from 'react'
+import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import styles from './Collection.module.scss'
-
-import PropTypes from 'prop-types'
-import { Flex, Typography, Skeleton } from 'antd'
-import { Link } from 'react-router-dom'
-import classNames from 'classnames/bind'
-import { useMemo, useState } from 'react'
-import { SwiperSlide, Swiper } from 'swiper/react'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Autoplay, Navigation, Scrollbar } from 'swiper/modules'
-import { FaAngleLeft, FaAngleRight, FaChevronRight } from 'react-icons/fa6'
-
+import { Swiper, SwiperSlide } from 'swiper/react'
 import cardNavId from '~/utils/cardNavId'
 import MovieCardWithHover from '../MovieCardWithHover/MovieCardWithHover'
+import styles from './Collection.module.scss'
 
 const cx = classNames.bind(styles)
-
-// Component hiển thị skeleton loading cho mỗi card phim
-const MovieCardSkeleton = ({ direction }) => {
-	return (
-		<div className={cx('movie-card-skeleton', direction)}>
-			<Skeleton.Image
-				active
-				className={cx('skeleton-img', direction)}
-				style={{
-					width: direction === 'horizontal' ? '100%' : '160px',
-					height: direction === 'horizontal' ? '250px' : '240px',
-					borderRadius: '8px',
-				}}
-			/>
-			<Skeleton
-				active
-				paragraph={false}
-				title={{ width: '100%', style: { marginTop: '8px' } }}
-				className={cx('skeleton-title')}
-			/>
-		</div>
-	)
-}
-
-MovieCardSkeleton.propTypes = {
-	direction: PropTypes.oneOf(['horizontal', 'vertical']),
-}
 
 const Collection = ({ movieData, isLoading, direction = 'horizontal', reverseDirection = false }) => {
 	const [isHovered, setIsHovered] = useState(false)
 	const cardNav = useMemo(() => cardNavId(), [])
-
-	// Số lượng skeleton items cần hiển thị khi loading
-	const skeletonCount = 6
 
 	const renderSlides = () => {
 		if (!movieData || !Array.isArray(movieData.items)) return null
 		return movieData.items.map((item, index) => (
 			<SwiperSlide key={item._id} virtualIndex={index}>
 				<MovieCardWithHover imageUrl={movieData?.APP_DOMAIN_CDN_IMAGE} movieData={item} direction={direction} />
-			</SwiperSlide>
-		))
-	}
-
-	// Tạo mảng skeletons cho trạng thái loading
-	const renderSkeletons = () => {
-		return Array.from({ length: skeletonCount }).map((_, index) => (
-			<SwiperSlide key={`skeleton-${index}`} virtualIndex={index}>
-				<MovieCardSkeleton direction={direction} />
 			</SwiperSlide>
 		))
 	}
@@ -148,7 +107,7 @@ const Collection = ({ movieData, isLoading, direction = 'horizontal', reverseDir
 							: false
 					}
 					breakpoints={direction === 'horizontal' ? horizontalBreakpoints : verticalBreakpoints}>
-					{isLoading ? renderSkeletons() : renderSlides()}
+					{renderSlides()}
 				</Swiper>
 			</div>
 		</div>

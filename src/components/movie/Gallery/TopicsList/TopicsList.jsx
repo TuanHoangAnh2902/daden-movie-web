@@ -8,8 +8,8 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import SwiperCarousel from '~/components/common/SwiperCarousel/SwiperCarousel'
 import { getRandomRGBColor } from '~/utils/getRandomColor'
-import MovieCardWithHoverSkeleton from '../../MovieCardWithHover/MovieCardWithHoverSkeleton/MovieCardWithHoverSkeleton'
 import styles from './TopicsList.module.scss'
+import { MovieCardSkeleton } from '~/components/common/Skeleton/Skeleton'
 
 const cx = classNames.bind(styles)
 
@@ -22,7 +22,7 @@ function TopicsList({ data, isLoading }) {
 	const typeList = data?.type_list || ''
 
 	return (
-		<Row wrap={false} className={cx('topics-list')} justify='space-around' align='middle'>
+		<Row wrap={false} className={cx('topics-list')} justify='space-around' align='middle' data-aos='fade-up'>
 			<Col span={3} className={cx('topics-list-content')}>
 				<Typography.Title
 					className={cx('topic-title')}
@@ -49,7 +49,7 @@ function TopicsList({ data, isLoading }) {
 			{isLoading ? (
 				<Flex gap={16}>
 					{[...Array(5)].map((_, index) => (
-						<MovieCardWithHoverSkeleton key={index} direction='horizontal' />
+						<MovieCardSkeleton key={index} direction='horizontal' />
 					))}
 				</Flex>
 			) : (
