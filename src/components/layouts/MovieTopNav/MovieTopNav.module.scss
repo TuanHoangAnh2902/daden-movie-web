@@ -126,3 +126,9 @@
 		padding: 0;
 	}
 }
+
+:global {
+	.ant-tabs-nav-wrap {
+		margin-top: 20px;
+	}
+}

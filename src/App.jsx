@@ -2,7 +2,7 @@ import AppRoutes from './routes/AppRoutes'
 import AuthInitializer from './components/auth/AuthInitializer'
 import FavoritesInitializer from './components/auth/FavoritesInitializer'
 import MovieListsInitializer from './components/auth/MovieListsInitializer'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, FloatButton } from 'antd'
 import { useThemeColors } from './themes/useThemeColors'
 
 function App() {
@@ -38,6 +38,7 @@ function App() {
 					</FavoritesInitializer>
 				</AuthInitializer>
 			</ConfigProvider>
+			<FloatButton.BackTop />
 		</>
 	)
 }

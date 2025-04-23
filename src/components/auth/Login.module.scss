@@ -179,4 +179,18 @@
 			}
 		}
 	}
+	.forgot-password {
+		.forgot-button {
+			color: $textColor;
+			margin-top: 10px;
+			transition: all 0.3s linear;
+			&:hover {
+				color: color.adjust($textColor, $lightness: -20%);
+			}
+		}
+	}
+}
+
+.reset-instructions {
+	margin-bottom: 20px;
 }
