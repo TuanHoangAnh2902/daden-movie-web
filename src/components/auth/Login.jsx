@@ -10,7 +10,7 @@ import styles from './Login.module.scss'
 import { Col, message, Row } from 'antd'
 
 const cx = classNames.bind(styles)
-const Login = ({ onClose, switchToRegister }) => {
+const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 	const [messageApi, contextHolder] = message.useMessage()
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -166,6 +166,16 @@ const Login = ({ onClose, switchToRegister }) => {
 							<button type='submit' className={cx('login-button')} disabled={isLoading}>
 								{isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
 							</button>
+
+							<div className={cx('forgot-password')}>
+								<button
+									type='button'
+									onClick={switchToForgotPassword}
+									className={cx('forgot-button')}
+									disabled={isLoading}>
+									Quên mật khẩu?
+								</button>
+							</div>
 						</form>
 					</>
 				) : (
@@ -194,6 +204,16 @@ const Login = ({ onClose, switchToRegister }) => {
 							<button type='submit' className={cx('login-button')} disabled={isLoading}>
 								{isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
 							</button>
+
+							<div className={cx('forgot-password')}>
+								<button
+									type='button'
+									onClick={switchToForgotPassword}
+									className={cx('forgot-button')}
+									disabled={isLoading}>
+									Quên mật khẩu?
+								</button>
+							</div>
 						</form>
 
 						<div className={cx('separator')}>
@@ -234,6 +254,7 @@ const Login = ({ onClose, switchToRegister }) => {
 Login.propTypes = {
 	onClose: PropTypes.func,
 	switchToRegister: PropTypes.func.isRequired,
+	switchToForgotPassword: PropTypes.func.isRequired,
 }
 
 export default Login

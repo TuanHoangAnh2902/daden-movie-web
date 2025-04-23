@@ -1,4 +1,4 @@
-import { Row, Col, Typography, Spin, ConfigProvider, Pagination } from 'antd'
+import { Typography, Spin, ConfigProvider, Pagination, Flex } from 'antd'
 import MovieCardWithHover from '~/components/movie/MovieCardWithHover/MovieCardWithHover'
 import PropTypes from 'prop-types'
 import styles from './MoviesDisplay.module.scss'
@@ -47,13 +47,11 @@ const MoviesDisplay = ({
 						<Spin size='large' />
 					</div>
 				) : (
-					<Row justify='center' align='center' gutter={[16, 20]} className={cx('movies-list')}>
+					<Flex wrap justify='center' align='flex-start' gap={20} className={cx('movies-list')}>
 						{movies?.map((item) => (
-							<Col key={item?._id} span={3} xxl={3} xl={3} lg={4} md={6} sm={8} xs={12}>
-								<MovieCardWithHover imageUrl={imageUrl} movieData={item} direction='vertical' />
-							</Col>
+							<MovieCardWithHover key={item?.id} imageUrl={imageUrl} movieData={item} direction='vertical' />
 						))}
-					</Row>
+					</Flex>
 				)}
 			</div>
 

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import Logo from '~/assets/Logo'
 import Login from '~/components/auth/Login'
 import Register from '~/components/auth/Register'
+import ForgotPassword from '~/components/auth/ForgotPassword'
 import { moviesCategories } from '~/constants/routes'
 import { logout } from '~/features/auth/authSlice'
 import { logOut } from '~/services/authService'
@@ -72,12 +73,23 @@ function MovieTopNav() {
 		{
 			key: '1',
 			label: 'Đăng nhập',
-			children: <Login onClose={handleCancel} switchToRegister={() => setActiveTabKey('2')} />,
+			children: (
+				<Login
+					onClose={handleCancel}
+					switchToRegister={() => setActiveTabKey('2')}
+					switchToForgotPassword={() => setActiveTabKey('3')}
+				/>
+			),
 		},
 		{
 			key: '2',
 			label: 'Đăng ký',
 			children: <Register onClose={handleCancel} switchToLogin={() => setActiveTabKey('1')} />,
+		},
+		{
+			key: '3',
+			label: 'Quên mật khẩu',
+			children: <ForgotPassword switchToLogin={() => setActiveTabKey('1')} />,
 		},
 	]
 	return (
@@ -145,6 +157,7 @@ function MovieTopNav() {
 			{/* Auth Modal */}
 			<ConfigProvider theme={{ components: { Modal: { contentBg: '#1e2545' } } }}>
 				<Modal
+					destroyOnClose
 					open={isAuthModalOpen}
 					footer={null}
 					onCancel={handleCancel}
