@@ -19,7 +19,6 @@ import {
   EmailIcon,
   PinterestShareButton,
   PinterestIcon,
-  FacebookMessengerShareButton,
   FacebookMessengerIcon
 } from 'react-share'
 
@@ -67,7 +66,7 @@ function ShareMovie({ movieData, isOpen, onClose }) {
 		})
 	}, [movieData])
 
-	// Xử lý chia sẻ qua Facebook trực tiếp - phương pháp thay thế
+	// Xử lý chia sẻ qua Facebook trực tiếp
 	const handleFacebookShare = () => {
 		// Tạo URL Facebook share với các tham số
 		const fbShareUrl = `https://www.facebook.com/dialog/share?app_id=184484190795&href=${encodeURIComponent(shareData.url)}&hashtag=%23phimhay&quote=${encodeURIComponent(`${shareData.title} - ${shareData.description}`)}`;
@@ -84,6 +83,47 @@ function ShareMovie({ movieData, isOpen, onClose }) {
 			`width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,status=0`
 		);
 	}
+
+	// Xử lý chia sẻ qua Messenger trực tiếp
+	const handleMessengerShare = () => {
+			// URL để mở ứng dụng Messenger trực tiếp
+			let messengerUrl;
+			
+			// Kiểm tra nếu người dùng đang sử dụng thiết bị di động
+			const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+			
+			if (isMobile) {
+				// Sử dụng định dạng URL cho ứng dụng di động
+				messengerUrl = `fb-messenger://share?link=${encodeURIComponent(shareData.url)}`;
+			} else {
+				// Sử dụng Facebook Send Dialog cho desktop
+				messengerUrl = `https://www.facebook.com/dialog/send?app_id=184484190795&link=${encodeURIComponent(shareData.url)}&redirect_uri=${encodeURIComponent(window.location.href)}&display=popup`;
+			}
+			
+			// Mở cửa sổ mới cho desktop hoặc chuyển hướng cho mobile
+			if (isMobile) {
+				// Thử mở ứng dụng Messenger trên thiết bị
+				window.location.href = messengerUrl;
+				
+				// Thêm fallback nếu ứng dụng không mở được
+				setTimeout(() => {
+					const webFallback = `https://www.facebook.com/dialog/send?app_id=184484190795&link=${encodeURIComponent(shareData.url)}&redirect_uri=${encodeURIComponent(window.location.href)}`;
+					window.location.href = webFallback;
+				}, 2500);
+			} else {
+				// Desktop: mở popup
+				const width = 550;
+				const height = 450;
+				const left = (window.screen.width - width) / 2;
+				const top = (window.screen.height - height) / 2;
+				
+				window.open(
+					messengerUrl,
+					'Chia sẻ qua Messenger',
+					`width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,status=0`
+				);
+			}
+		}
 
 	// Xử lý sao chép liên kết
 	const handleCopyLink = () => {
@@ -110,7 +150,7 @@ function ShareMovie({ movieData, isOpen, onClose }) {
                 </div>
             )}
 			<Flex className={cx('share-buttons')} gap={16} wrap>
-				{/* Thay thế nút chia sẻ Facebook đơn bằng hai lựa chọn */}
+				{/* Nút chia sẻ Facebook */}
 				<Tooltip title='Chia sẻ lên Facebook'>
 					<Button 
 						type='primary' 
@@ -121,12 +161,16 @@ function ShareMovie({ movieData, isOpen, onClose }) {
 					/>
 				</Tooltip>
 				
-				<FacebookMessengerShareButton 
-					url={shareData.url} 
-					appId="184484190795"
-				>
-					<FacebookMessengerIcon size={iconSize} round={iconRadius} />
-				</FacebookMessengerShareButton>
+				{/* Nút chia sẻ Messenger - đã được cập nhật */}
+				<Tooltip title='Chia sẻ qua Messenger'>
+					<Button 
+						type='primary' 
+						className={cx('custom-messenger-btn')}
+						onClick={handleMessengerShare}
+						icon={<FacebookMessengerIcon size={iconSize} round={iconRadius} />}
+						style={{ padding: 0, width: iconSize, height: iconSize, overflow: 'hidden', border: 'none' }}
+					/>
+				</Tooltip>
 				
 				<TwitterShareButton 
 					url={shareData.url} 
