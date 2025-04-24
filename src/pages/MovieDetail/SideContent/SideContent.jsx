@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
 import { memo } from 'react'
 import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
+import ShareMovie from '~/components/movie/ShareMovie/ShareMovie'
 
 const cx = classNames.bind(styles)
 function SideContent({ movieData, isLoading }) {
@@ -87,6 +88,9 @@ function SideContent({ movieData, isLoading }) {
 					<h5 className={cx('introduce-title')}>Tình trạng:</h5>
 					<span className={cx('introduce-content')}>{movieData?.episode_current}</span>
 				</Flex>
+				
+				{/* Integrated ShareMovie component */}
+				<ShareMovie movieData={movieData} />
 			</div>
 		</div>
 	)

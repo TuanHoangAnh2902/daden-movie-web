@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Flex, Tabs } from 'antd'
+import { Button, ConfigProvider, Flex, Modal, Tabs } from 'antd'
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { useRef, useState } from 'react'
@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom'
 
 import Comment from '~/components/movie/Comment/Comment'
 import MovieListSelector from '~/components/movie/MovieListSelector/MovieListSelector'
+import ShareMovie from '~/components/movie/ShareMovie/ShareMovie'
 import useToggleFavorite from '~/hooks/useToggleFavorite'
 import { buttonTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
@@ -23,6 +24,7 @@ function MainContent({ data }) {
 	const { subColor, textColor } = useThemeColors()
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
+	const [isShareModalOpen, setIsShareModalOpen] = useState(false)
 	const sectionRef = useRef(null)
 
 	// Check if the movie is a favorite
@@ -36,6 +38,16 @@ function MainContent({ data }) {
 	// Close the movie list selector modal
 	const closeListSelector = () => {
 		setIsListSelectorOpen(false)
+	}
+
+	// Open the share modal
+	const openShareModal = () => {
+		setIsShareModalOpen(true)
+	}
+
+	// Close the share modal
+	const closeShareModal = () => {
+		setIsShareModalOpen(false)
 	}
 
 	// eslint-disable-next-line no-unused-vars
@@ -124,7 +136,7 @@ function MainContent({ data }) {
 							<FaPlus />
 							<p>Thêm vào</p>
 						</Flex>
-						<Flex vertical gap={10} className={cx('favorite-btn')} align='center'>
+						<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={openShareModal}>
 							<IoIosSend />
 							<p>Chia sẻ</p>
 						</Flex>
@@ -160,6 +172,9 @@ function MainContent({ data }) {
 
 			{/* Movie List Selector Modal */}
 			{data?.movie && <MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />}
+
+			{/* Share Movie Modal */}
+			<ShareMovie movieData={data?.movie} isOpen={isShareModalOpen} onClose={closeShareModal} />
 		</>
 	)
 }
