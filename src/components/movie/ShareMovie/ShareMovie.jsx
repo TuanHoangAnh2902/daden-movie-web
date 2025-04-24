@@ -99,8 +99,9 @@ function ShareMovie({ movieData, isOpen, onClose }) {
 				{/* Nút chia sẻ Facebook */}
 				<Tooltip title='Chia sẻ lên Facebook'>
 					<Button
+						shape='round'
 						// type='primary'
-						className={cx('custom-fb-btn')}
+						className={cx('facebook-btn')}
 						onClick={handleFacebookShare}
 						icon={<FacebookIcon size={iconSize} round={iconRadius} />}
 						style={{ padding: 0, width: iconSize, height: iconSize, overflow: 'hidden', border: 'none' }}

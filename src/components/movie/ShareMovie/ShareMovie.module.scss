@@ -39,7 +39,6 @@
 
 				&:hover {
 					transform: translateY(-3px);
-					box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 				}
 			}
 		}
@@ -51,6 +50,7 @@
 			&:hover {
 				background-color: #166fe5;
 				border-color: #166fe5;
+				transform: translateY(-3px);
 			}
 		}
 
@@ -83,7 +83,6 @@
 				background-color: #4b5563;
 				border-color: #4b5563;
 				transform: translateY(-3px);
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 			}
 		}
 	}
