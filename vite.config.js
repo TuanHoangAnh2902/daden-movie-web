@@ -27,6 +27,18 @@ export default defineConfig({
 	],
 	server: {
 		port: 3434,
+		// Thêm cấu hình để xử lý định tuyến SPA trong quá trình phát triển
+		historyApiFallback: {
+			rewrites: [
+				{ from: /^\/$/, to: '/index.html' },
+				{ from: /^\/movie/, to: '/index.html' },
+				{ from: /^\/movie\/watch/, to: '/index.html' },
+				{ from: /^\/movies/, to: '/index.html' },
+				{ from: /^\/profile/, to: '/index.html' },
+				{ from: /^\/about/, to: '/index.html' },
+				{ from: /./, to: '/index.html' },
+			],
+		},
 	},
 	resolve: {
 		alias: [
