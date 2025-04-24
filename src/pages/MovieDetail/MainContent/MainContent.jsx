@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Flex, Modal, Tabs } from 'antd'
+import { Button, ConfigProvider, Flex, Tabs } from 'antd'
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { useRef, useState } from 'react'
