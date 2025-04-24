@@ -86,44 +86,30 @@ function ShareMovie({ movieData, isOpen, onClose }) {
 
 	// Xử lý chia sẻ qua Messenger trực tiếp
 	const handleMessengerShare = () => {
-			// URL để mở ứng dụng Messenger trực tiếp
-			let messengerUrl;
-			
-			// Kiểm tra nếu người dùng đang sử dụng thiết bị di động
-			const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-			
-			if (isMobile) {
-				// Sử dụng định dạng URL cho ứng dụng di động
-				messengerUrl = `fb-messenger://share?link=${encodeURIComponent(shareData.url)}`;
-			} else {
-				// Sử dụng Facebook Send Dialog cho desktop
-				messengerUrl = `https://www.facebook.com/dialog/send?app_id=184484190795&link=${encodeURIComponent(shareData.url)}&redirect_uri=${encodeURIComponent(window.location.href)}&display=popup`;
-			}
-			
-			// Mở cửa sổ mới cho desktop hoặc chuyển hướng cho mobile
-			if (isMobile) {
-				// Thử mở ứng dụng Messenger trên thiết bị
-				window.location.href = messengerUrl;
-				
-				// Thêm fallback nếu ứng dụng không mở được
-				setTimeout(() => {
-					const webFallback = `https://www.facebook.com/dialog/send?app_id=184484190795&link=${encodeURIComponent(shareData.url)}&redirect_uri=${encodeURIComponent(window.location.href)}`;
-					window.location.href = webFallback;
-				}, 2500);
-			} else {
-				// Desktop: mở popup
-				const width = 550;
-				const height = 450;
-				const left = (window.screen.width - width) / 2;
-				const top = (window.screen.height - height) / 2;
-				
-				window.open(
-					messengerUrl,
-					'Chia sẻ qua Messenger',
-					`width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,status=0`
-				);
-			}
+		// Kiểm tra xem có URL hợp lệ để chia sẻ không
+		if (!shareData.url) {
+			message.error('Không có URL hợp lệ để chia sẻ');
+			return;
 		}
+		
+		try {
+			// Sử dụng Facebook Send Dialog với tham số cố định - phương pháp đáng tin cậy nhất
+			const messengerShareUrl = `https://www.facebook.com/dialog/send?link=${encodeURIComponent(shareData.url)}&app_id=184484190795&redirect_uri=${encodeURIComponent(window.location.href)}`;
+			
+			// Mở cửa sổ mới và đảm bảo rằng nó được mở trước khi điều hướng
+			const newWindow = window.open('', '_blank');
+			
+			if (newWindow) {
+				newWindow.location.href = messengerShareUrl;
+			} else {
+				// Nếu popup bị chặn, thử phương pháp chuyển hướng trực tiếp
+				window.location.href = messengerShareUrl;
+			}
+		} catch (error) {
+			console.error('Lỗi khi chia sẻ qua Messenger:', error);
+			message.error('Không thể chia sẻ qua Messenger. Vui lòng thử lại sau.');
+		}
+	}
 
 	// Xử lý sao chép liên kết
 	const handleCopyLink = () => {
