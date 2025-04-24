@@ -1,0 +1,108 @@
+.share-container {
+  margin-top: 16px;
+  padding: 10px 0;
+  
+  .localhost-warning {
+    background-color: #fff7e6;
+    border: 1px solid #ffe58f;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #d48806;
+    
+    :global {
+      .anticon {
+        color: #faad14;
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .share-title {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .share-buttons {
+    // Căn chỉnh cho các nút
+    justify-content: flex-start;
+    
+    // Hiệu ứng hover cho các nút chia sẻ
+    :global {
+      .react-share__ShareButton {
+        transition: all 0.2s ease-in-out;
+        
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+    
+    .facebook-btn {
+      background-color: #1877f2;
+      border-color: #1877f2;
+      
+      &:hover {
+        background-color: #166fe5;
+        border-color: #166fe5;
+      }
+    }
+    
+    .twitter-btn {
+      background-color: #1da1f2;
+      border-color: #1da1f2;
+      
+      &:hover {
+        background-color: #1a91da;
+        border-color: #1a91da;
+      }
+    }
+    
+    .whatsapp-btn {
+      background-color: #25d366;
+      border-color: #25d366;
+      
+      &:hover {
+        background-color: #22c55e;
+        border-color: #22c55e;
+      }
+    }
+    
+    .link-btn {
+      background-color: #6b7280;
+      border-color: #6b7280;
+      transition: all 0.2s ease-in-out;
+      
+      &:hover {
+        background-color: #4b5563;
+        border-color: #4b5563;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+// Styling cho modal
+:global {
+  .share-modal {
+    .ant-modal-content {
+      border-radius: 12px;
+    }
+    
+    .ant-modal-header {
+      border-radius: 12px 12px 0 0;
+    }
+    
+    .ant-modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+}
