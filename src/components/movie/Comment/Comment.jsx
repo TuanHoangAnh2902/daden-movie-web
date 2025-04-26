@@ -184,7 +184,7 @@ function Comment({ movieId, sectionRef }) {
 		set(newCommentRef, {
 			content: values.commentContent,
 			userId: user.uid,
-			userName: user.displayName || 'Người dùng ẩn danh',
+			userName: user.displayName || user.email,
 			userPhoto: user.photoURL || '',
 			timestamp: serverTimestamp(),
 			likes: {},
@@ -580,7 +580,7 @@ function Comment({ movieId, sectionRef }) {
 					<Avatar size={48} icon={<UserOutlined />} src={user?.photoURL} />
 					<Flex className={cx('user-info')} gap={4} vertical justify='space-between'>
 						<p className={cx('user-title')}>Bình luận với tên</p>
-						<p className={cx('user-name')}>{user?.displayName || 'Vui lòng đăng nhập'}</p>
+						<p className={cx('user-name')}>{user?.displayName || user?.email || 'Vui lòng đăng nhập'}</p>
 					</Flex>
 				</Flex>
 				<div className={cx('comment-input')}>

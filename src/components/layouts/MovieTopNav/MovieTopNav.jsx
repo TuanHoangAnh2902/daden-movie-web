@@ -24,6 +24,7 @@ function MovieTopNav() {
 	const [activeTabKey, setActiveTabKey] = useState('1')
 	const [userMenuOpen, setUserMenuOpen] = useState(false)
 	const { user, isAuthenticated } = useSelector((state) => state.auth)
+	console.log('🚀 ~ MovieTopNav ~ user:', user)
 	const dispatch = useDispatch()
 	const { subColor, textColor } = useThemeColors()
 

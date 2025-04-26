@@ -39,7 +39,7 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 			dispatch(loginFailure(result.error))
 			messageApi.open({
 				type: 'error',
-				content: error,
+				content: result.error.includes('auth/invalid-credential') ? 'Địa chỉ email hoặc mật khẩu không đúng' : '',
 			})
 		} else {
 			dispatch(loginSuccess(serializeUser(result.user)))
