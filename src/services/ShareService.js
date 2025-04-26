@@ -27,13 +27,6 @@ export const shareFacebook = (options) => {
 	}
 }
 
-/**
- * Chia sẻ qua Twitter
- * @param {Object} options - Thông tin chia sẻ
- * @param {string} options.url - URL để chia sẻ
- * @param {string} options.title - Tiêu đề nội dung chia sẻ
- * @param {string} options.description - Mô tả nội dung chia sẻ
- */
 export const shareTwitter = (options) => {
 	const { url, title, description = '' } = options
 
@@ -61,13 +54,6 @@ export const shareTwitter = (options) => {
 	}
 }
 
-/**
- * Chia sẻ qua WhatsApp
- * @param {Object} options - Thông tin chia sẻ
- * @param {string} options.url - URL để chia sẻ
- * @param {string} options.title - Tiêu đề nội dung chia sẻ
- * @param {string} options.description - Mô tả nội dung chia sẻ
- */
 export const shareWhatsApp = (options) => {
 	const { url, title, description = '' } = options
 
@@ -87,15 +73,6 @@ export const shareWhatsApp = (options) => {
 	}
 }
 
-/**
- * Sử dụng Web Share API nếu có thể, nếu không thì chuyển sang các phương thức chia sẻ thông thường
- * @param {Object} options - Thông tin chia sẻ
- * @param {string} options.url - URL để chia sẻ
- * @param {string} options.title - Tiêu đề nội dung chia sẻ
- * @param {string} options.description - Mô tả nội dung chia sẻ
- * @param {string} options.platform - Nền tảng mục tiêu ('facebook', 'twitter', 'whatsapp')
- * @returns {Promise<boolean>} - Thành công hay không
- */
 export const shareContent = async (options) => {
 	const { platform, url, title, description } = options
 

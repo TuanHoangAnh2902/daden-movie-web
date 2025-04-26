@@ -11,6 +11,7 @@ import getRandomMovies from '~/utils/getRandomMovies'
 import randomPage from '~/utils/randomPage'
 import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
 import styles from './CarouselMovies.module.scss'
+import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 
 const cx = classNames.bind(styles)
 
@@ -45,13 +46,7 @@ const CarouselItem = memo(({ movie }) => (
 			<div className={cx('category-item')}>{`Tập: ${movie.episode_total}`}</div>
 			<div className={cx('category-item')}>{movie.year}</div>
 		</Flex>
-		<Flex gap={8} className={cx('category')}>
-			{movie?.category?.slice(0, 3).map((category) => (
-				<div className={cx('category-item')} key={category.id}>
-					{category.name}
-				</div>
-			))}
-		</Flex>
+		<CategoryInfo categoryData={movie?.category} carousel={true} />
 		<Typography.Paragraph ellipsis={{ rows: 3 }} className={cx('carousel-description')}>
 			{removeTagsUsingDOM(movie?.content)}
 		</Typography.Paragraph>

@@ -41,6 +41,8 @@ function Comment({ movieId, sectionRef }) {
 		if (!movieId) return
 
 		const commentsRef = ref(db, `comments/${movieId}`)
+		if (!commentsRef) return
+
 		setLoading(true)
 
 		const unsubscribe = onValue(

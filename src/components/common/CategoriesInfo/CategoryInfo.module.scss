@@ -1,6 +1,11 @@
 .category-container {
 	margin-top: 12px;
 	.category-item {
+		cursor: pointer !important;
 		@include category-item($bgColor: $bgColorLayoutLight2, $fontSize: 11px);
+	}
+	.category-item-carousel {
+		cursor: pointer !important;
+		@include category-item();
 	}
 }
