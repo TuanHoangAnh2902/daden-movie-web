@@ -1,6 +1,6 @@
 import { Avatar, Col, Flex, Row, Spin } from 'antd'
 import classNames from 'classnames/bind'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
@@ -11,18 +11,26 @@ import { UserOutlined } from '@ant-design/icons'
 
 const cx = classNames.bind(styles)
 const Profile = () => {
-	const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth)
+	const { user, isAuthenticated } = useSelector((state) => state.auth)
+	const [isLoading, setIsLoading] = useState(true)
 
 	const navigate = useNavigate()
 	const location = useLocation()
 	const currentPath = location.pathname.split('/')[2] || 'profile' // Get the current path after '/user/' or default to 'profile'
 
-	// If not authenticated, redirect to home
+	// Kiểm tra xác thực và xử lý loading state
 	useEffect(() => {
-		if (!isLoading && !isAuthenticated) {
-			navigate('/')
-		}
-	}, [isAuthenticated, isLoading, navigate])
+		// Giả lập thời gian kiểm tra xác thực
+		const authCheckTimer = setTimeout(() => {
+			setIsLoading(false)
+			// Nếu không được xác thực, chuyển hướng về trang chủ
+			if (!isAuthenticated) {
+				navigate('/')
+			}
+		}, 500)
+
+		return () => clearTimeout(authCheckTimer)
+	}, [isAuthenticated, navigate])
 
 	// Define menu items with their paths and icons for cleaner code
 	const menuItems = [

@@ -60,7 +60,7 @@ function EpisodeTab({ data }) {
 										},
 									},
 								}}>
-								<Link to={`/movie/watch?id=${data?.movie?._id}&ep=full`}>
+								<Link to={`/movie/watch?id=${data?.movie?._id}&ep=${data.episodes[0].server_data[0].slug}`}>
 									<Button className={cx('play-btn')}>Xem bản này</Button>
 								</Link>
 							</ConfigProvider>
@@ -109,6 +109,7 @@ EpisodeTab.propTypes = {
 				server_data: PropTypes.arrayOf(
 					PropTypes.shape({
 						name: PropTypes.string.isRequired,
+						slug: PropTypes.string,
 					}),
 				),
 			}),

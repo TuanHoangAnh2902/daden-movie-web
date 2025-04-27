@@ -1,4 +1,4 @@
-import { ConfigProvider, Flex, Modal } from 'antd'
+import { ConfigProvider, Flex, Image, Modal } from 'antd'
 import styles from './GalleryTab.module.scss'
 import classNames from 'classnames/bind'
 import { useState } from 'react'
@@ -58,7 +58,7 @@ function GalleryTab({ trailerData }) {
 			<h5 className={cx('title')}>Ảnh</h5>
 			<Flex className={cx('gallery')} wrap='wrap' gap={10}>
 				{images?.map((src, index) => (
-					<LazyImage className={cx('img')} key={index} src={src} alt={`Image ${index + 1}`} />
+					<Image className={cx('img')} key={index} src={src} alt={`Image ${index + 1}`} />
 				))}
 			</Flex>
 		</div>

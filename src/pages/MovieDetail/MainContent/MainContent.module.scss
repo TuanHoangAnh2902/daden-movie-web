@@ -1,72 +1,70 @@
-.movie-detail-main {
-	.movie-detail-main-wrapper {
-		padding: 30px;
-		background: $bgColorLayout;
-		border-top-left-radius: 48px;
-		border-top-right-radius: 20px;
+.movie-detail-main-wrapper {
+	padding: 30px;
+	background: $bgColorLayout;
+	border-top-left-radius: 48px;
+	border-top-right-radius: 20px;
 
-		.play-btn {
-			padding: 30px !important;
+	.play-btn {
+		padding: 30px !important;
 
-			:global(.ant-btn-icon) {
-				font-size: 12px;
+		:global(.ant-btn-icon) {
+			font-size: 12px;
+		}
+	}
+	.movie-detail-main-content {
+		.favorite-btn {
+			color: $textColor;
+			padding: 10px;
+			border-radius: 12px;
+			transition: all 0.3s ease;
+			cursor: pointer;
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.02);
+				svg {
+					color: $subColor;
+				}
+			}
+			svg {
+				width: 18px;
+				height: 18px;
+			}
+			p {
+				font-size: 13px;
+				line-height: 13px;
 			}
 		}
-		.movie-detail-main-content {
-			.favorite-btn {
-				color: $textColor;
-				padding: 10px;
-				border-radius: 12px;
-				transition: all 0.3s ease;
-				cursor: pointer;
-				&:hover {
-					background-color: rgba(255, 255, 255, 0.02);
-					svg {
-						color: $subColor;
-					}
-				}
-				svg {
-					width: 18px;
-					height: 18px;
-				}
-				p {
-					font-size: 13px;
-					line-height: 13px;
-				}
-			}
 
-			.trailer-btn {
-				background: linear-gradient(39deg, rgb(254, 207, 89), rgb(255, 241, 204));
-				overflow: hidden;
-				border-radius: 12px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				color: #000;
-				&:hover {
-					box-shadow: 0 0 20px rgba(254, 207, 89, 0.4);
-				}
-				.button {
-					padding: 10px 20px;
-					p {
-						font-size: 15px;
-						font-weight: 500;
-						line-height: 24px;
-					}
-					.trailer-icon {
-						font-size: 18px;
-					}
-				}
-				.trailer-text {
-					background: #fff;
-					padding: 0 20px;
-					font-size: 11px;
+		.trailer-btn {
+			background: linear-gradient(39deg, rgb(254, 207, 89), rgb(255, 241, 204));
+			overflow: hidden;
+			border-radius: 12px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			color: #000;
+			&:hover {
+				box-shadow: 0 0 20px rgba(254, 207, 89, 0.4);
+			}
+			.button {
+				padding: 10px 20px;
+				p {
+					font-size: 15px;
 					font-weight: 500;
 					line-height: 24px;
 				}
+				.trailer-icon {
+					font-size: 18px;
+				}
+			}
+			.trailer-text {
+				background: #fff;
+				padding: 0 20px;
+				font-size: 11px;
+				font-weight: 500;
+				line-height: 24px;
 			}
 		}
-		.tabs-detail {
-			margin-top: 26px;
-		}
+	}
+	.tabs-detail {
+		margin-top: 26px;
 	}
 }

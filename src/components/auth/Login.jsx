@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import classNames from 'classnames/bind'
-import { loginFailure, loginStart, loginSuccess } from '~/features/auth/authSlice'
+import { loginSuccess } from '~/features/auth/authSlice'
 import { signInWithEmail, signInWithFacebook, signInWithGoogle, serializeUser } from '~/services/authService'
 
 import styles from './Login.module.scss'
@@ -16,14 +16,14 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 	const [password, setPassword] = useState('')
 	const [redirecting, setRedirecting] = useState(false)
 	const [existingAccountInfo, setExistingAccountInfo] = useState(null)
+	const [isLoading, setIsLoading] = useState(false)
+
 	const dispatch = useDispatch()
-	const { isLoading, error } = useSelector((state) => state.auth)
 
 	const handleEmailLogin = async (e) => {
 		e.preventDefault()
 
 		if (!email || !password) {
-			dispatch(loginFailure('Email và mật khẩu không được để trống'))
 			messageApi.open({
 				type: 'info',
 				content: 'Email và mật khẩu không được để trống',
@@ -31,12 +31,11 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 			return
 		}
 
-		dispatch(loginStart())
+		setIsLoading(true)
 
 		const result = await signInWithEmail(email, password)
 
 		if (result.error) {
-			dispatch(loginFailure(result.error))
 			messageApi.open({
 				type: 'error',
 				content: result.error.includes('auth/invalid-credential') ? 'Địa chỉ email hoặc mật khẩu không đúng' : '',
@@ -49,17 +48,18 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 				content: 'Đăng nhập thành công!',
 			})
 		}
+		setIsLoading(false)
 	}
 
 	const handleGoogleLogin = async () => {
-		dispatch(loginStart())
+		setIsLoading(true)
+
 		const result = await signInWithGoogle()
 
 		if (result.error) {
-			dispatch(loginFailure(result.error))
 			messageApi.open({
 				type: 'error',
-				content: error,
+				content: result.error,
 			})
 		} else if (result.isRedirecting) {
 			// User is being redirected, show appropriate UI state
@@ -73,17 +73,18 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 				content: 'Đăng nhập thành công!',
 			})
 		}
+		setIsLoading(false)
 	}
 
 	const handleFacebookLogin = async () => {
-		dispatch(loginStart())
+		setIsLoading(true)
+
 		const result = await signInWithFacebook()
 
 		if (result.error) {
-			dispatch(loginFailure(result.error))
 			messageApi.open({
 				type: 'error',
-				content: error,
+				content: result.error,
 			})
 
 			// Check if we have existing account information
@@ -102,6 +103,7 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 				content: 'Đăng nhập thành công!',
 			})
 		}
+		setIsLoading(false)
 	}
 
 	// Helper to suggest appropriate login method based on existingAccountInfo

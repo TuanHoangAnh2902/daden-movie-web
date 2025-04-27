@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { loginSuccess, logout } from '../../features/auth/authSlice'
+import { loginSuccess, logout } from '~/features/auth/authSlice'
 import {
 	subscribeToAuthChanges,
 	serializeUser,
 	getAuthRedirectResult,
 	saveUserToFirestore,
-} from '../../services/authService'
+} from '~/services/authService'
 
 const AuthInitializer = ({ children }) => {
 	const dispatch = useDispatch()

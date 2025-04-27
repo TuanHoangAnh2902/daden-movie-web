@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	lists: {},
-	loading: false,
-	error: null,
 }
 
 export const movieListsSlice = createSlice({
@@ -12,8 +10,6 @@ export const movieListsSlice = createSlice({
 	reducers: {
 		setMovieLists: (state, action) => {
 			state.lists = action.payload
-			state.loading = false
-			state.error = null
 		},
 		addList: (state, action) => {
 			const newList = action.payload
@@ -56,17 +52,8 @@ export const movieListsSlice = createSlice({
 				state.lists[listId].updatedAt = Date.now()
 			}
 		},
-		setLoading: (state, action) => {
-			state.loading = action.payload
-		},
-		setError: (state, action) => {
-			state.error = action.payload
-			state.loading = false
-		},
 		resetMovieLists: (state) => {
 			state.lists = {}
-			state.loading = false
-			state.error = null
 		},
 	},
 })
@@ -78,8 +65,6 @@ export const {
 	removeList,
 	addMovieToListAction,
 	removeMovieFromListAction,
-	setLoading,
-	setError,
 	resetMovieLists,
 } = movieListsSlice.actions
 

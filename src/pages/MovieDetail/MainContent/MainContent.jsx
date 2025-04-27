@@ -21,6 +21,7 @@ import RecommentTab from './RecommentTab/RecommentTab'
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {
+	console.log('🚀 ~ MainContent ~ data:', data)
 	const { subColor, textColor } = useThemeColors()
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
@@ -94,79 +95,75 @@ function MainContent({ data }) {
 	return (
 		<>
 			{contextHolder}
-			<div className={cx('movie-detail-main')}>
-				<div className={cx('movie-detail-main-wrapper')}>
-					<Flex align='center' gap={30} className={cx('movie-detail-main-content')}>
-						{isTrailerOnly ? (
-							<Link to={`/movie/watch?id=${data?.movie?._id}&ep=full`}>
-								<div className={cx('trailer-btn')}>
-									<Flex align='center' gap={10} className={cx('button')}>
-										<BsCameraVideoFill className={cx('trailer-icon')} />
-										<p>Xem trailer</p>
-									</Flex>
-									<Flex className={cx('trailer-text')} align='center' justify='center'>
-										<p>Phim sắp ra mắt</p>
-									</Flex>
-								</div>
-							</Link>
-						) : (
-							<ConfigProvider
-								theme={{ components: { Button: { ...buttonTheme, contentFontSize: 17, fontWeight: 500 } } }}>
-								<Link
-									to={`/movie/watch?id=${data?.movie?._id}&ep=${
-										(data?.movie?.type || data?.movie?.name)?.toLowerCase() === 'single' ? 'full' : '1'
-									}`}>
-									<Button className={cx('play-btn')} shape='round' icon={<FaPlay />}>
-										Xem ngay
-									</Button>
-								</Link>
-							</ConfigProvider>
-						)}
 
-						<Flex
-							vertical
-							gap={10}
-							className={cx('favorite-btn')}
-							align='center'
-							onClick={!isToggling ? () => handleToggleFavorite(data?.movie) : null}>
-							<TiHeartFullOutline className={cx({ like: isFav })} />
-							<p>Yêu thích</p>
-						</Flex>
-						<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={openListSelector}>
-							<FaPlus />
-							<p>Thêm vào</p>
-						</Flex>
-						<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={openShareModal}>
-							<IoIosSend />
-							<p>Chia sẻ</p>
-						</Flex>
-						<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={scrollToSection}>
-							<FaComments />
-							<p>Bình luận</p>
-						</Flex>
+			<div className={cx('movie-detail-main-wrapper')}>
+				<Flex align='center' gap={30} className={cx('movie-detail-main-content')}>
+					{isTrailerOnly ? (
+						<Link to={`/movie/watch?id=${data?.movie?._id}&ep=full`}>
+							<div className={cx('trailer-btn')}>
+								<Flex align='center' gap={10} className={cx('button')}>
+									<BsCameraVideoFill className={cx('trailer-icon')} />
+									<p>Xem trailer</p>
+								</Flex>
+								<Flex className={cx('trailer-text')} align='center' justify='center'>
+									<p>Phim sắp ra mắt</p>
+								</Flex>
+							</div>
+						</Link>
+					) : (
+						<ConfigProvider
+							theme={{ components: { Button: { ...buttonTheme, contentFontSize: 17, fontWeight: 500 } } }}>
+							<Link to={`/movie/watch?id=${data?.movie?._id}&ep=${data.episodes[0].server_data[0].slug}`}>
+								<Button className={cx('play-btn')} shape='round' icon={<FaPlay />}>
+									Xem ngay
+								</Button>
+							</Link>
+						</ConfigProvider>
+					)}
+
+					<Flex
+						vertical
+						gap={10}
+						className={cx('favorite-btn')}
+						align='center'
+						onClick={!isToggling ? () => handleToggleFavorite(data?.movie) : null}>
+						<TiHeartFullOutline className={cx({ like: isFav })} />
+						<p>Yêu thích</p>
 					</Flex>
-					<ConfigProvider
-						theme={{
-							components: {
-								Tabs: {
-									itemActiveColor: subColor,
-									inkBarColor: subColor,
-									itemSelectedColor: subColor,
-									itemHoverColor: subColor,
-								},
+					<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={openListSelector}>
+						<FaPlus />
+						<p>Thêm vào</p>
+					</Flex>
+					<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={openShareModal}>
+						<IoIosSend />
+						<p>Chia sẻ</p>
+					</Flex>
+					<Flex vertical gap={10} className={cx('favorite-btn')} align='center' onClick={scrollToSection}>
+						<FaComments />
+						<p>Bình luận</p>
+					</Flex>
+				</Flex>
+				<ConfigProvider
+					theme={{
+						components: {
+							Tabs: {
+								itemActiveColor: subColor,
+								inkBarColor: subColor,
+								itemSelectedColor: subColor,
+								itemHoverColor: subColor,
 							},
-							token: { colorText: textColor },
-						}}>
-						<Tabs
-							tabBarStyle={{ fontSize: '14px', lineHeight: '22px', fontWeight: 500, opacity: 0.9 }}
-							animated={true}
-							className={cx('tabs-detail')}
-							defaultActiveKey='1'
-							items={tabsItems}
-							onChange={onChange}
-						/>
-					</ConfigProvider>
-				</div>
+						},
+						token: { colorText: textColor },
+					}}>
+					<Tabs
+						tabBarStyle={{ fontSize: '14px', lineHeight: '22px', fontWeight: 500, opacity: 0.9 }}
+						animated={true}
+						className={cx('tabs-detail')}
+						defaultActiveKey='1'
+						items={tabsItems}
+						onChange={onChange}
+					/>
+				</ConfigProvider>
 				<Comment movieId={data?.movie?._id} sectionRef={sectionRef} />
 			</div>
 

@@ -2,8 +2,8 @@ import { Col, message, Row } from 'antd'
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { loginFailure, loginStart, loginSuccess } from '~/features/auth/authSlice'
+import { useDispatch } from 'react-redux'
+import { loginSuccess } from '~/features/auth/authSlice'
 import { registerWithEmailAndPassword, serializeUser } from '~/services/authService'
 
 import styles from './Login.module.scss'
@@ -13,14 +13,13 @@ const Register = ({ onClose, switchToLogin }) => {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
 	const dispatch = useDispatch()
-	const { isLoading } = useSelector((state) => state.auth)
 
 	const handleRegister = async (e) => {
 		e.preventDefault()
 
 		if (!email || !password || !confirmPassword) {
-			dispatch(loginFailure('Vui lòng điền đầy đủ thông tin'))
 			messageApi.open({
 				type: 'info',
 				content: 'Vui lòng điền đầy đủ thông tin',
@@ -29,7 +28,6 @@ const Register = ({ onClose, switchToLogin }) => {
 		}
 
 		if (password !== confirmPassword) {
-			dispatch(loginFailure('Mật khẩu không khớp'))
 			messageApi.open({
 				type: 'info',
 				content: 'Mật khẩu không khớp',
@@ -38,7 +36,6 @@ const Register = ({ onClose, switchToLogin }) => {
 		}
 
 		if (password.length < 6) {
-			dispatch(loginFailure('Mật khẩu phải có ít nhất 6 ký tự'))
 			messageApi.open({
 				type: 'info',
 				content: 'Mật khẩu phải có ít nhất 6 ký tự',
@@ -46,12 +43,11 @@ const Register = ({ onClose, switchToLogin }) => {
 			return
 		}
 
-		dispatch(loginStart())
+		setIsLoading(true)
 
 		const result = await registerWithEmailAndPassword(email, password)
 
 		if (result.error) {
-			dispatch(loginFailure(result.error))
 			messageApi.open({
 				type: 'error',
 				content: result.error,
@@ -64,6 +60,8 @@ const Register = ({ onClose, switchToLogin }) => {
 			})
 			if (onClose) onClose()
 		}
+
+		setIsLoading(false)
 	}
 
 	const cx = classNames.bind(styles)
