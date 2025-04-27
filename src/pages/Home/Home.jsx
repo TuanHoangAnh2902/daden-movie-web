@@ -16,7 +16,7 @@ function Home() {
 
 	return (
 		<div className={cx('home')}>
-			<CarouselMovies />
+			<CarouselMovies autoPlaySpeed={3000} />
 			<Gallery />
 			<Collection movieData={dataPhimLe} isLoading={isLoadingPhimLe} direction={'vertical'} reverseDirection={false} />
 			<Collection
