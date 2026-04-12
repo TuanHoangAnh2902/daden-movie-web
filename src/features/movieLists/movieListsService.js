@@ -65,7 +65,6 @@ export const getMovieLists = async () => {
 
 		const path = `movieLists/${user.uid}/lists`
 		const snapshot = await get(ref(db, path))
-		console.log('🚀 ~ getMovieLists ~ snapshot:', snapshot)
 
 		if (snapshot.exists()) {
 			return { status: 'success', data: snapshot.val(), error: null }

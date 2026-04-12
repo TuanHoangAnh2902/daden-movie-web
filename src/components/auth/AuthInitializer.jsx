@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { loginSuccess, logout } from '~/features/auth/authSlice'
+import { loginSuccess, logout, setAuthLoading } from '~/features/auth/authSlice'
 import {
 	subscribeToAuthChanges,
 	serializeUser,
@@ -10,8 +10,18 @@ import {
 
 const AuthInitializer = ({ children }) => {
 	const dispatch = useDispatch()
+	const hasAuthStateResolved = useRef(false)
+	const hasRedirectResultResolved = useRef(false)
 
 	useEffect(() => {
+		dispatch(setAuthLoading(true))
+
+		const tryFinishAuthLoading = () => {
+			if (hasAuthStateResolved.current && hasRedirectResultResolved.current) {
+				dispatch(setAuthLoading(false))
+			}
+		}
+
 		// Check for redirect authentication result
 		const handleRedirectResult = async () => {
 			try {
@@ -31,6 +41,9 @@ const AuthInitializer = ({ children }) => {
 				}
 			} catch (err) {
 				console.error('Error processing redirect result:', err)
+			} finally {
+				hasRedirectResultResolved.current = true
+				tryFinishAuthLoading()
 			}
 		}
 
@@ -43,6 +56,11 @@ const AuthInitializer = ({ children }) => {
 				dispatch(loginSuccess(serializeUser(user)))
 			} else {
 				dispatch(logout())
+			}
+
+			if (!hasAuthStateResolved.current) {
+				hasAuthStateResolved.current = true
+				tryFinishAuthLoading()
 			}
 		})
 

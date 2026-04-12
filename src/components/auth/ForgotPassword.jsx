@@ -33,7 +33,6 @@ const ForgotPassword = ({ switchToLogin }) => {
 		setIsLoading(true)
 
 		try {
-			console.log('Đang gửi yêu cầu đặt lại mật khẩu cho email:', email.trim().toLowerCase())
 			const result = await resetPassword(email)
 
 			if (result.success) {

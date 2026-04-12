@@ -46,9 +46,7 @@ const CardDetails = memo(({ movieData, imageUrl, cardPosition, onMouseEnter, onM
 		}
 	}, [ref])
 
-	// useEffect debug loading
 	useEffect(() => {
-		// Nếu URL không hợp lệ, console.log để debug
 		if (!detailImageUrl || detailImageUrl === `${imageBaseUrl}undefined`) {
 			console.warn('Invalid detail image URL:', detailImageUrl)
 		}

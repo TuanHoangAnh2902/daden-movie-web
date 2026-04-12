@@ -85,8 +85,7 @@ export const shareContent = async (options) => {
 				url: url,
 			})
 			return true
-		} catch (error) {
-			console.log('Web Share API error:', error)
+		} catch {
 			// Fallback to traditional sharing methods
 		}
 	}

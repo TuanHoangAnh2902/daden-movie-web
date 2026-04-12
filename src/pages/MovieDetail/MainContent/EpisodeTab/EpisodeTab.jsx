@@ -26,7 +26,6 @@ const dropdownItems = [
 
 const cx = classNames.bind(styles)
 function EpisodeTab({ data }) {
-	console.log('🚀 ~ EpisodeTab ~ data:', data)
 	const [searchParams] = useSearchParams()
 	const movieEp = searchParams.get('ep')
 
