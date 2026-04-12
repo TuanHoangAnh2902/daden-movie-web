@@ -12,7 +12,6 @@ import { Button, Flex } from 'antd'
 import { SwiperSlide, Swiper } from 'swiper/react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { Autoplay, Scrollbar, Navigation } from 'swiper/modules'
-console.log('width: ', window.innerWidth)
 
 const cx = classNames.bind(styles)
 function SwiperCarousel({ data }) {
@@ -65,6 +64,5 @@ SwiperCarousel.propTypes = {
 		APP_DOMAIN_CDN_IMAGE: PropTypes.string.isRequired,
 		items: PropTypes.arrayOf(PropTypes.object).isRequired,
 	}),
-	isLoading: PropTypes.bool.isRequired,
 }
 export default SwiperCarousel

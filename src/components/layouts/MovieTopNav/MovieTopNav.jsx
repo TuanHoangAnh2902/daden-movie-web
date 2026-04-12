@@ -1,20 +1,21 @@
 import { CaretDownOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Col, ConfigProvider, Dropdown, Flex, Modal, Row, Space, Tabs } from 'antd'
+import { Avatar, Button, Col, ConfigProvider, Dropdown, Flex, Modal, Row, Space, Spin, Tabs } from 'antd'
 import classNames from 'classnames/bind'
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import Logo from '~/assets/Logo'
-import Login from '~/components/auth/Login'
-import Register from '~/components/auth/Register'
-import ForgotPassword from '~/components/auth/ForgotPassword'
 import { moviesCategories } from '~/constants/routes'
 import { logout } from '~/features/auth/authSlice'
 import { logOut } from '~/services/authService'
 import { useThemeColors } from '~/themes/useThemeColors'
 import MovieSearch from '../../movie/MovieSearch/MovieSearch'
 import styles from './MovieTopNav.module.scss'
+
+const Login = lazy(() => import('~/components/auth/Login'))
+const Register = lazy(() => import('~/components/auth/Register'))
+const ForgotPassword = lazy(() => import('~/components/auth/ForgotPassword'))
 
 const cx = classNames.bind(styles)
 
@@ -23,8 +24,7 @@ function MovieTopNav() {
 	const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 	const [activeTabKey, setActiveTabKey] = useState('1')
 	const [userMenuOpen, setUserMenuOpen] = useState(false)
-	const { user, isAuthenticated } = useSelector((state) => state.auth)
-	console.log('🚀 ~ MovieTopNav ~ user:', user)
+	const { user, isAuthenticated, isAuthLoading } = useSelector((state) => state.auth)
 	const dispatch = useDispatch()
 	const { subColor, textColor } = useThemeColors()
 
@@ -39,7 +39,7 @@ function MovieTopNav() {
 		return () => {
 			window.removeEventListener('scroll', handleScroll)
 		}
-	}, [lastScrollY])
+	}, [])
 
 	const showAuthModal = (isLogin = true) => {
 		setActiveTabKey(isLogin ? '1' : '2')
@@ -131,7 +131,11 @@ function MovieTopNav() {
 
 				{/* Auth Section */}
 				<div className={cx('auth-section')}>
-					{isAuthenticated ? (
+					{isAuthLoading ? (
+						<Flex align='center' justify='center' style={{ minWidth: '120px', minHeight: '40px' }}>
+							<Spin size='small' />
+						</Flex>
+					) : isAuthenticated ? (
 						<Dropdown
 							menu={{ items: userMenuItems }}
 							trigger={['click']}
@@ -185,14 +189,21 @@ function MovieTopNav() {
 									},
 									token: { colorText: textColor },
 								}}>
-								<Tabs
-									className={cx('tabs-auth')}
-									centered
-									animated
-									activeKey={activeTabKey}
-									onChange={setActiveTabKey}
-									items={items}
-								/>
+								<Suspense
+									fallback={
+										<Flex align='center' justify='center' style={{ minHeight: '320px' }}>
+											<Spin size='large' />
+										</Flex>
+									}>
+									<Tabs
+										className={cx('tabs-auth')}
+										centered
+										animated
+										activeKey={activeTabKey}
+										onChange={setActiveTabKey}
+										items={items}
+									/>
+								</Suspense>
 							</ConfigProvider>
 						</Col>
 					</Row>
