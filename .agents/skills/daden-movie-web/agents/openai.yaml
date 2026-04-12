@@ -1,0 +1,6 @@
+interface:
+  display_name: "Daden Movie Web"
+  short_description: "Repo-specific patterns and workflows for daden-movie-web"
+  default_prompt: "Use the daden-movie-web repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true
