@@ -39,7 +39,6 @@ export const saveUserToFirestore = async (user) => {
 			email: user.email,
 			createdAt: new Date().toISOString(),
 		})
-		console.log('Đã lưu thông tin người dùng vào Firestore')
 	} catch (error) {
 		console.error('Lỗi khi lưu thông tin người dùng vào Firestore:', error)
 		throw error
@@ -56,10 +55,9 @@ export const registerWithEmailAndPassword = async (email, password) => {
 			if (methods && methods.length > 0) {
 				return { user: null, error: 'Email đã được sử dụng bởi một tài khoản khác.' }
 			}
-		} catch (error) {
+		} catch {
 			// Nếu có lỗi khi kiểm tra, vẫn tiếp tục quá trình đăng ký
 			// Firebase sẽ tự động từ chối nếu email đã tồn tại
-			console.log('Lỗi khi kiểm tra phương thức đăng nhập:', error)
 		}
 
 		// Tiến hành đăng ký
@@ -108,7 +106,6 @@ export const signInWithGoogle = async () => {
 				popupError.message.includes('Cross-Origin-Opener-Policy') ||
 				popupError.message.includes('window.closed')
 			) {
-				console.log('Popup was blocked or COOP error occurred. Trying redirect method...')
 				// Fallback to redirect method
 				await signInWithRedirect(auth, googleProvider)
 				// Note: The result will be handled in the AuthInitializer component
@@ -136,7 +133,6 @@ export const signInWithFacebook = async () => {
 				popupError.message.includes('Cross-Origin-Opener-Policy') ||
 				popupError.message.includes('window.closed')
 			) {
-				console.log('Popup was blocked or COOP error occurred. Trying redirect method...')
 				// Fallback to redirect method
 				await signInWithRedirect(auth, facebookProvider)
 				// Note: The result will be handled in the AuthInitializer component
@@ -248,10 +244,7 @@ export const resetPassword = async (email) => {
 	const normalizedEmail = email.trim().toLowerCase()
 
 	try {
-		console.log('Đang xử lý yêu cầu đặt lại mật khẩu cho email:', normalizedEmail)
-
 		// Kiểm tra email trong Firestore trước
-		console.log('Kiểm tra email trong Firestore...')
 		let existsInFirestore = false
 
 		try {
@@ -261,29 +254,20 @@ export const resetPassword = async (email) => {
 			// Thực hiện truy vấn
 			const querySnapshot = await getDocs(q)
 			existsInFirestore = !querySnapshot.empty
-
-			console.log(`Email ${normalizedEmail} ${existsInFirestore ? 'tồn tại' : 'không tồn tại'} trong Firestore`)
 		} catch (firestoreError) {
 			console.warn('Lỗi khi kiểm tra Firestore:', firestoreError)
 			// Tiếp tục với Firebase Authentication nếu có lỗi khi truy cập Firestore
 		}
 
 		// Kiểm tra email trong Firebase Authentication
-		console.log('Kiểm tra email trong Firebase Authentication...')
 		try {
 			const methods = await fetchSignInMethodsForEmail(auth, normalizedEmail)
 			const existsInAuth = methods && methods.length > 0
 
 			// Nếu email tồn tại trong Firestore hoặc Authentication, gửi email đặt lại mật khẩu
 			if (existsInFirestore || existsInAuth) {
-				console.log(`Email ${normalizedEmail} tồn tại trong hệ thống.`)
-				if (existsInAuth) {
-					console.log('Phương thức đăng nhập:', methods)
-				}
-
 				// Gửi email đặt lại mật khẩu
 				await sendPasswordResetEmail(auth, normalizedEmail)
-				console.log(`Email đặt lại mật khẩu đã được gửi đến ${normalizedEmail}`)
 
 				return {
 					success: true,
@@ -292,7 +276,6 @@ export const resetPassword = async (email) => {
 					existsInAuth,
 				}
 			} else {
-				console.log(`Email ${normalizedEmail} không tồn tại trong hệ thống.`)
 				return {
 					success: false,
 					error: 'Email không tồn tại trong hệ thống. Vui lòng kiểm tra lại hoặc đăng ký mới.',

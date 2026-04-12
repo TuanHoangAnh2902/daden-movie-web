@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async'
+import PropTypes from 'prop-types'
 import { useLocation } from 'react-router-dom'
 
 const SEO = ({ title, description, image, canonical }) => {
@@ -28,3 +29,10 @@ const SEO = ({ title, description, image, canonical }) => {
 }
 
 export default SEO
+
+SEO.propTypes = {
+	title: PropTypes.string,
+	description: PropTypes.string,
+	image: PropTypes.string,
+	canonical: PropTypes.string,
+}
