@@ -1,27 +1,64 @@
-import { RouterProvider } from 'react-router'
-import { createBrowserRouter } from 'react-router-dom'
-import MovieCategoryList from '~/components/movie/MovieCategoryList/MovieCategoryList'
-import MoviesCountiesList from '~/components/movie/MoviesCountiesList/MoviesCountiesList'
-import MoviesList from '~/components/movie/MoviesList/MoviesList'
-import MoviesSearchList from '~/components/movie/MoviesSearchList/MoviesSearchList'
+import { Spin } from 'antd'
+import { lazy, Suspense } from 'react'
+import { Navigate, RouterProvider, createBrowserRouter, useNavigate } from 'react-router-dom'
 import { moviesCategories } from '~/constants/routes'
 import AuthLayouts from '~/layouts/AuthLayouts'
 import MainLayout from '~/layouts/MainLayout'
-import About from '~/pages/About'
-import Home from '~/pages/Home/Home'
-import MovieDetail from '~/pages/MovieDetail/MovieDetail'
-import NotFound from '~/pages/NotFount'
-import AccountInfo from '~/pages/Profile/AccountInfo/AccountInfo'
-import Favourite from '~/pages/Profile/Favourite/Favourite'
-import MoviesListAdded from '~/pages/Profile/MoviesListAdded/MoviesListAdded'
-import Profile from '~/pages/Profile/Profile'
-import WatchMovie from '~/pages/WatchMovie/WatchMovie'
+
+const About = lazy(() => import('~/pages/About'))
+const Home = lazy(() => import('~/pages/Home/Home'))
+const MovieDetail = lazy(() => import('~/pages/MovieDetail/MovieDetail'))
+const NotFound = lazy(() => import('~/pages/NotFount'))
+const AccountInfo = lazy(() => import('~/pages/Profile/AccountInfo/AccountInfo'))
+const Favourite = lazy(() => import('~/pages/Profile/Favourite/Favourite'))
+const MoviesListAdded = lazy(() => import('~/pages/Profile/MoviesListAdded/MoviesListAdded'))
+const Profile = lazy(() => import('~/pages/Profile/Profile'))
+const WatchMovie = lazy(() => import('~/pages/WatchMovie/WatchMovie'))
+const MovieCategoryList = lazy(() => import('~/components/movie/MovieCategoryList/MovieCategoryList'))
+const MoviesCountiesList = lazy(() => import('~/components/movie/MoviesCountiesList/MoviesCountiesList'))
+const MoviesList = lazy(() => import('~/components/movie/MoviesList/MoviesList'))
+const MoviesSearchList = lazy(() => import('~/components/movie/MoviesSearchList/MoviesSearchList'))
+const Login = lazy(() => import('~/components/auth/Login'))
+const Register = lazy(() => import('~/components/auth/Register'))
+const ForgotPassword = lazy(() => import('~/components/auth/ForgotPassword'))
+
+function RouteFallback() {
+	return (
+		<div style={{ display: 'grid', minHeight: '100vh', placeItems: 'center' }}>
+			<Spin size='large' />
+		</div>
+	)
+}
+
+function AuthLoginRoute() {
+	const navigate = useNavigate()
+
+	return (
+		<Login
+			onClose={() => navigate('/', { replace: true })}
+			switchToRegister={() => navigate('/auth/register', { replace: true })}
+			switchToForgotPassword={() => navigate('/auth/forgot-password', { replace: true })}
+		/>
+	)
+}
+
+function AuthRegisterRoute() {
+	const navigate = useNavigate()
+
+	return <Register onClose={() => navigate('/', { replace: true })} switchToLogin={() => navigate('/auth/login', { replace: true })} />
+}
+
+function AuthForgotPasswordRoute() {
+	const navigate = useNavigate()
+
+	return <ForgotPassword switchToLogin={() => navigate('/auth/login', { replace: true })} />
+}
 
 const navRoutes = moviesCategories.flatMap(({ name, children, to }) =>
 	children
-		? children.map(({ to: childName }) => ({
+		? children.map(({ name: childTitle }) => ({
 				path: `movies/${to}`,
-				element: <MoviesList title={childName.to} />,
+				element: <MoviesList title={childTitle} />,
 		  }))
 		: [{ path: `movies`, element: <MoviesList title={name} /> }],
 )
@@ -57,6 +94,7 @@ const router = createBrowserRouter([
 				path: 'user',
 				element: <Profile />,
 				children: [
+					{ index: true, element: <Navigate to='profile' replace /> },
 					{ path: 'favourite', element: <Favourite /> },
 					{ path: 'profile', element: <AccountInfo /> },
 					{ path: 'lists', element: <MoviesListAdded /> },
@@ -68,6 +106,12 @@ const router = createBrowserRouter([
 	{
 		path: '/auth',
 		element: <AuthLayouts />,
+		children: [
+			{ index: true, element: <Navigate to='login' replace /> },
+			{ path: 'login', element: <AuthLoginRoute /> },
+			{ path: 'register', element: <AuthRegisterRoute /> },
+			{ path: 'forgot-password', element: <AuthForgotPasswordRoute /> },
+		],
 	},
 	{
 		path: '*',
@@ -76,7 +120,11 @@ const router = createBrowserRouter([
 ])
 
 function AppRoutes() {
-	return <RouterProvider router={router} />
+	return (
+		<Suspense fallback={<RouteFallback />}>
+			<RouterProvider router={router} />
+		</Suspense>
+	)
 }
 
 export default AppRoutes

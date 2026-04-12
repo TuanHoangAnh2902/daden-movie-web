@@ -21,7 +21,6 @@ import RecommentTab from './RecommentTab/RecommentTab'
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {
-	console.log('🚀 ~ MainContent ~ data:', data)
 	const { subColor, textColor } = useThemeColors()
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
@@ -49,11 +48,6 @@ function MainContent({ data }) {
 	// Close the share modal
 	const closeShareModal = () => {
 		setIsShareModalOpen(false)
-	}
-
-	// eslint-disable-next-line no-unused-vars
-	const onChange = (key) => {
-		// console.log(key)
 	}
 
 	const trailerData = {
@@ -161,7 +155,6 @@ function MainContent({ data }) {
 						className={cx('tabs-detail')}
 						defaultActiveKey='1'
 						items={tabsItems}
-						onChange={onChange}
 					/>
 				</ConfigProvider>
 				<Comment movieId={data?.movie?._id} sectionRef={sectionRef} />
