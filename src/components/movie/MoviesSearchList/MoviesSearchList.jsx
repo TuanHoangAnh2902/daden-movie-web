@@ -33,16 +33,18 @@ const MoviesSearchList = () => {
 	}
 
 	return (
-		<MoviesDisplay
-			titlePage={`Tìm kiếm: ${param}`}
-			imageUrl={data?.APP_DOMAIN_CDN_IMAGE || ''}
-			movies={searchResults}
-			totalMovies={data?.params?.pagination?.totalItems || 0}
-			itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 24}
-			isLoading={isLoading}
-			currentPage={page}
-			setCurrentPage={handlePageChange}
-		/>
+		<>
+			<MoviesDisplay
+				titlePage={`Tìm kiếm: ${param}`}
+				imageUrl={data?.APP_DOMAIN_CDN_IMAGE || ''}
+				movies={searchResults}
+				totalMovies={data?.params?.pagination?.totalItems || 0}
+				itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 24}
+				isLoading={isLoading}
+				currentPage={page}
+				setCurrentPage={handlePageChange}
+			/>
+		</>
 	)
 }
 

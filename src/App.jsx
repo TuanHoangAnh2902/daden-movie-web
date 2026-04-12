@@ -5,10 +5,15 @@ import MovieListsInitializer from './components/auth/MovieListsInitializer'
 import { ConfigProvider, FloatButton } from 'antd'
 import { useThemeColors } from './themes/useThemeColors'
 
+// 1. Import các thành phần từ react-helmet-async
+import { Helmet, HelmetProvider } from 'react-helmet-async'
+
 function App() {
 	const { subColor } = useThemeColors()
+
 	return (
-		<>
+		// 2. Bọc HelmetProvider ở lớp ngoài cùng
+		<HelmetProvider>
 			<ConfigProvider
 				theme={{
 					token: { colorBgLayout: '#191b24', fontFamily: '"Be Vietnam Pro","sans-serif"', colorPrimary: subColor },
@@ -30,6 +35,16 @@ function App() {
 						},
 					},
 				}}>
+				{/* 3. Đặt Helmet mặc định tại đây */}
+				<Helmet>
+					<title>DaDen Movie - Xem phim Vietsub miễn phí</title>
+					<meta
+						name='description'
+						content='Trang web xem phim chất lượng cao với phụ đề tiếng Việt cập nhật nhanh nhất.'
+					/>
+					<link rel='canonical' href='https://daden-movie-web.vercel.app/' />
+				</Helmet>
+
 				<AuthInitializer>
 					<FavoritesInitializer>
 						<MovieListsInitializer>
@@ -39,7 +54,7 @@ function App() {
 				</AuthInitializer>
 			</ConfigProvider>
 			<FloatButton.BackTop />
-		</>
+		</HelmetProvider>
 	)
 }
 
