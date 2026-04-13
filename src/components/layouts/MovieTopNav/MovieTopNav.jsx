@@ -112,7 +112,7 @@ function MovieTopNav() {
 
 					return (
 						<Flex className={cx('nav-tab')} key={category.to || category.name} align='center'>
-							{category.children ? (
+							{category.children ?
 								<ConfigProvider theme={{ components: { Dropdown: { paddingBlock: 0 } } }}>
 									<Dropdown className={cx('dropdown-link')} arrow menu={{ items: menuItems }} trigger={['click']}>
 										<Space>
@@ -121,22 +121,21 @@ function MovieTopNav() {
 										</Space>
 									</Dropdown>
 								</ConfigProvider>
-							) : (
-								<Link className='nav-child' to={toMovieListPath(category.to, 1)}>
+							:	<Link className='nav-child' to={toMovieListPath(category.to, 1)}>
 									{category.name}
 								</Link>
-							)}
+							}
 						</Flex>
 					)
 				})}
 
 				{/* Auth Section */}
 				<div className={cx('auth-section')}>
-					{isAuthLoading ? (
+					{isAuthLoading ?
 						<Flex align='center' justify='center' style={{ minWidth: '120px', minHeight: '40px' }}>
 							<Spin size='small' />
 						</Flex>
-					) : isAuthenticated ? (
+					: isAuthenticated ?
 						<Dropdown
 							menu={{ items: userMenuItems }}
 							trigger={['click']}
@@ -147,8 +146,7 @@ function MovieTopNav() {
 								<span className={cx('user-name')}>{user?.displayName || user?.email?.split('@')[0]}</span>
 							</div>
 						</Dropdown>
-					) : (
-						<Flex gap={12}>
+					:	<Flex gap={12}>
 							<Button type='primary' className={cx('login-button')} onClick={() => showAuthModal(true)}>
 								Đăng nhập
 							</Button>
@@ -156,7 +154,7 @@ function MovieTopNav() {
 								Đăng ký
 							</Button>
 						</Flex>
-					)}
+					}
 				</div>
 			</Flex>
 

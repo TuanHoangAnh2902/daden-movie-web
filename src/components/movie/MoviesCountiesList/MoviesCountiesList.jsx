@@ -36,7 +36,10 @@ const MoviesCountiesList = () => {
 
 	return (
 		<>
-			<SEO title={data?.titlePage || 'Phim theo quoc gia'} description={`Danh sach phim quoc gia ${data?.titlePage || ''}`.trim()} />
+			<SEO
+				title={data?.titlePage || 'Phim theo quoc gia'}
+				description={`Danh sach phim quoc gia ${data?.titlePage || ''}`.trim()}
+			/>
 			<MoviesDisplay
 				randomColor={randomColor}
 				titlePage={data?.titlePage || 'Movies List'}

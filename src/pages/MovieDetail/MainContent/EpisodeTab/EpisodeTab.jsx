@@ -37,7 +37,7 @@ function EpisodeTab({ data }) {
 
 	return (
 		<div className={cx('episode-tab')}>
-			{isSingle ? (
+			{isSingle ?
 				<>
 					<h5 className={cx('title')}>Các bản chiếu</h5>
 					<Flex className={cx('slide-movies')} align='center' justify='flex-start'>
@@ -65,11 +65,12 @@ function EpisodeTab({ data }) {
 								</Link>
 							</ConfigProvider>
 						</Space>
-						{thumb_url ? <LazyImage className={cx('thumb')} src={thumb_url} alt='Movie Thumbnail' /> : null}
+						{thumb_url ?
+							<LazyImage className={cx('thumb')} src={thumb_url} alt='Movie Thumbnail' />
+						:	null}
 					</Flex>
 				</>
-			) : (
-				<ConfigProvider theme={{ token: { colorPrimary: 'red' } }}>
+			:	<ConfigProvider theme={{ token: { colorPrimary: 'red' } }}>
 					<Dropdown className={cx('season-dropdown')} menu={{ items: dropdownItems }} trigger={['click']}>
 						<a onClick={(e) => e.preventDefault()}>
 							<Space align='center'>
@@ -80,7 +81,7 @@ function EpisodeTab({ data }) {
 						</a>
 					</Dropdown>
 				</ConfigProvider>
-			)}
+			}
 			<Flex className={cx('episode-list')} gap={6} align='start' wrap>
 				{episodeList &&
 					!isSingle &&

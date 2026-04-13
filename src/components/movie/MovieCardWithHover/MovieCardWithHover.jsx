@@ -143,9 +143,9 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 	// Tạo URL ảnh dựa vào hướng hiển thị - kiểm tra null và undefined
 	const mainImageUrl = useMemo(() => {
 		const imagePath =
-			direction === 'horizontal'
-				? movieData?.poster_url || movieData?.thumb_url
-				: movieData?.thumb_url || movieData?.poster_url
+			direction === 'horizontal' ?
+				movieData?.poster_url || movieData?.thumb_url
+			:	movieData?.thumb_url || movieData?.poster_url
 
 		// Nếu không có đường dẫn ảnh hợp lệ, trả về placeholder
 		if (!imagePath) {
@@ -258,10 +258,9 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 
 	return (
 		<>
-			{!shouldShowContent ? (
+			{!shouldShowContent ?
 				<MovieCardSkeleton direction={direction} />
-			) : (
-				<div
+			:	<div
 					data-aos='fade-up'
 					ref={cardRef} // Gán ref trực tiếp, không dùng inline function trong render
 					className={cx('movie-card', direction)}
@@ -286,7 +285,7 @@ const MovieCardWithHoverComponent = ({ imageUrl, movieData, direction }) => {
 						</div>
 					</motion.div>
 				</div>
-			)}
+			}
 
 			<AnimatePresence>
 				{hoveredCard === movieData?._id && cardPosition && (

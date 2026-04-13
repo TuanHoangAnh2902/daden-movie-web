@@ -81,10 +81,9 @@ function MovieDetail() {
 				description={removeTagsUsingDOM(movieData?.content) || 'Thong tin chi tiet phim'}
 				image={movieData?.poster_url || movieData?.thumb_url}
 			/>
-			{isFetching ? (
+			{isFetching ?
 				<MovieDetailSkeleton />
-			) : (
-				<div className={cx('movie-detail')}>
+			:	<div className={cx('movie-detail')}>
 					<div className={cx('movie-detail-wrapper')}>
 						<img
 							className={cx('movie-img')}
@@ -109,7 +108,7 @@ function MovieDetail() {
 						</ConfigProvider>
 					</div>
 				</div>
-			)}
+			}
 		</>
 	)
 }

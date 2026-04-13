@@ -42,7 +42,11 @@ const Profile = () => {
 
 	return (
 		<div className={cx('wrapper')}>
-			<SEO title='Tai khoan nguoi dung' description='Quan ly thong tin tai khoan, danh sach phim yeu thich va danh sach da luu.' noIndex />
+			<SEO
+				title='Tai khoan nguoi dung'
+				description='Quan ly thong tin tai khoan, danh sach phim yeu thich va danh sach da luu.'
+				noIndex
+			/>
 			<Row className={cx('profile-container')} align={'top'} justify={'space-between'}>
 				<Col flex='0 0 20%' className={cx('tabs-side')}>
 					<h1>Quản lý tài khoản</h1>

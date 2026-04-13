@@ -53,7 +53,12 @@ function AuthLoginRoute() {
 function AuthRegisterRoute() {
 	const navigate = useNavigate()
 
-	return <Register onClose={() => navigate('/', { replace: true })} switchToLogin={() => navigate('/auth/login', { replace: true })} />
+	return (
+		<Register
+			onClose={() => navigate('/', { replace: true })}
+			switchToLogin={() => navigate('/auth/login', { replace: true })}
+		/>
+	)
 }
 
 function AuthForgotPasswordRoute() {
@@ -134,12 +139,12 @@ function LegacyMovieCountryRedirect() {
 }
 
 const navRoutes = moviesCategories.flatMap(({ name, children, to }) =>
-	children
-		? children.map(({ name: childTitle, to: childSlug }) => ({
-				path: `movies/list/${childSlug}`,
-				element: <MoviesList title={childTitle} />,
-		  }))
-		: [{ path: `movies/list/${to}`, element: <MoviesList title={name} /> }],
+	children ?
+		children.map(({ name: childTitle, to: childSlug }) => ({
+			path: `movies/list/${childSlug}`,
+			element: <MoviesList title={childTitle} />,
+		}))
+	:	[{ path: `movies/list/${to}`, element: <MoviesList title={name} /> }],
 )
 
 const router = createBrowserRouter([

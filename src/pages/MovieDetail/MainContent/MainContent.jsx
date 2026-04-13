@@ -93,7 +93,7 @@ function MainContent({ data }) {
 
 			<div className={cx('movie-detail-main-wrapper')}>
 				<Flex align='center' gap={30} className={cx('movie-detail-main-content')}>
-					{isTrailerOnly ? (
+					{isTrailerOnly ?
 						<Link to={toMovieWatchPath(data?.movie?._id, 'full')}>
 							<div className={cx('trailer-btn')}>
 								<Flex align='center' gap={10} className={cx('button')}>
@@ -105,16 +105,14 @@ function MainContent({ data }) {
 								</Flex>
 							</div>
 						</Link>
-					) : (
-						<ConfigProvider
-							theme={{ components: { Button: { ...buttonTheme, contentFontSize: 17, fontWeight: 500 } } }}>
+					:	<ConfigProvider theme={{ components: { Button: { ...buttonTheme, contentFontSize: 17, fontWeight: 500 } } }}>
 							<Link to={toMovieWatchPath(data?.movie?._id, data.episodes[0].server_data[0].slug)}>
 								<Button className={cx('play-btn')} shape='round' icon={<FaPlay />}>
 									Xem ngay
 								</Button>
 							</Link>
 						</ConfigProvider>
-					)}
+					}
 
 					<Flex
 						vertical

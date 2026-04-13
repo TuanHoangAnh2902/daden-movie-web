@@ -15,9 +15,9 @@ function RecommentMovie({ movieData }) {
 	const navigate = useNavigate()
 	// Dùng useMemo để tránh tính toán lại mỗi lần re-render
 	const randomCategory = useMemo(() => {
-		return movieData?.category?.length > 0
-			? movieData?.category[Math.floor(Math.random() * movieData?.category.length)]
-			: null
+		return movieData?.category?.length > 0 ?
+				movieData?.category[Math.floor(Math.random() * movieData?.category.length)]
+			:	null
 	}, [movieData?.category])
 
 	// Memoize the page value to prevent unnecessary recalculations
