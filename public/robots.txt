@@ -4,5 +4,5 @@ User-agent: *
 # Chặn bot truy cập vào các file tài nguyên tĩnh không cần thiết trong build
 Disallow: /assets/
 
-# Đường dẫn đến Sitemap (Thay bằng domain thật của bạn)
+# Đường dẫn đến Sitemap 
 Sitemap: https://daden-movie-web.vercel.app/
