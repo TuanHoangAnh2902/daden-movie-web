@@ -9,13 +9,15 @@ import { ConfigProvider, Layout, Skeleton } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
 import { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import SEO from '~/components/SEO.index'
 import { LayoutTheme } from '~/themes/buttonTheme'
+import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
 
 const cx = classNames.bind(styles)
 function MovieDetail() {
-	const [searchParams] = useSearchParams()
-	const id = searchParams.get('id')
+	const { movieId } = useParams()
+	const id = movieId
 
 	const { data, isFetching, error } = useGetMovieByIdQuery(id)
 	const movieData = data?.movie || {}
@@ -74,6 +76,11 @@ function MovieDetail() {
 
 	return (
 		<>
+			<SEO
+				title={movieData?.name || 'Chi tiet phim'}
+				description={removeTagsUsingDOM(movieData?.content) || 'Thong tin chi tiet phim'}
+				image={movieData?.poster_url || movieData?.thumb_url}
+			/>
 			{isFetching ? (
 				<MovieDetailSkeleton />
 			) : (

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import { Flex } from 'antd'
 import { Link } from 'react-router-dom'
+import { toMovieCategoryPath } from '~/utils/routePaths'
 
 const cx = classNames.bind(styles)
 function CategoryInfo({ categoryData, carousel = false }) {
@@ -11,7 +12,7 @@ function CategoryInfo({ categoryData, carousel = false }) {
 		<Flex className={cx('category-container')} gap={10} wrap>
 			{categoryData?.map((category) => (
 				<Link
-					to={`/movies/category?name=${category?.slug}`}
+					to={toMovieCategoryPath(category?.slug, 1)}
 					key={category.id}
 					className={cx(carousel ? 'category-item-carousel' : 'category-item')}>
 					{category.name}

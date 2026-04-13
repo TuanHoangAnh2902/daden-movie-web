@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams, useLocation } from 'react-router-dom'
+import { useSearchParams, useLocation, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import SEO from '~/components/SEO.index'
 import { useLazyGetMoviesByCategoryQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
 
 const MovieCategoryList = () => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const location = useLocation()
+	const { categorySlug } = useParams()
 
-	const countryNameSlug = searchParams.get('name') // Lấy slug từ query string
+	const countryNameSlug = categorySlug // Lấy slug từ path param
 	// Lấy page từ query string hoặc mặc định là 1
 	const initialPage = parseInt(searchParams.get('page')) || 1
 	const [currentPage, setCurrentPage] = useState(initialPage)
@@ -22,7 +24,7 @@ const MovieCategoryList = () => {
 	// Xử lý chuyển trang
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage)
-		setSearchParams({ name: countryNameSlug, page: newPage.toString() })
+		setSearchParams({ page: newPage.toString() })
 	}
 
 	// Fetch phim khi countryNameSlug hoặc page thay đổi
@@ -33,19 +35,22 @@ const MovieCategoryList = () => {
 	}, [countryNameSlug, currentPage, fetchData])
 
 	return (
-		<MoviesDisplay
-			randomColor={randomColor}
-			titlePage={data?.titlePage || 'Movies List'}
-			imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
-			movies={data?.items || []}
-			totalMovies={data?.params?.pagination?.totalItems || 0}
-			itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 20}
-			isLoading={isLoading}
-			isError={isError}
-			error={error}
-			currentPage={currentPage}
-			setCurrentPage={handlePageChange}
-		/>
+		<>
+			<SEO title={data?.titlePage || 'Phim theo the loai'} description={`Danh sach phim the loai ${data?.titlePage || ''}`.trim()} />
+			<MoviesDisplay
+				randomColor={randomColor}
+				titlePage={data?.titlePage || 'Movies List'}
+				imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
+				movies={data?.items || []}
+				totalMovies={data?.params?.pagination?.totalItems || 0}
+				itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 20}
+				isLoading={isLoading}
+				isError={isError}
+				error={error}
+				currentPage={currentPage}
+				setCurrentPage={handlePageChange}
+			/>
+		</>
 	)
 }
 

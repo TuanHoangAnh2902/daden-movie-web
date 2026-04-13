@@ -8,6 +8,7 @@ import { Flex } from 'antd'
 import { LuDot } from 'react-icons/lu'
 import { useNavigate } from 'react-router-dom'
 import LazyImage from '~/utils/Lazyimage'
+import { toMovieDetailPath } from '~/utils/routePaths'
 
 const cx = classNames.bind(styles)
 function RecommentMovie({ movieData }) {
@@ -39,7 +40,7 @@ function RecommentMovie({ movieData }) {
 	)
 
 	const handleMovieClick = (movieId) => {
-		navigate(`/movie/detail?id=${movieId}`)
+		navigate(toMovieDetailPath(movieId))
 	}
 	return (
 		<div className={cx('recomment-movie')}>

@@ -10,6 +10,7 @@ import { moviesCategories } from '~/constants/routes'
 import { logout } from '~/features/auth/authSlice'
 import { logOut } from '~/services/authService'
 import { useThemeColors } from '~/themes/useThemeColors'
+import { toMovieListPath } from '~/utils/routePaths'
 import MovieSearch from '../../movie/MovieSearch/MovieSearch'
 import styles from './MovieTopNav.module.scss'
 
@@ -106,7 +107,7 @@ function MovieTopNav() {
 				{moviesCategories?.map((category) => {
 					const menuItems = category.children?.map((child) => ({
 						key: child.to,
-						label: <Link to={`movies/${category.to}?name=${child.to}`}>{child.name}</Link>,
+						label: <Link to={toMovieListPath(child.to, 1)}>{child.name}</Link>,
 					}))
 
 					return (
@@ -121,7 +122,7 @@ function MovieTopNav() {
 									</Dropdown>
 								</ConfigProvider>
 							) : (
-								<Link className='nav-child' to={`movies?name=${category.to}&page=1`}>
+								<Link className='nav-child' to={toMovieListPath(category.to, 1)}>
 									{category.name}
 								</Link>
 							)}

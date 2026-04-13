@@ -38,7 +38,7 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 		if (result.error) {
 			messageApi.open({
 				type: 'error',
-				content: result.error.includes('auth/invalid-credential') ? 'Địa chỉ email hoặc mật khẩu không đúng' : '',
+				content: result.error,
 			})
 		} else {
 			dispatch(loginSuccess(serializeUser(result.user)))
@@ -139,7 +139,7 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 				<h2>Đăng nhập</h2>
 				{redirecting && <div className={cx('redirecting')}>Đang chuyển hướng đến trang đăng nhập...</div>}
 
-				{existingAccountInfo ? (
+				{existingAccountInfo ?
 					<>
 						{renderAlternativeLoginSuggestion()}
 						<form onSubmit={handleEmailLogin}>
@@ -180,8 +180,7 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 							</div>
 						</form>
 					</>
-				) : (
-					<>
+				:	<>
 						<form onSubmit={handleEmailLogin}>
 							<div className={cx('input-group')}>
 								<input
@@ -241,7 +240,7 @@ const Login = ({ onClose, switchToRegister, switchToForgotPassword }) => {
 							</Col>
 						</Row>
 					</>
-				)}
+				}
 
 				<div className={cx('swicth-auth')}>
 					<span>Chưa có tài khoản?</span>

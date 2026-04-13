@@ -4,6 +4,7 @@ import classNames from 'classnames/bind'
 import CarouselMovies from '~/components/layouts/CarouselMovies/CarouselMovies'
 import Collection from '~/components/movie/Collection/Collection'
 import Gallery from '~/components/movie/Gallery/Gallery'
+import SEO from '~/components/SEO.index'
 import { useGetMoviesByListQuery } from '~/services/ophimApi'
 
 const cx = classNames.bind(styles)
@@ -16,6 +17,7 @@ function Home() {
 
 	return (
 		<div className={cx('home')}>
+			<SEO title='Trang chu' description='Xem phim Vietsub mien phi, cap nhat phim moi moi ngay.' />
 			<CarouselMovies autoPlaySpeed={3000} />
 			<Gallery />
 			<Collection movieData={dataPhimLe} isLoading={isLoadingPhimLe} direction={'vertical'} reverseDirection={false} />

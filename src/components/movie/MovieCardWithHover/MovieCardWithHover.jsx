@@ -16,6 +16,7 @@ import useImageLoader from '~/hooks/useImageLoader'
 import useToggleFavorite from '~/hooks/useToggleFavorite'
 import { buttonTheme } from '~/themes/buttonTheme'
 import { debounce } from '~/utils/debounce'
+import { toMovieDetailPath, toMovieWatchPath } from '~/utils/routePaths'
 
 const cx = classNames.bind(styles)
 
@@ -86,7 +87,7 @@ const CardDetails = memo(({ movieData, imageUrl, cardPosition, onMouseEnter, onM
 					<p className={cx('origin-name')}>{movieData.origin_name}</p>
 					<Flex gap={8} className={cx('card-detail-actions-btn')}>
 						<ConfigProvider theme={{ components: { Button: buttonTheme } }}>
-							<Link to={`/movie/watch?id=${movieData?._id}&ep=${movieData?.type === 'single' ? 'full' : '1'}`}>
+							<Link to={toMovieWatchPath(movieData?._id, movieData?.type === 'single' ? 'full' : '1')}>
 								<Button className={cx('play-btn')} icon={<FaPlay />}>
 									{movieData.episode_current === 'Trailer' ? 'Xem Trailer' : 'Xem phim'}
 								</Button>
@@ -100,7 +101,7 @@ const CardDetails = memo(({ movieData, imageUrl, cardPosition, onMouseEnter, onM
 							disabled={isToggling}>
 							{isFav ? 'Đã thích' : 'Thích'}
 						</Button>
-						<Link to={`/movie/detail?id=${movieData?._id}`}>
+						<Link to={toMovieDetailPath(movieData?._id)}>
 							<Button className={cx('action-btn')} type='text' icon={<InfoCircleFilled />}>
 								Chi tiết
 							</Button>

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { SearchOutlined } from '@ant-design/icons'
 
 import convertToSlug from '~/utils/convertToSlug'
+import { toSearchPath } from '~/utils/routePaths'
 
 const cx = classNames.bind(styles)
 const MovieSearch = () => {
@@ -18,7 +19,7 @@ const MovieSearch = () => {
 		const slug = convertToSlug(string.trim()) // Xử lý trim trước khi convert
 		if (!slug) return // Nếu không có slug hợp lệ, thoát sớm
 		if (string) {
-			navigate(`search?query=${slug}&page=1`, { state: { param: string } }) // 🟢 Navigate to the search page
+			navigate(toSearchPath(slug, 1), { state: { param: string } })
 		}
 	}
 

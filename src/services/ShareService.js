@@ -22,7 +22,7 @@ export const shareFacebook = (options) => {
 	const left = (window.screen.width - width) / 2
 	const top = (window.screen.height - height) / 2
 
-	openSafeShareWindow(
+	const popup = openSafeShareWindow(
 		fbShareUrl,
 		'Chia sẻ lên Facebook',
 		`width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,status=0`,
@@ -36,6 +36,8 @@ export const shareFacebook = (options) => {
 			content_id: title,
 		})
 	}
+
+	return Boolean(popup)
 }
 
 export const shareTwitter = (options) => {
@@ -53,7 +55,11 @@ export const shareTwitter = (options) => {
 	const left = (window.screen.width - width) / 2
 	const top = (window.screen.height - height) / 2
 
-	openSafeShareWindow(twitterShareUrl, 'Chia sẻ lên Twitter', `width=${width},height=${height},top=${top},left=${left}`)
+	const popup = openSafeShareWindow(
+		twitterShareUrl,
+		'Chia sẻ lên Twitter',
+		`width=${width},height=${height},top=${top},left=${left}`,
+	)
 
 	// Theo dõi sự kiện chia sẻ nếu cần
 	if (window.gtag) {
@@ -63,6 +69,8 @@ export const shareTwitter = (options) => {
 			content_id: title,
 		})
 	}
+
+	return Boolean(popup)
 }
 
 export const shareWhatsApp = (options) => {
@@ -72,7 +80,7 @@ export const shareWhatsApp = (options) => {
 	const text = `${title}${description ? ': ' + description : ''} ${url}`
 	const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`
 
-	openSafeShareWindow(whatsappShareUrl, '_blank')
+	const popup = openSafeShareWindow(whatsappShareUrl, '_blank')
 
 	// Theo dõi sự kiện chia sẻ nếu cần
 	if (window.gtag) {
@@ -82,6 +90,8 @@ export const shareWhatsApp = (options) => {
 			content_id: title,
 		})
 	}
+
+	return Boolean(popup)
 }
 
 export const shareContent = async (options) => {
@@ -96,7 +106,11 @@ export const shareContent = async (options) => {
 				url: url,
 			})
 			return true
-		} catch {
+		} catch (error) {
+			if (error?.name === 'AbortError') {
+				return false
+			}
+
 			// Fallback to traditional sharing methods
 		}
 	}
@@ -104,17 +118,12 @@ export const shareContent = async (options) => {
 	// Sử dụng các phương thức chia sẻ truyền thống nếu Web Share API không khả dụng hoặc gặp lỗi
 	switch (platform) {
 		case 'facebook':
-			shareFacebook(options)
-			break
+			return shareFacebook(options)
 		case 'twitter':
-			shareTwitter(options)
-			break
+			return shareTwitter(options)
 		case 'whatsapp':
-			shareWhatsApp(options)
-			break
+			return shareWhatsApp(options)
 		default:
 			return false
 	}
-
-	return true
 }

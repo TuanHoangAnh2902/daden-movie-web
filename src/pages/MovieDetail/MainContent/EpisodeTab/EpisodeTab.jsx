@@ -6,8 +6,9 @@ import { FaPlay, FaSortDown } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 import { useThemeColors } from '~/themes/useThemeColors'
 import { LiaComment } from 'react-icons/lia'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import LazyImage from '~/utils/Lazyimage'
+import { toMovieWatchPath } from '~/utils/routePaths'
 
 const dropdownItems = [
 	{
@@ -26,8 +27,8 @@ const dropdownItems = [
 
 const cx = classNames.bind(styles)
 function EpisodeTab({ data }) {
-	const [searchParams] = useSearchParams()
-	const movieEp = searchParams.get('ep')
+	const { episodeSlug } = useParams()
+	const movieEp = episodeSlug || 'full'
 
 	const { subColor } = useThemeColors()
 	const episodeList = data?.episodes?.[0].server_data || []
@@ -59,7 +60,7 @@ function EpisodeTab({ data }) {
 										},
 									},
 								}}>
-								<Link to={`/movie/watch?id=${data?.movie?._id}&ep=${data.episodes[0].server_data[0].slug}`}>
+								<Link to={toMovieWatchPath(data?.movie?._id, data.episodes[0].server_data[0].slug)}>
 									<Button className={cx('play-btn')}>Xem bản này</Button>
 								</Link>
 							</ConfigProvider>
@@ -84,7 +85,7 @@ function EpisodeTab({ data }) {
 				{episodeList &&
 					!isSingle &&
 					episodeList?.map((ep, index) => (
-						<Link key={index} to={`/movie/watch?id=${data?.movie?._id}&ep=${(ep.slug || ep.name)?.toLowerCase()}`}>
+						<Link key={index} to={toMovieWatchPath(data?.movie?._id, ep.slug || ep.name)}>
 							<Flex
 								className={cx('episode-item', {
 									active: (ep.slug || ep.name)?.toLowerCase() === movieEp?.toLowerCase(),

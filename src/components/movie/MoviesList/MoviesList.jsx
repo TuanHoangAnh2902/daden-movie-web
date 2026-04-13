@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams, useLocation } from 'react-router-dom'
+import { useSearchParams, useLocation, useParams } from 'react-router-dom'
+import SEO from '~/components/SEO.index'
 import { useLazyGetMoviesByListQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
 
 const MoviesList = () => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const location = useLocation()
+	const { listSlug = '' } = useParams()
 
 	// Giữ randomColor nếu có
 	const randomColor = location.state?.randomColor || ''
 
-	const categoryNameSlug = searchParams.get('name') || ''
 	const initialPage = parseInt(searchParams.get('page')) || 1
 	const [currentPage, setCurrentPage] = useState(initialPage)
 
@@ -24,31 +25,34 @@ const MoviesList = () => {
 
 	// Fetch dữ liệu khi categoryNameSlug hoặc currentPage thay đổi
 	useEffect(() => {
-		if (!categoryNameSlug) return
-		fetchData({ list: categoryNameSlug, page: currentPage })
+		if (!listSlug) return
+		fetchData({ list: listSlug, page: currentPage })
 		window.scrollTo({ top: 0, behavior: 'smooth' })
-	}, [categoryNameSlug, currentPage, fetchData])
+	}, [listSlug, currentPage, fetchData])
 
 	// Xử lý chuyển trang
 	const handlePageChange = (newPage) => {
 		setCurrentPage(newPage)
-		setSearchParams({ name: categoryNameSlug, page: newPage.toString() })
+		setSearchParams({ page: newPage.toString() })
 	}
 
 	return (
-		<MoviesDisplay
-			randomColor={randomColor}
-			titlePage={data?.titlePage || 'Movies List'}
-			imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
-			movies={data?.items || []}
-			totalMovies={data?.params?.pagination?.totalItems || 0}
-			itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 20}
-			isLoading={isLoading}
-			isError={isError}
-			error={error}
-			currentPage={currentPage}
-			setCurrentPage={handlePageChange}
-		/>
+		<>
+			<SEO title={data?.titlePage || 'Danh sach phim'} description={`Danh sach phim ${data?.titlePage || ''}`.trim()} />
+			<MoviesDisplay
+				randomColor={randomColor}
+				titlePage={data?.titlePage || 'Movies List'}
+				imageUrl={data?.APP_DOMAIN_CDN_IMAGE}
+				movies={data?.items || []}
+				totalMovies={data?.params?.pagination?.totalItems || 0}
+				itemsPerPage={data?.params?.pagination?.totalItemsPerPage || 20}
+				isLoading={isLoading}
+				isError={isError}
+				error={error}
+				currentPage={currentPage}
+				setCurrentPage={handlePageChange}
+			/>
+		</>
 	)
 }
 

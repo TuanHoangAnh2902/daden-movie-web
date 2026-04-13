@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
+import SEO from '~/components/SEO.index'
 import { useLazyGetSearchMovieQuery } from '~/services/ophimApi'
 import MoviesDisplay from '~/pages/MoviesDisplay/MoviesDisplay'
 
 const MoviesSearchList = () => {
 	const [searchParams, setSearchParams] = useSearchParams()
-	const query = searchParams.get('query') || '' // Search query from URL
+	const { query = '' } = useParams()
 	const location = useLocation()
 
 	const page = parseInt(searchParams.get('page')) || 1 // Page from URL
@@ -34,8 +35,9 @@ const MoviesSearchList = () => {
 
 	return (
 		<>
+			<SEO title={`Tim kiem: ${param || query}`} description={`Ket qua tim kiem cho tu khoa ${param || query}`} />
 			<MoviesDisplay
-				titlePage={`Tìm kiếm: ${param}`}
+				titlePage={`Tìm kiếm: ${param || query}`}
 				imageUrl={data?.APP_DOMAIN_CDN_IMAGE || ''}
 				movies={searchResults}
 				totalMovies={data?.params?.pagination?.totalItems || 0}

@@ -1,9 +1,17 @@
 import { Spin } from 'antd'
 import { lazy, Suspense } from 'react'
-import { Navigate, RouterProvider, createBrowserRouter, useNavigate } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter, useNavigate, useSearchParams } from 'react-router-dom'
 import { moviesCategories } from '~/constants/routes'
 import AuthLayouts from '~/layouts/AuthLayouts'
 import MainLayout from '~/layouts/MainLayout'
+import {
+	toMovieCategoryPath,
+	toMovieCountryPath,
+	toMovieDetailPath,
+	toMovieListPath,
+	toMovieWatchPath,
+	toSearchPath,
+} from '~/utils/routePaths'
 
 const About = lazy(() => import('~/pages/About'))
 const Home = lazy(() => import('~/pages/Home/Home'))
@@ -54,13 +62,84 @@ function AuthForgotPasswordRoute() {
 	return <ForgotPassword switchToLogin={() => navigate('/auth/login', { replace: true })} />
 }
 
+function LegacySearchRedirect() {
+	const [searchParams] = useSearchParams()
+	const query = searchParams.get('query')
+	const page = Number.parseInt(searchParams.get('page') || '1', 10)
+
+	if (!query) {
+		return <Navigate to='/' replace />
+	}
+
+	return <Navigate to={toSearchPath(query, Number.isNaN(page) ? 1 : page)} replace />
+}
+
+function LegacyMovieDetailRedirect() {
+	const [searchParams] = useSearchParams()
+	const movieId = searchParams.get('id')
+
+	if (!movieId) {
+		return <Navigate to='/' replace />
+	}
+
+	return <Navigate to={toMovieDetailPath(movieId)} replace />
+}
+
+function LegacyMovieWatchRedirect() {
+	const [searchParams] = useSearchParams()
+	const movieId = searchParams.get('id')
+	const episodeSlug = searchParams.get('ep') || 'full'
+
+	if (!movieId) {
+		return <Navigate to='/' replace />
+	}
+
+	return <Navigate to={toMovieWatchPath(movieId, episodeSlug)} replace />
+}
+
+function LegacyMovieListRedirect() {
+	const [searchParams] = useSearchParams()
+	const listSlug = searchParams.get('name')
+	const page = Number.parseInt(searchParams.get('page') || '1', 10)
+
+	if (!listSlug) {
+		return <Navigate to='/' replace />
+	}
+
+	return <Navigate to={toMovieListPath(listSlug, Number.isNaN(page) ? 1 : page)} replace />
+}
+
+function LegacyMovieCategoryRedirect() {
+	const [searchParams] = useSearchParams()
+	const categorySlug = searchParams.get('name')
+	const page = Number.parseInt(searchParams.get('page') || '1', 10)
+
+	if (!categorySlug) {
+		return <Navigate to='/' replace />
+	}
+
+	return <Navigate to={toMovieCategoryPath(categorySlug, Number.isNaN(page) ? 1 : page)} replace />
+}
+
+function LegacyMovieCountryRedirect() {
+	const [searchParams] = useSearchParams()
+	const countrySlug = searchParams.get('name')
+	const page = Number.parseInt(searchParams.get('page') || '1', 10)
+
+	if (!countrySlug) {
+		return <Navigate to='/' replace />
+	}
+
+	return <Navigate to={toMovieCountryPath(countrySlug, Number.isNaN(page) ? 1 : page)} replace />
+}
+
 const navRoutes = moviesCategories.flatMap(({ name, children, to }) =>
 	children
-		? children.map(({ name: childTitle }) => ({
-				path: `movies/${to}`,
+		? children.map(({ name: childTitle, to: childSlug }) => ({
+				path: `movies/list/${childSlug}`,
 				element: <MoviesList title={childTitle} />,
 		  }))
-		: [{ path: `movies`, element: <MoviesList title={name} /> }],
+		: [{ path: `movies/list/${to}`, element: <MoviesList title={name} /> }],
 )
 
 const router = createBrowserRouter([
@@ -70,24 +149,42 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <Home /> },
 			{ path: 'about', element: <About /> },
+			{ path: 'search', element: <LegacySearchRedirect /> },
 			{
-				path: 'search',
+				path: 'search/:query',
 				element: <MoviesSearchList />,
 			},
+			{ path: 'movies', element: <LegacyMovieListRedirect /> },
 			{
 				path: 'movies/country',
+				element: <LegacyMovieCountryRedirect />,
+			},
+			{
+				path: 'movies/country/:countrySlug',
 				element: <MoviesCountiesList />,
 			},
 			{
 				path: 'movies/category',
+				element: <LegacyMovieCategoryRedirect />,
+			},
+			{
+				path: 'movies/category/:categorySlug',
 				element: <MovieCategoryList />,
 			},
 			{
 				path: 'movie/detail',
+				element: <LegacyMovieDetailRedirect />,
+			},
+			{
+				path: 'movie/:movieId',
 				element: <MovieDetail />,
 			},
 			{
 				path: 'movie/watch',
+				element: <LegacyMovieWatchRedirect />,
+			},
+			{
+				path: 'watch/:movieId/:episodeSlug?',
 				element: <WatchMovie />,
 			},
 			{

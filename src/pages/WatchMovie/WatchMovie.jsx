@@ -7,17 +7,19 @@ import { CiCircleChevLeft } from 'react-icons/ci'
 import { FaAngleRight, FaPlus } from 'react-icons/fa6'
 import { MdAutorenew } from 'react-icons/md'
 import { TiHeartFullOutline } from 'react-icons/ti'
-import ReactPlayer from 'react-player'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import ReactPlayer from 'react-player/lazy'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import LazyImage from '~/utils/Lazyimage'
 
 import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
+import SEO from '~/components/SEO.index'
 import Comment from '~/components/movie/Comment/Comment'
 import MovieListSelector from '~/components/movie/MovieListSelector/MovieListSelector'
 import { useLazyGetMovieByIdQuery } from '~/services/ophimApi'
 import { LayoutTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
+import { toMovieDetailPath, toMovieWatchPath } from '~/utils/routePaths'
 import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
 import EpisodeTab from '../MovieDetail/MainContent/EpisodeTab/EpisodeTab'
 import RecommentMovie from './RecommentMovie/RecommentMovie'
@@ -28,7 +30,7 @@ import useToggleFavorite from '~/hooks/useToggleFavorite'
 const cx = classNames.bind(styles)
 function WatchMovie() {
 	const navigate = useNavigate()
-	const [searchParams] = useSearchParams()
+	const { movieId, episodeSlug } = useParams()
 	const [fetchData, { data }] = useLazyGetMovieByIdQuery()
 	const { checkIsFavorite, isToggling, handleToggleFavorite, contextHolder } = useToggleFavorite()
 	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
@@ -54,7 +56,7 @@ function WatchMovie() {
 
 	const episoleList = useMemo(() => data?.episodes?.[0].server_data || [], [data])
 
-	const currentEp = searchParams.get('ep')
+	const currentEp = episodeSlug || 'full'
 	const [currentEpUrl, setCurrentEpUrl] = useState(null)
 
 	// Lưu trữ tham chiếu đến movieId và data để dùng trong callbacks
@@ -86,8 +88,6 @@ function WatchMovie() {
 		}
 	}, [currentEp, episoleList])
 
-	const movieId = searchParams.get('id')
-
 	// Lưu movieId vào ref để các callback có thể truy cập mà không phụ thuộc vào re-render
 	useEffect(() => {
 		movieIdRef.current = movieId
@@ -111,7 +111,7 @@ function WatchMovie() {
 			const currentMovieId = dataRef.current?.movie?._id || movieIdRef.current
 
 			// Chuyển đến tập tiếp theo
-			navigate(`/movie/watch?id=${currentMovieId}&ep=${nextEpSlug?.toLowerCase()}`)
+			navigate(toMovieWatchPath(currentMovieId, nextEpSlug))
 		}
 	}, [episoleList, currentEpIndex, navigate])
 
@@ -120,7 +120,7 @@ function WatchMovie() {
 		if (currentEpIndex < episoleList.length - 1) {
 			const nextEpisode = episoleList[currentEpIndex + 1]
 			const nextEpSlug = nextEpisode.slug || nextEpisode.name
-			navigate(`/movie/watch?id=${data?.movie?._id}&ep=${nextEpSlug?.toLowerCase()}`)
+			navigate(toMovieWatchPath(data?.movie?._id, nextEpSlug))
 		}
 	}, [currentEpIndex, episoleList, navigate, data?.movie?._id])
 
@@ -129,7 +129,7 @@ function WatchMovie() {
 		if (currentEpIndex > 0) {
 			const prevEpisode = episoleList[currentEpIndex - 1]
 			const prevEpSlug = prevEpisode.slug || prevEpisode.name
-			navigate(`/movie/watch?id=${data?.movie?._id}&ep=${prevEpSlug?.toLowerCase()}`)
+			navigate(toMovieWatchPath(data?.movie?._id, prevEpSlug))
 		}
 	}, [currentEpIndex, episoleList, navigate, data?.movie?._id])
 
@@ -160,6 +160,11 @@ function WatchMovie() {
 
 	return (
 		<>
+			<SEO
+				title={`Xem phim ${data?.movie?.name || ''}`.trim()}
+				description={removeTagsUsingDOM(data?.movie?.content) || 'Xem phim truc tuyen'}
+				image={data?.movie?.poster_url || data?.movie?.thumb_url}
+			/>
 			{contextHolder}
 			<div className={cx('wrapper')}>
 				<div className={cx('watch-player')}>
@@ -233,7 +238,7 @@ function WatchMovie() {
 									<Flex vertical gap={20}>
 										<p className={cx('movie-info-description')}>{removeTagsUsingDOM(data?.movie?.content)}</p>
 										<Flex align='center' gap={4} className={cx('view-more')}>
-											<Link className={cx('view-more-text')} to={`/movie/detail?id=${data?.movie?._id}`}>
+											<Link className={cx('view-more-text')} to={toMovieDetailPath(data?.movie?._id)}>
 												Thông tin phim
 											</Link>
 											<FaAngleRight />

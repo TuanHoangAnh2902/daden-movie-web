@@ -4,6 +4,8 @@ import compression from 'vite-plugin-compression'
 import svgr from 'vite-plugin-svgr'
 import { visualizer } from 'rollup-plugin-visualizer'
 
+const shouldAnalyze = globalThis.process?.env?.ANALYZE === 'true'
+
 export default defineConfig({
 	plugins: [
 		react({
@@ -21,24 +23,13 @@ export default defineConfig({
 				],
 			},
 		}),
-		compression(),
+		compression({ algorithm: 'gzip' }),
+		compression({ algorithm: 'brotliCompress', ext: '.br' }),
 		svgr(),
-		visualizer({ open: false }), // Thêm plugin để phân tích kích thước bundle
+		shouldAnalyze && visualizer({ open: false, filename: 'stats.html' }),
 	],
 	server: {
 		port: 3434,
-		// Thêm cấu hình để xử lý định tuyến SPA trong quá trình phát triển
-		historyApiFallback: {
-			rewrites: [
-				{ from: /^\/$/, to: '/index.html' },
-				{ from: /^\/movie/, to: '/index.html' },
-				{ from: /^\/movie\/watch/, to: '/index.html' },
-				{ from: /^\/movies/, to: '/index.html' },
-				{ from: /^\/profile/, to: '/index.html' },
-				{ from: /^\/about/, to: '/index.html' },
-				{ from: /./, to: '/index.html' },
-			],
-		},
 	},
 	resolve: {
 		alias: [
@@ -64,10 +55,45 @@ export default defineConfig({
 		},
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					vendor: ['react', 'react-dom', 'react-router-dom'], // Tách các thư viện lớn thành chunks riêng
-					antd: ['antd'], // Tách riêng antd nếu được sử dụng
-					redux: ['@reduxjs/toolkit', 'react-redux'], // Tách riêng Redux nếu được sử dụng
+				manualChunks(id) {
+					if (!id.includes('node_modules')) return
+
+					const hasModule = (moduleName) => new RegExp(`[\\\\/]${moduleName}[\\\\/]`).test(id)
+					const isReactCoreModule = /[\\\\/]node_modules[\\\\/](react|react-dom|react-router-dom)[\\\\/]/.test(id)
+
+					if (isReactCoreModule) {
+						return 'react-core'
+					}
+
+					if (hasModule('antd') || id.includes('@ant-design')) {
+						return 'antd'
+					}
+
+					if (id.includes('@reduxjs/toolkit') || hasModule('react-redux')) {
+						return 'redux'
+					}
+
+					if (hasModule('firebase') || id.includes('@firebase')) {
+						return 'firebase'
+					}
+
+					if (hasModule('react-icons')) {
+						return 'icons'
+					}
+
+					if (hasModule('react-share')) {
+						return 'share'
+					}
+
+					if (hasModule('react-player') || hasModule('hls.js') || hasModule('plyr')) {
+						return 'media'
+					}
+
+					if (hasModule('framer-motion') || hasModule('swiper') || hasModule('aos')) {
+						return 'ui-motion'
+					}
+
+					return 'vendor'
 				},
 			},
 		},

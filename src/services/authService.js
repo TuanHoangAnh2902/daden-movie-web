@@ -30,6 +30,41 @@ facebookProvider.setCustomParameters({
 	display: 'popup',
 })
 
+const AUTH_ERROR_MESSAGES = {
+	invalidCredential: 'Địa chỉ email hoặc mật khẩu không đúng.',
+	emailAlreadyInUse: 'Email này đã được sử dụng bởi một tài khoản khác.',
+	tooManyRequests: 'Bạn thao tác quá nhanh. Vui lòng thử lại sau ít phút.',
+	popupClosed: 'Bạn đã đóng cửa sổ đăng nhập trước khi hoàn tất.',
+	popupBlocked: 'Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép popup và thử lại.',
+	default: 'Không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.',
+}
+
+const getSafeAuthErrorMessage = (error, fallback = AUTH_ERROR_MESSAGES.default) => {
+	const code = error?.code
+
+	if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+		return AUTH_ERROR_MESSAGES.invalidCredential
+	}
+
+	if (code === 'auth/email-already-in-use') {
+		return AUTH_ERROR_MESSAGES.emailAlreadyInUse
+	}
+
+	if (code === 'auth/too-many-requests') {
+		return AUTH_ERROR_MESSAGES.tooManyRequests
+	}
+
+	if (code === 'auth/popup-closed-by-user') {
+		return AUTH_ERROR_MESSAGES.popupClosed
+	}
+
+	if (code === 'auth/popup-blocked') {
+		return AUTH_ERROR_MESSAGES.popupBlocked
+	}
+
+	return fallback
+}
+
 // Lưu thông tin người dùng vào Firestore
 export const saveUserToFirestore = async (user) => {
 	if (!user) return
@@ -76,9 +111,9 @@ export const registerWithEmailAndPassword = async (email, password) => {
 	} catch (error) {
 		// Xử lý lỗi Firebase Authentication
 		if (error.code === 'auth/email-already-in-use') {
-			return { user: null, error: 'Email này đã được sử dụng bởi một tài khoản khác.' }
+			return { user: null, error: AUTH_ERROR_MESSAGES.emailAlreadyInUse }
 		}
-		return { user: null, error: error.message }
+		return { user: null, error: getSafeAuthErrorMessage(error) }
 	}
 }
 
@@ -88,7 +123,7 @@ export const signInWithEmail = async (email, password) => {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password)
 		return { user: userCredential.user, error: null }
 	} catch (error) {
-		return { user: null, error: error.message }
+		return { user: null, error: getSafeAuthErrorMessage(error, AUTH_ERROR_MESSAGES.invalidCredential) }
 	}
 }
 
@@ -115,7 +150,10 @@ export const signInWithGoogle = async () => {
 		}
 	} catch (error) {
 		console.error('Google sign-in error:', error)
-		return { user: null, error: error.message }
+		return {
+			user: null,
+			error: getSafeAuthErrorMessage(error, 'Không thể đăng nhập với Google lúc này. Vui lòng thử lại sau.'),
+		}
 	}
 }
 
@@ -168,7 +206,10 @@ export const signInWithFacebook = async () => {
 		}
 	} catch (error) {
 		console.error('Facebook sign-in error:', error)
-		return { user: null, error: error.message }
+		return {
+			user: null,
+			error: getSafeAuthErrorMessage(error, 'Không thể đăng nhập với Facebook lúc này. Vui lòng thử lại sau.'),
+		}
 	}
 }
 
@@ -180,10 +221,10 @@ export const linkAccounts = async (credential) => {
 			await linkWithCredential(currentUser, credential)
 			return { success: true, error: null }
 		}
-		return { success: false, error: 'No user is currently signed in' }
+		return { success: false, error: 'Không tìm thấy phiên đăng nhập hợp lệ.' }
 	} catch (error) {
 		console.error('Error linking accounts:', error)
-		return { success: false, error: error.message }
+		return { success: false, error: getSafeAuthErrorMessage(error) }
 	}
 }
 
@@ -197,7 +238,7 @@ export const getAuthRedirectResult = async () => {
 		return { user: null, error: null }
 	} catch (error) {
 		console.error('Redirect result error:', error)
-		return { user: null, error: error.message }
+		return { user: null, error: getSafeAuthErrorMessage(error) }
 	}
 }
 
@@ -207,7 +248,7 @@ export const logOut = async () => {
 		await signOut(auth)
 		return { error: null }
 	} catch (error) {
-		return { error: error.message }
+		return { error: getSafeAuthErrorMessage(error) }
 	}
 }
 

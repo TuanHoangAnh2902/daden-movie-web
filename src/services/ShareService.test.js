@@ -113,6 +113,47 @@ describe('shareContent', () => {
 		expect(openSpy).toHaveBeenCalledTimes(1)
 	})
 
+	it('does not fallback when user cancels Web Share (AbortError)', async () => {
+		const abortError = Object.assign(new Error('User canceled share'), { name: 'AbortError' })
+		const shareMock = vi.fn().mockRejectedValue(abortError)
+		const openSpy = vi.spyOn(window, 'open').mockReturnValue({ opener: {} })
+
+		Object.defineProperty(navigator, 'share', {
+			value: shareMock,
+			configurable: true,
+		})
+
+		const result = await shareContent({
+			platform: 'facebook',
+			url: 'https://example.com',
+			title: 'Movie H',
+			description: 'Desc',
+		})
+
+		expect(result).toBe(false)
+		expect(openSpy).not.toHaveBeenCalled()
+	})
+
+	it('returns false when popup is blocked during fallback share', async () => {
+		const shareMock = vi.fn().mockRejectedValue(new Error('fallback'))
+		const openSpy = vi.spyOn(window, 'open').mockReturnValue(null)
+
+		Object.defineProperty(navigator, 'share', {
+			value: shareMock,
+			configurable: true,
+		})
+
+		const result = await shareContent({
+			platform: 'twitter',
+			url: 'https://example.com',
+			title: 'Movie I',
+			description: 'Desc',
+		})
+
+		expect(openSpy).toHaveBeenCalledTimes(1)
+		expect(result).toBe(false)
+	})
+
 	it('returns false for unsupported platform', async () => {
 		Object.defineProperty(navigator, 'share', {
 			value: undefined,

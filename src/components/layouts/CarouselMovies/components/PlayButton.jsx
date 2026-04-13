@@ -5,13 +5,14 @@ import { memo } from 'react'
 import { FaPlay } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { buttonTheme } from '~/themes/buttonTheme'
+import { toMovieWatchPath } from '~/utils/routePaths'
 import styles from '../CarouselMovies.module.scss'
 
 const cx = classNames.bind(styles)
 
 const PlayButton = ({ movieId, type }) => (
 	<ConfigProvider theme={{ components: { Button: buttonTheme } }}>
-		<Link to={`movie/watch?id=${movieId}&ep=${type === 'single' ? 'full' : '1'}`}>
+		<Link to={toMovieWatchPath(movieId, type === 'single' ? 'full' : '1')}>
 			<Button className={cx('play-btn')} shape='circle' icon={<FaPlay />} />
 		</Link>
 	</ConfigProvider>
