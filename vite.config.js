@@ -76,4 +76,9 @@ export default defineConfig({
 		cssCodeSplit: true, // Tách CSS thành các file riêng biệt
 		assetsInlineLimit: 4096, // Nhúng các assets nhỏ hơn 4kb vào bundle
 	},
+	test: {
+		environment: 'jsdom',
+		globals: true,
+		setupFiles: './src/test/setup.js',
+	},
 })
