@@ -59,14 +59,15 @@ export default defineConfig({
 					if (!id.includes('node_modules')) return
 
 					const hasModule = (moduleName) => new RegExp(`[\\\\/]${moduleName}[\\\\/]`).test(id)
-					const isReactCoreModule = /[\\\\/]node_modules[\\\\/](react|react-dom|react-router-dom)[\\\\/]/.test(id)
-
-					if (isReactCoreModule) {
+					if (/[^/\\]node_modules[\\\\/](react|react-dom|react-router|react-router-dom|scheduler|react-is|use-sync-external-store|loose-envify|object-assign|js-tokens|react-helmet-async|@ant-design[\\\\/]v5-patch-for-react-19|prop-types)[\\\\/]/.test(id) ||
+						hasModule('antd') ||
+						id.includes('@ant-design') ||
+						id.includes('@rc-component') ||
+						/[\\\\/]node_modules[\\\\/]rc-[^/\\\\]+[\\\\/]/.test(id) ||
+						hasModule('@ant-design/icons') ||
+						hasModule('classnames') ||
+						hasModule('react-icons')) {
 						return 'react-core'
-					}
-
-					if (hasModule('antd') || id.includes('@ant-design')) {
-						return 'antd'
 					}
 
 					if (id.includes('@reduxjs/toolkit') || hasModule('react-redux')) {
@@ -89,7 +90,7 @@ export default defineConfig({
 						return 'ui-motion'
 					}
 
-					return 'vendor'
+					return 'react-core'
 				},
 			},
 		},

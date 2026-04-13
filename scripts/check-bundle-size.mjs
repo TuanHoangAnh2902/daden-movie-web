@@ -9,12 +9,10 @@ const jsFiles = readdirSync(DIST_ASSETS_DIR).filter((fileName) => fileName.endsW
 
 const budgetsKb = {
 	'index-': 80,
-	'react-core-': 220,
+	'react-core-': 1300,
 	'redux-': 70,
 	'share-': 20,
 	'ui-motion-': 240,
-	'vendor-': 500,
-	'antd-': 550,
 	'firebase-': 620,
 	'media-': 780,
 }
