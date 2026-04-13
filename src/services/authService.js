@@ -12,7 +12,7 @@ import {
 	linkWithCredential,
 	sendPasswordResetEmail,
 } from 'firebase/auth'
-import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 import { auth, firestore } from '../config/firebase'
 
 // Create a Google provider instance with custom parameters
@@ -238,61 +238,31 @@ export const serializeUser = (user) => {
 	}
 }
 
-// Send password reset email using Firebase Authentication and checking Firestore
+// Send password reset email with a generic response to avoid account enumeration
 export const resetPassword = async (email) => {
-	// Chuẩn hóa email
 	const normalizedEmail = email.trim().toLowerCase()
+	const genericSuccessMessage =
+		'Nếu email tồn tại trong hệ thống, chúng tôi đã gửi liên kết đặt lại mật khẩu. Vui lòng kiểm tra hộp thư của bạn.'
 
 	try {
-		// Kiểm tra email trong Firestore trước
-		let existsInFirestore = false
-
-		try {
-			// Tạo truy vấn tìm kiếm email trong collection users
-			const q = query(collection(firestore, 'users'), where('email', '==', normalizedEmail))
-
-			// Thực hiện truy vấn
-			const querySnapshot = await getDocs(q)
-			existsInFirestore = !querySnapshot.empty
-		} catch (firestoreError) {
-			console.warn('Lỗi khi kiểm tra Firestore:', firestoreError)
-			// Tiếp tục với Firebase Authentication nếu có lỗi khi truy cập Firestore
-		}
-
-		// Kiểm tra email trong Firebase Authentication
-		try {
-			const methods = await fetchSignInMethodsForEmail(auth, normalizedEmail)
-			const existsInAuth = methods && methods.length > 0
-
-			// Nếu email tồn tại trong Firestore hoặc Authentication, gửi email đặt lại mật khẩu
-			if (existsInFirestore || existsInAuth) {
-				// Gửi email đặt lại mật khẩu
-				await sendPasswordResetEmail(auth, normalizedEmail)
-
-				return {
-					success: true,
-					message: 'Email đặt lại mật khẩu đã được gửi đến địa chỉ email của bạn.',
-					existsInFirestore, // Chỉ trả về trạng thái tồn tại, không trả về dữ liệu cụ thể
-					existsInAuth,
-				}
-			} else {
-				return {
-					success: false,
-					error: 'Email không tồn tại trong hệ thống. Vui lòng kiểm tra lại hoặc đăng ký mới.',
-				}
-			}
-		} catch (error) {
-			console.error('Lỗi khi kiểm tra Authentication:', error)
-			return {
-				success: false,
-				error: `Đã xảy ra lỗi khi kiểm tra email. Vui lòng thử lại sau. (${error.message})`,
-			}
+		await sendPasswordResetEmail(auth, normalizedEmail)
+		return {
+			success: true,
+			message: genericSuccessMessage,
 		}
 	} catch (error) {
+		// Tránh lộ thông tin tồn tại tài khoản.
+		if (error?.code === 'auth/user-not-found') {
+			return {
+				success: true,
+				message: genericSuccessMessage,
+			}
+		}
+
 		console.error('Lỗi khi xử lý yêu cầu đặt lại mật khẩu:', error)
 		return {
 			success: false,
-			error: `Đã xảy ra lỗi khi xử lý yêu cầu. Vui lòng thử lại sau. (${error.message})`,
+			error: 'Không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.',
 		}
 	}
 }

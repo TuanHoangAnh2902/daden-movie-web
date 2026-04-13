@@ -1,3 +1,14 @@
+const openSafeShareWindow = (url, title, featureString = '') => {
+	const features = [featureString, 'noopener', 'noreferrer'].filter(Boolean).join(',')
+	const popup = window.open(url, title, features)
+
+	if (popup) {
+		popup.opener = null
+	}
+
+	return popup
+}
+
 export const shareFacebook = (options) => {
 	const { url, title } = options
 
@@ -11,7 +22,7 @@ export const shareFacebook = (options) => {
 	const left = (window.screen.width - width) / 2
 	const top = (window.screen.height - height) / 2
 
-	window.open(
+	openSafeShareWindow(
 		fbShareUrl,
 		'Chia sẻ lên Facebook',
 		`width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,status=0`,
@@ -42,7 +53,7 @@ export const shareTwitter = (options) => {
 	const left = (window.screen.width - width) / 2
 	const top = (window.screen.height - height) / 2
 
-	window.open(twitterShareUrl, 'Chia sẻ lên Twitter', `width=${width},height=${height},top=${top},left=${left}`)
+	openSafeShareWindow(twitterShareUrl, 'Chia sẻ lên Twitter', `width=${width},height=${height},top=${top},left=${left}`)
 
 	// Theo dõi sự kiện chia sẻ nếu cần
 	if (window.gtag) {
@@ -61,7 +72,7 @@ export const shareWhatsApp = (options) => {
 	const text = `${title}${description ? ': ' + description : ''} ${url}`
 	const whatsappShareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`
 
-	window.open(whatsappShareUrl, '_blank')
+	openSafeShareWindow(whatsappShareUrl, '_blank')
 
 	// Theo dõi sự kiện chia sẻ nếu cần
 	if (window.gtag) {
