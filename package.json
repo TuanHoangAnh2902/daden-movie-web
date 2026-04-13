@@ -6,6 +6,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
+		"build:ci": "vite build && npm run check:bundle",
+		"check:bundle": "node scripts/check-bundle-size.mjs",
 		"lint": "eslint .",
 		"preview": "vite preview",
 		"test": "vitest run",

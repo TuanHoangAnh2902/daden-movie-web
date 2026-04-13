@@ -2,17 +2,18 @@ import classNames from 'classnames/bind'
 import styles from './MovieDetail.module.scss'
 
 import { useGetMovieByIdQuery } from '~/services/ophimApi'
-import MainContent from './MainContent/MainContent'
-import SideContent from './SideContent/SideContent'
 
 import { ConfigProvider, Layout, Skeleton } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SEO from '~/components/SEO.index'
 import { LayoutTheme } from '~/themes/buttonTheme'
 import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
+
+const MainContent = lazy(() => import('./MainContent/MainContent'))
+const SideContent = lazy(() => import('./SideContent/SideContent'))
 
 const cx = classNames.bind(styles)
 function MovieDetail() {
@@ -21,6 +22,7 @@ function MovieDetail() {
 
 	const { data, isFetching, error } = useGetMovieByIdQuery(id)
 	const movieData = data?.movie || {}
+	const suspenseFallback = <Skeleton active paragraph={{ rows: 10 }} />
 
 	// Scroll to top when component mounts or ID changes
 	useEffect(() => {
@@ -99,10 +101,14 @@ function MovieDetail() {
 						<ConfigProvider theme={{ components: { Layout: LayoutTheme } }}>
 							<Layout>
 								<Sider width='25%'>
-									<SideContent movieData={movieData} />
+									<Suspense fallback={suspenseFallback}>
+										<SideContent movieData={movieData} />
+									</Suspense>
 								</Sider>
 								<Content>
-									<MainContent data={data} />
+									<Suspense fallback={suspenseFallback}>
+										<MainContent data={data} />
+									</Suspense>
 								</Content>
 							</Layout>
 						</ConfigProvider>

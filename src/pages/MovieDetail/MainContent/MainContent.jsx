@@ -1,24 +1,25 @@
 import { Button, ConfigProvider, Flex, Tabs } from 'antd'
 import classNames from 'classnames/bind'
 import PropTypes from 'prop-types'
-import { useRef, useState } from 'react'
+import { lazy, Suspense, useRef, useState } from 'react'
 import { BsCameraVideoFill } from 'react-icons/bs'
 import { FaComments, FaPlay, FaPlus } from 'react-icons/fa'
 import { IoIosSend } from 'react-icons/io'
 import { TiHeartFullOutline } from 'react-icons/ti'
 import { Link } from 'react-router-dom'
 
-import Comment from '~/components/movie/Comment/Comment'
-import MovieListSelector from '~/components/movie/MovieListSelector/MovieListSelector'
-import ShareMovie from '~/components/movie/ShareMovie/ShareMovie'
 import useToggleFavorite from '~/hooks/useToggleFavorite'
 import { buttonTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
 import { toMovieWatchPath } from '~/utils/routePaths'
-import EpisodeTab from './EpisodeTab/EpisodeTab'
 import GalleryTab from './GalleryTab/GalleryTab'
 import styles from './MainContent.module.scss'
 import RecommentTab from './RecommentTab/RecommentTab'
+
+const Comment = lazy(() => import('~/components/movie/Comment/Comment'))
+const EpisodeTab = lazy(() => import('./EpisodeTab/EpisodeTab'))
+const MovieListSelector = lazy(() => import('~/components/movie/MovieListSelector/MovieListSelector'))
+const ShareMovie = lazy(() => import('~/components/movie/ShareMovie/ShareMovie'))
 
 const cx = classNames.bind(styles)
 function MainContent({ data }) {
@@ -86,6 +87,7 @@ function MainContent({ data }) {
 	const trailerMovieTabsItems = completedMovieTabsItems.filter((item) => item.key !== '1')
 	let isTrailerOnly = data?.episodes?.[0]?.server_data?.[0]?.filename === ''
 	let tabsItems = isTrailerOnly ? trailerMovieTabsItems : completedMovieTabsItems
+	const suspenseFallback = <div />
 
 	return (
 		<>
@@ -156,14 +158,22 @@ function MainContent({ data }) {
 						items={tabsItems}
 					/>
 				</ConfigProvider>
-				<Comment movieId={data?.movie?._id} sectionRef={sectionRef} />
+				<Suspense fallback={suspenseFallback}>
+					<Comment movieId={data?.movie?._id} sectionRef={sectionRef} />
+				</Suspense>
 			</div>
 
 			{/* Movie List Selector Modal */}
-			{data?.movie && <MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />}
+			{data?.movie && isListSelectorOpen && (
+				<Suspense fallback={suspenseFallback}>
+					<MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />
+				</Suspense>
+			)}
 
 			{/* Share Movie Modal */}
-			<ShareMovie movieData={data?.movie} isOpen={isShareModalOpen} onClose={closeShareModal} />
+			<Suspense fallback={suspenseFallback}>
+				<ShareMovie movieData={data?.movie} isOpen={isShareModalOpen} onClose={closeShareModal} />
+			</Suspense>
 		</>
 	)
 }

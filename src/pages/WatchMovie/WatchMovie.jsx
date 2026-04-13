@@ -2,7 +2,7 @@ import { ConfigProvider, Divider, Flex, Layout, Switch } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { Content } from 'antd/es/layout/layout'
 import classNames from 'classnames/bind'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CiCircleChevLeft } from 'react-icons/ci'
 import { FaAngleRight, FaPlus } from 'react-icons/fa6'
 import { MdAutorenew } from 'react-icons/md'
@@ -14,18 +14,19 @@ import LazyImage from '~/utils/Lazyimage'
 import CategoryInfo from '~/components/common/CategoriesInfo/CategoryInfo'
 import ImdbInfo from '~/components/common/ImdbInfo/ImdbInfo'
 import SEO from '~/components/SEO.index'
-import Comment from '~/components/movie/Comment/Comment'
-import MovieListSelector from '~/components/movie/MovieListSelector/MovieListSelector'
 import { useLazyGetMovieByIdQuery } from '~/services/ophimApi'
 import { LayoutTheme } from '~/themes/buttonTheme'
 import { useThemeColors } from '~/themes/useThemeColors'
 import { toMovieDetailPath, toMovieWatchPath } from '~/utils/routePaths'
 import removeTagsUsingDOM from '~/utils/removeTagsUsingDOM'
-import EpisodeTab from '../MovieDetail/MainContent/EpisodeTab/EpisodeTab'
-import RecommentMovie from './RecommentMovie/RecommentMovie'
 import VideoPlayer from './VideoPlayer/VideoPlayer'
 import styles from './WatchMovie.module.scss'
 import useToggleFavorite from '~/hooks/useToggleFavorite'
+
+const Comment = lazy(() => import('~/components/movie/Comment/Comment'))
+const EpisodeTab = lazy(() => import('../MovieDetail/MainContent/EpisodeTab/EpisodeTab'))
+const MovieListSelector = lazy(() => import('~/components/movie/MovieListSelector/MovieListSelector'))
+const RecommentMovie = lazy(() => import('./RecommentMovie/RecommentMovie'))
 
 const cx = classNames.bind(styles)
 function WatchMovie() {
@@ -36,6 +37,7 @@ function WatchMovie() {
 	const [isListSelectorOpen, setIsListSelectorOpen] = useState(false)
 
 	const { subColor } = useThemeColors()
+	const suspenseFallback = <div />
 
 	const isFav = checkIsFavorite(data?.movie?._id)
 
@@ -246,12 +248,20 @@ function WatchMovie() {
 									</Flex>
 								</Flex>
 								<Divider className={cx('divider')} />
-								{currentEpUrl && <EpisodeTab data={data} />}
-								<Comment movieId={data?.movie?._id} />
+								{currentEpUrl && (
+									<Suspense fallback={suspenseFallback}>
+										<EpisodeTab data={data} />
+									</Suspense>
+								)}
+								<Suspense fallback={suspenseFallback}>
+									<Comment movieId={data?.movie?._id} />
+								</Suspense>
 							</Content>
 							<Divider className={cx('vertical-divider')} type='vertical' />
 							<Sider className={cx('recomment')} width='28%'>
-								<RecommentMovie movieData={data?.movie} />
+								<Suspense fallback={suspenseFallback}>
+									<RecommentMovie movieData={data?.movie} />
+								</Suspense>
 							</Sider>
 						</Layout>
 					</ConfigProvider>
@@ -259,7 +269,11 @@ function WatchMovie() {
 			</div>
 
 			{/* Movie List Selector Modal */}
-			{data?.movie && <MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />}
+			{data?.movie && isListSelectorOpen && (
+				<Suspense fallback={suspenseFallback}>
+					<MovieListSelector movie={data.movie} isOpen={isListSelectorOpen} onClose={closeListSelector} />
+				</Suspense>
+			)}
 		</>
 	)
 }

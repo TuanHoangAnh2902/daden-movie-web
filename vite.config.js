@@ -77,10 +77,6 @@ export default defineConfig({
 						return 'firebase'
 					}
 
-					if (hasModule('react-icons')) {
-						return 'icons'
-					}
-
 					if (hasModule('react-share')) {
 						return 'share'
 					}
