@@ -152,7 +152,9 @@ export const signInWithFacebook = async () => {
 					return {
 						user: null,
 						error: `Tài khoản với email ${email} đã tồn tại. Vui lòng đăng nhập bằng ${
-							methods.includes('google.com') ? 'Google' : methods.includes('password') ? 'Email/Password' : methods[0]
+							methods.includes('google.com') ? 'Google'
+							: methods.includes('password') ? 'Email/Password'
+							: methods[0]
 						}`,
 						existingAccount: {
 							email,
